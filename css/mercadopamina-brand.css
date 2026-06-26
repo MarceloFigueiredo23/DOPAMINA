@@ -71,16 +71,17 @@ body::before {
   line-height: 1;
 }
 
-.brand-logo-mark,
-.brand-logo-full {
+.brand-logo-mark {
   display: block;
   height: 48px;
   width: auto;
-  max-width: min(220px, 42vw);
   object-fit: contain;
   object-position: left center;
   flex-shrink: 0;
-  image-rendering: auto;
+}
+
+.brand-logo-full {
+  display: none;
 }
 
 .mp-wordmark {
@@ -103,10 +104,8 @@ body::before {
 }
 
 @media (min-width: 721px) {
-  .brand-logo-mark,
-  .brand-logo-full {
-    height: 56px;
-    max-width: 260px;
+  .brand-logo-mark {
+    height: 52px;
   }
 
   .mp-wm-full {
@@ -119,10 +118,8 @@ body::before {
 }
 
 @media (max-width: 720px) {
-  .brand-logo-mark,
-  .brand-logo-full {
+  .brand-logo-mark {
     height: 40px;
-    max-width: 180px;
   }
 
   .mp-wm-full {
@@ -931,17 +928,37 @@ body.theme-mercadopamina.flow-checkout .summary-row.total span:last-child {
     box-shadow: 0 10px 36px rgba(255, 193, 7, 0.14);
   }
 
-  .checkout-brand-panel__logo {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    margin: 0 auto 16px;
-    display: block;
-    object-fit: contain;
-    filter: drop-shadow(0 8px 20px rgba(255, 193, 7, 0.2));
+  .checkout-brand-lockup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
   }
 
-  .checkout-brand-panel__gnome,
+  .checkout-brand-panel__gnome {
+    width: min(100%, 240px);
+    height: auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 24px rgba(255, 193, 7, 0.28));
+  }
+
+  .checkout-brand-panel__wordmark {
+    margin: 0;
+    line-height: 1;
+  }
+
+  .mp-wm-full--checkout {
+    font-family: var(--dopa-font-display);
+    font-size: clamp(2rem, 4.5vw, 3.35rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    color: var(--mp-ink);
+    white-space: nowrap;
+  }
+
+  .checkout-brand-panel__logo,
   .checkout-brand-panel__name {
     display: none;
   }
@@ -994,8 +1011,12 @@ body.theme-mercadopamina.flow-checkout .summary-row.total span:last-child {
     gap: 36px;
   }
 
-  .checkout-brand-panel__logo {
-    max-width: 340px;
+  .checkout-brand-panel__gnome {
+    width: min(100%, 280px);
+  }
+
+  .mp-wm-full--checkout {
+    font-size: 3.4rem;
   }
 
   .checkout-main {
@@ -1051,14 +1072,12 @@ body.theme-mercadopamina .ds-home-search-wrap {
     gap: 8px;
   }
 
-  .brand-logo-mark,
-  .brand-logo-full {
+  .brand-logo-mark {
     height: 38px;
-    max-width: 170px;
   }
 
   .mp-wm-full {
-    display: none;
+    font-size: 1.2rem;
   }
 
   .mp-header-nav {
@@ -1179,14 +1198,12 @@ body.theme-mercadopamina .ds-home-search-wrap {
     min-height: 58px;
   }
 
-  .brand-logo-mark,
-  .brand-logo-full {
-    height: 52px;
-    max-width: 240px;
+  .brand-logo-mark {
+    height: 44px;
   }
 
   .mp-wm-full {
-    display: none;
+    font-size: 1.45rem;
   }
 
   .mp-tab {
@@ -1228,14 +1245,12 @@ body.theme-mercadopamina .ds-home-search-wrap {
     gap: 24px;
   }
 
-  .brand-logo-mark,
-  .brand-logo-full {
-    height: 58px;
-    max-width: 280px;
+  .brand-logo-mark {
+    height: 54px;
   }
 
   .mp-wm-full {
-    display: none;
+    font-size: 1.65rem;
   }
 
   .mp-brand-lockup {
