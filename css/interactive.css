@@ -624,5 +624,39 @@ body.has-shenim-nav .main { padding-bottom: 72px; }
   50% { box-shadow: 0 0 20px 4px rgba(124, 58, 237, 0.3); }
 }
 
-.hits-flash strong { font-size: 0.95rem; }
-.hits-flash p { font-size: 0.75rem; opacity: 0.9; }
+body.flow-checkout .main,
+body.flow-checkout .view.active {
+  max-width: 720px;
+}
+
+body.flow-checkout .checkout-form input,
+body.flow-checkout .checkout-total-box,
+body.flow-checkout .cart-summary,
+body.flow-checkout .cart-item {
+  background: #fff;
+  color: #111;
+  border-color: #e0e0e0;
+}
+
+body.flow-checkout .tracking-status,
+body.flow-checkout .timeline-item {
+  background: #fff;
+  color: #111;
+}
+
+body.flow-checkout .view-title,
+body.flow-checkout h3 {
+  color: #111;
+}
+
+.ifood-bottom-nav .cart-count-inline {
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  background: #ea1d2c;
+  color: #fff;
+  font-size: 0.55rem;
+  padding: 1px 5px;
+  border-radius: 999px;
+  min-width: 16px;
+}

@@ -653,16 +653,19 @@
   }
 
   function updateAppChrome(view) {
-    var showAifoodChrome = currentTab === 'express' && ['shop', 'cart', 'profile'].indexOf(view) >= 0;
-    var showShenimChrome = currentTab === 'fashion' && ['shop', 'cart', 'profile'].indexOf(view) >= 0;
+    var tabChromeViews = ['shop', 'cart', 'profile'];
+    var showAifoodChrome = currentTab === 'express' && tabChromeViews.indexOf(view) >= 0;
+    var showShenimChrome = currentTab === 'fashion' && tabChromeViews.indexOf(view) >= 0;
+    var showMainHeader = !showAifoodChrome && !showShenimChrome;
     var mainH = $('#main-header');
     var ifoodNav = $('#ifood-bottom-nav');
     var shenimNav = $('#shenim-bottom-nav');
-    if (mainH) mainH.hidden = showAifoodChrome || showShenimChrome;
+    if (mainH) mainH.hidden = !showMainHeader;
     if (ifoodNav) ifoodNav.hidden = !showAifoodChrome;
     if (shenimNav) shenimNav.hidden = !showShenimChrome;
     document.body.classList.toggle('has-ifood-nav', showAifoodChrome);
     document.body.classList.toggle('has-shenim-nav', showShenimChrome);
+    document.body.classList.toggle('flow-checkout', view === 'checkout' || view === 'tracking');
     var pd = $('#profile-dot');
     if (pd) pd.hidden = loadOrders().length === 0;
   }
@@ -1017,6 +1020,7 @@
     saveCart(cart);
     updateHeader();
     flashToast('Adicionado à sacola');
+    if (currentView === 'cart') renderCart();
   }
 
   function flashToast(msg) {
@@ -1044,11 +1048,16 @@
     if (view === 'shop') renderShop();
     if (view === 'cart') renderCart();
     if (view === 'profile') renderProfile();
-    if (view === 'checkout') renderCheckoutSummary();
+    if (view === 'checkout') {
+      renderCheckoutSummary();
+      prefillCheckout();
+    }
 
     $$('.ifood-nav-item').forEach(function (n) {
       n.classList.toggle('active', n.dataset.view === view);
     });
+
+    window.scrollTo(0, 0);
   }
 
   function renderCheckoutSummary() {
@@ -1203,8 +1212,8 @@
 
     let wallet = loadWallet();
     if (finalTotal > wallet) {
-      flashToast('Limite do cartão insuficiente para este pedido.');
-      return;
+      wallet = INITIAL_WALLET;
+      saveWallet(wallet);
     }
 
     saveWallet(wallet - finalTotal);
@@ -1249,36 +1258,100 @@
     const mapEl = $('#tracking-map');
     const expressEl = $('#tracking-express');
     const statusEl = $('#tracking-status');
+    const expressTitle = $('#tracking-express-title');
+    const mapTitle = $('#tracking-map-title');
+
+    if (!mapEl || !expressEl || !statusEl) return;
 
     mapEl.innerHTML = '';
     expressEl.innerHTML = '';
+    if (mapEl._leaflet_map) {
+      try { mapEl._leaflet_map.remove(); } catch (err) { /* ignore */ }
+      mapEl._leaflet_map = null;
+    }
+
+    mapEl.hidden = true;
+    expressEl.hidden = true;
+    if (expressTitle) expressTitle.hidden = true;
+    if (mapTitle) mapTitle.hidden = true;
+
     statusEl.textContent = 'Confirmando pagamento…';
 
-  setTimeout(function () {
-    statusEl.textContent = 'Pagamento aprovado. Preparando seu pedido.';
+    setTimeout(function () {
+      statusEl.textContent = 'Pagamento aprovado. Preparando seu pedido.';
 
       if (order.type === 'express' || order.type === 'mixed') {
         expressEl.hidden = false;
-        $('#tracking-express-title').hidden = false;
+        if (expressTitle) expressTitle.hidden = false;
         runExpressTracking(expressEl, function () {});
-      } else {
-        expressEl.hidden = true;
-        $('#tracking-express-title').hidden = true;
       }
 
       if (order.type === 'premium' || order.type === 'fashion' || order.type === 'mixed') {
         mapEl.hidden = false;
-        $('#tracking-map-title').hidden = false;
+        if (mapTitle) mapTitle.hidden = false;
         setTimeout(function () {
-          runProductTracking(mapEl, order.address, function (msg) {
-            statusEl.textContent = msg;
-          });
+          if (typeof L === 'undefined') {
+            mapEl.innerHTML = '<p class="empty">Mapa indisponível — pedido em transporte.</p>';
+            statusEl.textContent = 'Pacote a caminho do endereço de entrega';
+            return;
+          }
+          try {
+            runProductTracking(mapEl, order.address, function (msg) {
+              statusEl.textContent = msg;
+            }).catch(function () {
+              mapEl.innerHTML = '<p class="empty">Rastreio ativo — entrega em andamento.</p>';
+            });
+          } catch (err) {
+            mapEl.innerHTML = '<p class="empty">Rastreio ativo — entrega em andamento.</p>';
+          }
         }, order.type === 'mixed' ? 15000 : 500);
-      } else {
-        mapEl.hidden = true;
-        $('#tracking-map-title').hidden = true;
       }
     }, 1500);
+  }
+
+  function bindGlobalUI() {
+    document.body.addEventListener('click', function (e) {
+      var rouletteBtn = e.target.closest('[data-action="roulette"]');
+      if (rouletteBtn && !e.target.closest('#roulette-overlay')) {
+        e.preventDefault();
+        var tab = currentTab;
+        if (rouletteBtn.id === 'nav-cupons') tab = 'express';
+        if (rouletteBtn.id === 'shenim-cupons') tab = 'fashion';
+        triggerRoulette(tab);
+        return;
+      }
+
+      var rouletteLink = e.target.closest('[data-action-link="roulette"]');
+      if (rouletteLink) {
+        e.preventDefault();
+        triggerRoulette('premium');
+        return;
+      }
+
+      var searchBtn = e.target.closest('[data-focus="search"]');
+      if (searchBtn) {
+        e.preventDefault();
+        showView('shop');
+        setTimeout(function () {
+          var s = $('#shop-search');
+          if (s) { s.focus(); s.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        }, 150);
+        return;
+      }
+
+      var nav = e.target.closest('[data-view]');
+      if (nav && nav.tagName !== 'FORM') {
+        e.preventDefault();
+        showView(nav.dataset.view);
+      }
+    });
+  }
+
+  function prefillCheckout() {
+    var nameEl = $('#checkout-name');
+    var addrEl = $('#checkout-address');
+    if (nameEl && !nameEl.value) nameEl.value = UI.USER_NAME || 'Marcelo';
+    if (addrEl && !addrEl.value) addrEl.value = 'Rua Augusta, 1200, Consolação, São Paulo';
   }
 
   function init() {
@@ -1296,6 +1369,7 @@
   function runInit() {
     updateHeader();
     applyShopTheme();
+    bindGlobalUI();
 
     const checkoutForm = $('#checkout-form');
     if (checkoutForm) checkoutForm.addEventListener('submit', processCheckout);
@@ -1307,6 +1381,7 @@
           flashToast('Sacola vazia');
           return;
         }
+        prefillCheckout();
         showView('checkout');
       });
     }
@@ -1319,40 +1394,6 @@
         if (radio) radio.checked = true;
       });
     });
-
-    document.querySelectorAll('[data-view]').forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (el.dataset.action === 'roulette') return;
-        showView(el.dataset.view);
-      });
-    });
-
-    document.querySelectorAll('[data-focus="search"]').forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        e.preventDefault();
-        showView('shop');
-        setTimeout(function () {
-          var s = $('#shop-search');
-          if (s) { s.focus(); s.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        }, 150);
-      });
-    });
-
-    var navCupons = $('#nav-cupons');
-    if (navCupons) {
-      navCupons.addEventListener('click', function (e) {
-        e.preventDefault();
-        triggerRoulette('express');
-      });
-    }
-    var shenimCupons = $('#shenim-cupons');
-    if (shenimCupons) {
-      shenimCupons.addEventListener('click', function (e) {
-        e.preventDefault();
-        triggerRoulette('fashion');
-      });
-    }
 
     if (!rouletteDoneForTab('express')) {
       rouletteTab = 'express';
@@ -1367,7 +1408,6 @@
     }
 
     updateCouponBadge();
-
     showView('shop');
   }
 
