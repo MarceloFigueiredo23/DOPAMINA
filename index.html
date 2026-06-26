@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dopamina — delivery e marketplace com experiência completa de compra." />
+  <title>Dopamina</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+</head>
+<body>
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <!-- Roleta -->
+  <div id="roulette-overlay" class="overlay">
+    <div class="roulette-modal">
+      <button type="button" class="roulette-close-x" id="roulette-close-x" aria-label="Fechar sem girar">✕</button>
+      <h1>Roleta de cupons</h1>
+      <p>Gire e desbloqueie descontos exclusivos no seu próximo pedido.</p>
+      <div id="roulette-stage">
+        <div class="roulette-wrap">
+          <div class="roulette-pointer">▼</div>
+          <div id="roulette-wheel" class="roulette-wheel">
+            <svg id="roulette-svg" viewBox="0 0 280 280" width="280" height="280" aria-hidden="true"></svg>
+          </div>
+          <div class="roulette-hub">GIRE</div>
+        </div>
+        <button type="button" class="btn btn-primary btn-lg" id="roulette-spin">GIRAR AGORA</button>
+      </div>
+      <div id="roulette-result" hidden></div>
+    </div>
+  </div>
+
+  <header class="header" id="main-header">
+    <div class="header-inner">
+      <a href="#" class="logo nav-link" data-view="shop">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">DOPAMINA</span>
+      </a>
+      <nav class="nav">
+        <a href="#" class="nav-link active" data-view="shop">Início</a>
+        <a href="#" class="nav-link" data-view="cart">Sacola</a>
+        <a href="#" class="nav-link" data-view="profile">Conta</a>
+      </nav>
+      <div class="header-right">
+        <span id="coupon-badge" class="coupon-badge" hidden></span>
+        <div class="wallet payment-pill">
+          <span class="wallet-label">Pagamento</span>
+          <span class="wallet-value">Visa •••• 4821</span>
+        </div>
+        <button type="button" class="cart-btn nav-link" data-view="cart">
+          🛒 <span id="cart-count" class="cart-count" hidden>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- LOJA -->
+    <section id="view-shop" class="view active">
+      <div id="shop-shell" class="shop-shell theme-express">
+        <div id="shop-header-zone"></div>
+        <div id="product-grid" class="product-grid"></div>
+      </div>
+    </section>
+
+    <!-- DETALHE PRODUTO -->
+    <div id="product-modal" class="product-modal" hidden>
+      <div class="product-modal-backdrop" id="product-modal-backdrop"></div>
+      <div class="product-modal-panel" id="product-modal-panel"></div>
+    </div>
+
+    <!-- CARRINHO -->
+    <section id="view-cart" class="view">
+      <h2 class="view-title">Sacola</h2>
+      <div id="cart-list" class="cart-list"></div>
+      <div id="cart-summary" class="cart-summary" hidden>
+        <div class="summary-row"><span>Subtotal</span><span id="cart-subtotal"></span></div>
+        <div class="summary-row"><span>Desconto</span><span id="cart-discount"></span></div>
+        <div class="summary-row"><span>Taxa de entrega</span><span id="cart-shipping"></span></div>
+        <div class="summary-row"><span>Taxa de serviço</span><span id="cart-service"></span></div>
+        <div class="summary-row total"><span>Total</span><span id="cart-total"></span></div>
+        <button type="button" class="btn btn-primary btn-lg" id="btn-checkout">Continuar</button>
+      </div>
+    </section>
+
+    <section id="view-checkout" class="view">
+      <h2 class="view-title">Pagamento</h2>
+      <form id="checkout-form" class="checkout-form">
+        <label>
+          Nome completo
+          <input type="text" id="checkout-name" placeholder="Como está no cartão" required />
+        </label>
+        <label>
+          Endereço de entrega
+          <input type="text" id="checkout-address" placeholder="Rua, número, bairro, cidade" required />
+        </label>
+        <label>
+          Complemento e referência
+          <input type="text" id="checkout-complement" placeholder="Apto, bloco, ponto de referência" />
+        </label>
+        <div class="checkout-payment-block">
+          <p class="checkout-section-label">Forma de pagamento</p>
+          <label class="pay-option selected">
+            <input type="radio" name="pay" value="card" checked />
+            <span>💳 Visa crédito •••• 4821</span>
+          </label>
+          <label class="pay-option">
+            <input type="radio" name="pay" value="pix" />
+            <span>PIX — aprovação instantânea</span>
+          </label>
+        </div>
+        <div id="checkout-total-box" class="checkout-total-box"></div>
+        <button type="submit" class="btn btn-primary btn-lg" id="checkout-submit-btn">Fazer pedido</button>
+      </form>
+    </section>
+
+    <!-- RASTREIO -->
+    <section id="view-tracking" class="view">
+      <h2 class="view-title">Acompanhar pedido</h2>
+      <p class="tracking-meta">Pedido <strong id="tracking-order-id"></strong></p>
+      <p class="tracking-address-line" id="tracking-address"></p>
+      <p id="tracking-status" class="tracking-status">Aguardando confirmação…</p>
+
+      <h3 id="tracking-express-title">Entrega rápida</h3>
+      <div id="tracking-express" class="tracking-express"></div>
+
+      <h3 id="tracking-map-title">Rastreamento do envio</h3>
+      <div id="tracking-map" class="tracking-map"></div>
+
+      <button type="button" class="btn btn-secondary" onclick="location.reload()">Fazer novo pedido</button>
+    </section>
+
+    <section id="view-profile" class="view">
+      <h2 class="view-title">Minha conta</h2>
+      <div class="profile-stats">
+        <div class="stat-card">
+          <span class="stat-value" id="profile-saved">R$ 0,00</span>
+          <span class="stat-label">Total em pedidos este mês</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value" id="profile-orders">0</span>
+          <span class="stat-label">Pedidos realizados</span>
+        </div>
+      </div>
+      <h3>Histórico de gastos (últimos 7 dias)</h3>
+      <div id="savings-chart" class="savings-chart"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Dopamina © 2026 · Experiência demonstrativa — nenhuma cobrança real é processada.</p>
+  </footer>
+
+  <nav class="ifood-bottom-nav" id="ifood-bottom-nav" hidden>
+    <button type="button" class="ifood-nav-item active nav-link" data-view="shop"><span>🏠</span>Início</button>
+    <button type="button" class="ifood-nav-item nav-link" data-view="cart"><span>🛒</span>Sacola</button>
+    <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Conta</button>
+  </nav>
+
+  <script src="js/catalog-data.js"></script>
+  <script src="js/ifood-data.js"></script>
+  <script src="js/realism.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/dopamina.js"></script>
+</body>
+</html>
