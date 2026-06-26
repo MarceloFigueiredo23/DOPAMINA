@@ -93,22 +93,59 @@
   margin-top: -2px;
 }
 
-/* Header principal DOPAMINA SHOP */
-.logo {
-  gap: 10px !important;
+/* Header principal DOPAMINA SHOP — identidade premium */
+#main-header .logo {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 11px !important;
+  padding: 6px 10px 6px 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  text-decoration: none !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: border-box !important;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+#main-header .logo:hover {
+  border-color: rgba(176, 38, 255, 0.35);
+  background: rgba(176, 38, 255, 0.08);
 }
 
 .logo .brand-mark--dopamina {
-  width: 40px;
-  height: 40px;
-  animation: dopaLogoPulse 3s ease-in-out infinite;
+  width: 36px;
+  height: 36px;
+  filter: drop-shadow(0 2px 8px rgba(176, 38, 255, 0.25));
 }
 
-@keyframes dopaLogoPulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 2px 8px rgba(176, 38, 255, 0.4)); }
-  50% { transform: scale(1.04); filter: drop-shadow(0 4px 14px rgba(255, 45, 149, 0.55)); }
+.logo-wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  line-height: 1.05;
+  gap: 1px;
 }
 
+.logo-name {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #f8f8fc;
+  text-transform: none;
+}
+
+.logo-tagline {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.38em;
+  text-indent: 0.38em;
+  color: #e879f9;
+  text-transform: uppercase;
+}
+
+/* legado — remover se não usado */
 .logo-text {
   display: flex;
   flex-direction: column;
@@ -224,4 +261,10 @@
   margin-left: auto;
   margin-right: auto;
   line-height: 1.4;
+}
+
+.footer-brand {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--dopa-text, #f4f4f8);
 }

@@ -167,6 +167,20 @@ body.theme-fashion #main-header .wallet-fintech .wallet-value {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
+body.theme-express #main-header .logo,
+body.theme-premium #main-header .logo,
+body.theme-fashion #main-header .logo {
+  background: rgba(255, 255, 255, 0.03) !important;
+  -webkit-text-fill-color: initial !important;
+  color: inherit !important;
+}
+
+body.theme-express #main-header .logo-name,
+body.theme-premium #main-header .logo-name,
+body.theme-fashion #main-header .logo-name {
+  color: #f8f8fc !important;
+}
+
 .logo {
   font-weight: 800;
   letter-spacing: 0.12em;
