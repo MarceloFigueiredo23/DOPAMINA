@@ -588,6 +588,14 @@ body.flow-checkout .stat-value {
   text-shadow: 0 0 24px rgba(0, 255, 163, 0.35);
 }
 
+body.flow-checkout #view-tracking .tracking-countdown {
+  color: #00ffa3 !important;
+}
+
+body.flow-checkout #view-tracking .tracking-phase {
+  color: #9b9bb0 !important;
+}
+
 body.flow-checkout #view-tracking .tracking-eta {
   color: var(--dopa-accent) !important;
   background: rgba(255, 45, 149, 0.12);
