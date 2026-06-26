@@ -1,5 +1,5 @@
 /**
- * DopShop — Design System Premium
+ * Mercadopamina — Design System
  * Dark Mode · Neon Cyberpunk · Fintech / Delivery App
  */
 
@@ -117,9 +117,25 @@ h3 {
   color: var(--dopa-muted);
 }
 
-/* ── Header glass — FIXO em todas as lojas ── */
+/* ── Sem barra global (só header de cada loja + menu inferior) ── */
+body.no-top-chrome,
 body.has-dopamina-header {
-  padding-top: var(--dopamina-chrome-h, 102px);
+  padding-top: 0 !important;
+}
+
+body.no-top-chrome {
+  --promo-ticker-h: 0px;
+  --dopamina-header-h: 0px;
+  --dopamina-chrome-h: 0px;
+}
+
+body.no-top-chrome .active-order-banner {
+  top: 0;
+}
+
+#main-header,
+.promo-ticker {
+  display: none !important;
 }
 
 /* ── Ticker promocional ── */

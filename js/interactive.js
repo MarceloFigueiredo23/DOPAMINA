@@ -63,7 +63,7 @@
 
   var MERCADAO_BENEFITS = [
     { icon: '🚚', title: 'Frete grátis', sub: 'Benefício na sua primeira compra simulada.', cta: 'Mostrar produtos' },
-    { icon: '👤', title: 'Entre na sua conta', sub: 'Aproveite ofertas no DopShop.', cta: 'Entrar na conta' },
+    { icon: '👤', title: 'Entre na sua conta', sub: 'Aproveite ofertas no Mercadopamina.', cta: 'Entrar na conta' },
     { icon: '📍', title: 'Insira sua localização', sub: 'Confira prazos de entrega simulados.', cta: 'Informar CEP' },
     { icon: '💳', title: 'Meios de pagamento', sub: 'Pix, cartão e saldo do desafio R$ 1 mi.', cta: 'Ver meios' },
     { icon: '💰', title: 'Menos de R$100', sub: 'Produtos com preços baixos.', cta: 'Mostrar produtos' },
@@ -237,6 +237,7 @@
 
   function therapyHero(tab) {
     var subs = {
+      home: 'Sinta a dopamina sem gastar dinheiro real. Navegue por ofertas imperdíveis, monte seu carrinho e acompanhe entregas simuladas em tempo real. A emoção é real, a conta não.',
       express: 'Peça, acompanhe a entrega e sinta o checkout — sem gastar de verdade.',
       market: 'Tudo que você procura em um só lugar — com a cara do marketplace brasileiro.',
       premium: 'Navegue ofertas, monte o carrinho e acompanhe entregas simuladas em tempo real.',
@@ -246,10 +247,10 @@
     return (
       '<section class="therapy-hero therapy-hero--' + (tab || 'default') + '">' +
       '<span class="therapy-hero-kicker">Mega ofertas do dia</span>' +
-      '<h2 class="therapy-hero-title">Simulador de Compras para Terapia de Varejo</h2>' +
+      '<h1 class="therapy-hero-title">Simulador de Compras para Terapia de Varejo.</h1>' +
       '<p class="therapy-hero-sub">' + (subs[tab] || subs.default) + '</p>' +
       '<div class="therapy-hero-tags">' +
-      '<span>🚚 Frete grátis hoje</span><span>Até 60% OFF</span><span>📦 Entrega simulada</span>' +
+      '<span>🚚 Frete grátis hoje</span><span>Até 60% OFF</span>' +
       '</div></section>'
     );
   }

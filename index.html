@@ -3,36 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="DopShop — simulador de compras para terapia de varejo. AIFOOD, MERCADÃO, AMAZOOM e SHENIM em um só lugar." />
-  <meta name="application-name" content="DopShop" />
-  <title>DopShop — Terapia de Varejo</title>
+  <meta name="description" content="Mercadopamina — terapia de varejo e simulador de compras. Ofertas, carrinho e entrega simulada sem cobrança real." />
+  <meta name="application-name" content="Mercadopamina" />
+  <title>Mercadopamina — Terapia de Varejo</title>
   <meta name="theme-color" content="#0B0B0F" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/styles.css?v=11" />
-  <link rel="stylesheet" href="css/themes.css?v=11" />
-  <link rel="stylesheet" href="css/interactive.css?v=11" />
-  <link rel="stylesheet" href="css/readability.css?v=11" />
-  <link rel="stylesheet" href="css/brand.css?v=11" />
-  <link rel="stylesheet" href="css/brands.css?v=11" />
-  <link rel="stylesheet" href="css/auth.css?v=11" />
+  <link rel="stylesheet" href="css/styles.css?v=16" />
+  <link rel="stylesheet" href="css/themes.css?v=16" />
+  <link rel="stylesheet" href="css/interactive.css?v=16" />
+  <link rel="stylesheet" href="css/readability.css?v=16" />
+  <link rel="stylesheet" href="css/brand.css?v=16" />
+  <link rel="stylesheet" href="css/brands.css?v=16" />
+  <link rel="stylesheet" href="css/auth.css?v=16" />
+  <link rel="stylesheet" href="css/dopamina-home.css?v=16" />
 </head>
 <body>
   <div class="promo-ticker" id="promo-ticker" aria-hidden="true">
     <div class="promo-ticker-track">
       <span>🚚 Frete GRÁTIS hoje em milhares de produtos</span>
       <span>⚡ Ofertas relâmpago por tempo limitado</span>
-      <span>🎟️ Cupom DOPSHOP10 — 10% OFF no checkout</span>
+      <span>🎟️ Cupom MERCADOPAMINA10 — 10% OFF no checkout</span>
       <span>📦 Entrega simulada em tempo real</span>
-      <span>🛍️ DopShop — terapia de varejo simulada</span>
-      <span>💰 Desafio R$ 1 milhão — quanto você gastaria?</span>
+      <span>🛍️ Mercadopamina — terapia de varejo simulada</span>
       <span>🚚 Frete GRÁTIS hoje em milhares de produtos</span>
       <span>⚡ Ofertas relâmpago por tempo limitado</span>
-      <span>🎟️ Cupom DOPSHOP10 — 10% OFF no checkout</span>
+      <span>🎟️ Cupom MERCADOPAMINA10 — 10% OFF no checkout</span>
       <span>📦 Entrega simulada em tempo real</span>
     </div>
+  </div>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header-inner">
+      <a href="#" class="site-logo nav-link" data-view="shop" data-tab="home" aria-label="Mercadopamina — início">
+        <span id="site-logo-mark" aria-hidden="true"></span>
+        <span>Mercado<em>pamina</em></span>
+      </a>
+      <nav class="site-header-nav">
+        <a href="#" class="nav-link" data-view="profile">Meus Pedidos</a>
+        <button type="button" class="site-header-cart nav-link" data-view="cart">
+          Carrinho <span id="cart-count" class="cart-count" hidden>0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="site-chrome-stubs" hidden aria-hidden="true">
+    <span id="coupon-badge" class="coupon-badge" hidden></span>
+    <span id="wallet-balance"></span>
   </div>
   <div id="toast" class="toast" aria-live="polite"></div>
 
@@ -40,7 +60,7 @@
   <div id="cart-drawer-overlay" class="cart-drawer-overlay" hidden aria-hidden="true"></div>
   <aside id="cart-drawer" class="cart-drawer" hidden aria-hidden="true" aria-label="Seu carrinho">
     <header class="cart-drawer-head">
-      <span class="cart-drawer-head-title">🛍️ Seu carrinho</span>
+      <span class="cart-drawer-head-title">🧠 Seu carrinho</span>
       <button type="button" class="cart-drawer-close" id="cart-drawer-close" aria-label="Fechar carrinho">✕</button>
     </header>
     <div class="cart-drawer-scroll">
@@ -89,34 +109,6 @@
     </div>
   </div>
 
-  <header class="header" id="main-header">
-    <div class="header-inner">
-      <a href="#" class="logo nav-link" data-view="shop" aria-label="DopShop — início">
-        <span class="logo-icon" id="site-logo-mark" aria-hidden="true"></span>
-        <span class="logo-wordmark">
-          <span class="logo-name">Dop</span>
-          <span class="logo-tagline">Shop</span>
-        </span>
-      </a>
-      <nav class="nav">
-        <a href="#" class="nav-link active" data-view="shop">Início</a>
-        <a href="#" class="nav-link" data-view="cart">Sacola</a>
-        <a href="#" class="nav-link" data-view="profile">Conta</a>
-      </nav>
-      <div class="header-right">
-        <span id="coupon-badge" class="coupon-badge" hidden></span>
-        <div class="wallet wallet-fintech payment-pill">
-          <span class="wallet-label">Desafio R$ 1 mi</span>
-          <span class="wallet-value" id="wallet-balance">R$ 1.000.000,00</span>
-          <span class="wallet-card-hint">Visa •••• 4821</span>
-        </div>
-        <button type="button" class="cart-btn nav-link" data-view="cart">
-          🛒 <span id="cart-count" class="cart-count" hidden>0</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
   <div id="active-order-banner" class="active-order-banner" hidden>
     <button type="button" class="active-order-banner-inner" id="active-order-banner-btn">
       <span class="active-order-icon" aria-hidden="true">📦</span>
@@ -132,7 +124,7 @@
   <main class="main">
     <!-- LOJA -->
     <section id="view-shop" class="view active">
-      <div id="shop-shell" class="shop-shell theme-express">
+      <div id="shop-shell" class="shop-shell theme-home">
         <div id="shop-header-zone"></div>
         <div id="product-grid" class="product-grid"></div>
       </div>
@@ -279,7 +271,7 @@
       <div id="profile-guest" hidden>
         <div class="auth-card">
           <h2>Criar conta</h2>
-          <p class="auth-lead">Cadastro piloto do DopShop. Você pode navegar sem conta; aqui salvamos pedidos e preferências no seu dispositivo.</p>
+          <p class="auth-lead">Cadastro piloto do Mercadopamina. Você pode navegar sem conta; aqui salvamos pedidos e preferências no seu dispositivo.</p>
           <form id="register-form" class="auth-form">
             <label>
               Nome completo
@@ -394,9 +386,27 @@
   </main>
 
   <footer class="footer">
-    <p><strong class="footer-brand">DopShop</strong> © 2026 · dopshop.com.br · Simulador de compras para terapia de varejo — a emoção é real, a cobrança não.</p>
-    <p class="brand-disclaimer">AIFOOD, MERCADÃO, AMAZOOM e SHENIM são marcas fictícias de paródia, sem vínculo com iFood, Mercado Livre, Amazon, SHEIN ou outras empresas.</p>
-    <p><a href="#" class="legal-link" data-legal="privacy">Política de Privacidade</a> · <a href="#" class="legal-link" data-legal="terms">Termos de Uso</a></p>
+    <div class="ds-therapy-footer">
+      <h2>Shopping Terapêutico Seguro</h2>
+      <p>Use o Mercadopamina como uma válvula de escape financeira segura. Sinta toda a emoção do checkout e do rastreio sem acumular dívidas — a emoção é real, a cobrança não.</p>
+    </div>
+    <p><strong class="footer-brand">Mercadopamina</strong> — A emoção de comprar online, sem gastar nada.</p>
+    <nav class="footer-links">
+      <a href="#" class="nav-link" data-view="shop">Todos os Produtos</a>
+      <a href="#" class="nav-link" data-view="profile">Meus Pedidos</a>
+      <a href="#" class="legal-link" data-legal="privacy">Política de Privacidade</a>
+      <a href="#" class="legal-link" data-legal="terms">Termos de Uso</a>
+    </nav>
+    <div class="parody-shops-bar" id="parody-shops-bar">
+      <span>Modo lojas paródia:</span>
+      <button type="button" data-tab="express">AIFOOD</button>
+      <button type="button" data-tab="market">MERCADÃO</button>
+      <button type="button" data-tab="premium">AMAZOOM</button>
+      <button type="button" data-tab="fashion">SHENIM</button>
+      <button type="button" data-tab="home">← Voltar ao início</button>
+    </div>
+    <p class="brand-disclaimer">AIFOOD, MERCADÃO, AMAZOOM e SHENIM são marcas fictícias de paródia. Simulador — sem pagamentos reais.</p>
+    <p>© 2026 Mercadopamina · mercadopamina.com.br</p>
   </footer>
 
   <div id="legal-modal" class="legal-modal" hidden role="dialog" aria-modal="true" aria-labelledby="legal-modal-title">
@@ -425,13 +435,14 @@
     <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Perfil</button>
   </nav>
 
-  <script src="js/catalog-data.js?v=11"></script>
-  <script src="js/ifood-data.js?v=11"></script>
-  <script src="js/brands.js?v=11"></script>
-  <script src="js/auth.js?v=11"></script>
-  <script src="js/realism.js?v=11"></script>
-  <script src="js/interactive.js?v=11"></script>
+  <script src="js/catalog-photos.js?v=16"></script>
+  <script src="js/catalog-data.js?v=16"></script>
+  <script src="js/ifood-data.js?v=16"></script>
+  <script src="js/brands.js?v=16"></script>
+  <script src="js/auth.js?v=16"></script>
+  <script src="js/realism.js?v=16"></script>
+  <script src="js/interactive.js?v=16"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/dopamina.js?v=11"></script>
+  <script src="js/dopamina.js?v=16"></script>
 </body>
 </html>

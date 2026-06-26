@@ -38,15 +38,13 @@
     '<circle cx="8" cy="18" r="2" fill="#ff2d6a"/><circle cx="40" cy="16" r="2" fill="#ff2d6a"/>' +
     '</svg>';
 
-  /* DopShop — monograma premium */
-  var LOGO_DOPSHOP =
-    '<svg class="brand-mark brand-mark--dopamina" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true">' +
-    '<defs>' +
-    '<linearGradient id="dopaMarkGrad" x1="0" y1="0" x2="44" y2="44"><stop offset="0%" stop-color="#c084fc"/><stop offset="50%" stop-color="#b026ff"/><stop offset="100%" stop-color="#ff2d95"/></linearGradient>' +
-    '</defs>' +
-    '<rect x="1" y="1" width="42" height="42" rx="11" fill="#12121a" stroke="url(#dopaMarkGrad)" stroke-width="1.5"/>' +
-    '<path d="M15 13 H24.5 C29.5 13 33 16.2 33 20.5 C33 24.8 29.5 28 24.5 28 H19 V35" fill="none" stroke="url(#dopaMarkGrad)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>' +
-    '<circle cx="31" cy="13" r="2.25" fill="#00ffa3"/>' +
+  /* Mercadopamina — hub marketplace (amarelo + verde) */
+  var LOGO_MERCADOPAMINA =
+    '<svg class="brand-mark brand-mark--mercadopamina" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true">' +
+    '<rect x="1" y="1" width="42" height="42" rx="11" fill="#fff159" stroke="#3483fa" stroke-width="1.5"/>' +
+    '<path d="M14 28 C18 22 22 20 24 20 C26 20 30 22 34 28" stroke="#3483fa" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+    '<circle cx="17" cy="26" r="2.5" fill="#00a650"/><circle cx="31" cy="26" r="2.5" fill="#00a650"/>' +
+    '<path d="M12 14 H32" stroke="#2d3277" stroke-width="2" stroke-linecap="round"/>' +
     '</svg>';
 
   /* MERCADÃO — paródia marketplace amarelo/azul */
@@ -119,10 +117,10 @@
 
   var BRANDS = {
     site: {
-      name: 'DopShop',
-      short: 'Dop',
-      suffix: 'Shop',
-      logoMark: LOGO_DOPSHOP,
+      name: 'Mercadopamina',
+      short: 'Mercado',
+      suffix: 'pamina',
+      logoMark: LOGO_MERCADOPAMINA,
     },
     express: { name: 'AIFOOD', logoMark: LOGO_AIFOOD, color: '#ea1d2c' },
     market: { name: 'MERCADÃO', logoMark: LOGO_MERCADAO, color: '#fff159' },

@@ -41,6 +41,13 @@
 
   const UI = window.DOPAMINA_UI || {};
 
+  /** Fallback por produto (nunca uma imagem genérica igual para todos) */
+  function productImgOnerror(p) {
+    var fb = (p && (p.imageFallback || p.image)) || '';
+    if (!fb) return 'this.style.opacity=0.35';
+    return "if(!this.dataset.tried){this.dataset.tried=1;this.src='" + fb.replace(/'/g, '%27') + "'}";
+  }
+
   function AUTH() {
     return window.DOPAMINA_AUTH || {};
   }
@@ -109,7 +116,7 @@
       title: 'Termos de Uso — Piloto',
       html:
         '<h3>1. Natureza do serviço</h3>' +
-        '<p>O DopShop é uma experiência demonstrativa de e-commerce simulado. Nenhuma cobrança real é processada.</p>' +
+        '<p>O Mercadopamina é uma experiência demonstrativa de e-commerce simulado. Nenhuma cobrança real é processada.</p>' +
         '<h3>2. Conta piloto</h3>' +
         '<p>Os dados de cadastro ficam armazenados localmente no seu navegador até você excluir a conta ou limpar os dados do site.</p>' +
         '<h3>3. Marcas paródia</h3>' +
@@ -121,7 +128,7 @@
       title: 'Política de Privacidade — Piloto',
       html:
         '<h3>Controlador</h3>' +
-        '<p>DopShop (experiência piloto). Contato: canal definido pelo operador do projeto.</p>' +
+        '<p>Mercadopamina (experiência piloto). Contato: canal definido pelo operador do projeto.</p>' +
         '<h3>Dados coletados no cadastro</h3>' +
         '<ul><li>Nome, e-mail, cidade (opcional) e senha simulada (local)</li><li>Pedidos simulados e preferências de navegação</li><li>No checkout: nome, idade, e-mail, sexo e região para finalizar cada pedido</li></ul>' +
         '<h3>Notificações de envio (opt-in)</h3>' +
@@ -553,7 +560,7 @@
       modal.className = 'roulette-modal roulette-' + rouletteTab;
       var h1 = modal.querySelector('h1');
       var p = modal.querySelector('p');
-      if (h1) h1.textContent = 'Roleta ' + (tabLabel[rouletteTab] || 'DopShop');
+      if (h1) h1.textContent = 'Roleta ' + (tabLabel[rouletteTab] || 'Mercadopamina');
       if (p) p.textContent = 'Gire e ganhe cupons exclusivos no ' + (tabLabel[rouletteTab] || 'app') + '!';
     }
 
@@ -1036,7 +1043,138 @@
   }
 
   /* ── app.js ── */
-  let currentTab = 'express';
+  let currentTab = 'home';
+  let homeCategory = 'all';
+
+  var HOME_CATEGORIES = [
+    { id: 'all', label: 'Todos' },
+    { id: 'eletronicos', label: 'Eletrônicos' },
+    { id: 'moda', label: 'Moda' },
+    { id: 'acessorios', label: 'Acessórios' },
+    { id: 'casa', label: 'Casa' },
+    { id: 'gadgets', label: 'Gadgets' },
+    { id: 'esportes', label: 'Esportes' },
+    { id: 'beleza', label: 'Beleza' },
+    { id: 'games', label: 'Games' },
+    { id: 'foods', label: 'Mercadopamina Foods' },
+  ];
+
+  function getAllCatalogItems() {
+    return (CATALOG.premium || []).concat(CATALOG.fashion || []).concat(CATALOG.express || []);
+  }
+
+  function homeCategoryOf(p) {
+    if (isExpress(p.id)) return 'foods';
+    if (p.category === 'Acessórios') return 'acessorios';
+    if (p.category === 'Calçados') {
+      if (['Nike', 'Adidas', 'New Balance', 'Puma', 'Balenciaga', 'Prada'].indexOf(p.brand) >= 0) return 'esportes';
+      return 'moda';
+    }
+    if (p.category === 'Feminino' || p.category === 'Masculino') return 'moda';
+    if (p.tag === 'Games' || p.id === 'p03' || p.id === 'p08' || p.id === 'p13' || p.id === 'p30') return 'games';
+    if (p.tag === 'Beleza' || p.tag === 'Wearable') return 'beleza';
+    if (['Áudio', 'Creator', 'Periféricos', 'Foto', 'Tablet'].indexOf(p.tag) >= 0) return 'gadgets';
+    if (['Casa', 'Cozinha', 'Eletro', 'TV', 'Monitor', 'Barista'].indexOf(p.tag) >= 0) return 'casa';
+    return 'eletronicos';
+  }
+
+  function filterHomeItems(items) {
+    var q = (ifoodSearch || '').toLowerCase().trim();
+    return items.filter(function (p) {
+      if (homeCategory !== 'all' && homeCategoryOf(p) !== homeCategory) return false;
+      if (!q) return true;
+      var hay = (p.name + ' ' + (p.brand || '') + ' ' + (p.tag || '')).toLowerCase();
+      return hay.indexOf(q) >= 0;
+    });
+  }
+
+  function exploreCategoriesHtml() {
+    return '<div class="ds-category-tabs" role="tablist">' +
+      HOME_CATEGORIES.map(function (c) {
+        return '<button type="button" class="ds-cat-tab' + (homeCategory === c.id ? ' active' : '') + '" data-home-cat="' + c.id + '">' + c.label + '</button>';
+      }).join('') +
+      '</div>';
+  }
+
+  function adPlaceholderHtml() {
+    return '<div class="ds-ad-slot" aria-hidden="true">' +
+      '<span>Patrocinado</span>' +
+      '<h3>📢 Espaço Publicitário</h3>' +
+      '<p>Imagine que aqui tem um anúncio irritante.</p></div>';
+  }
+
+  function renderDopaminaCard(p) {
+    var pct = discountPct(p);
+    var urgency = '';
+    if (p.reviews >= 8000) urgency = '<span class="deal-urgency deal-urgency--hot">Voando! Restam poucas</span>';
+    else if (p.reviews >= 4000) urgency = '<span class="deal-urgency">Mais vendido</span>';
+    else if (pct >= 50) urgency = '<span class="deal-urgency">Oferta relâmpago</span>';
+    else if (p.reviews < 2000 && pct > 0) urgency = '<span class="deal-urgency">Últimas unidades</span>';
+    return '<article class="ds-card deal-card-rich" data-open="' + p.id + '">' +
+      '<div class="ds-card-img-wrap">' +
+      (pct > 0 ? '<span class="deal-pct-badge">−' + pct + '%</span>' : '') +
+      '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="' + productImgOnerror(p) + '" />' +
+      '</div>' +
+      urgency +
+      '<h3>' + p.name + '</h3>' +
+      productSoldMetaHtml(p) +
+      '<div class="ds-card-prices"><strong>' + formatBRL(p.price) + '</strong>' +
+      (p.oldPrice ? '<s>' + formatBRL(p.oldPrice) + '</s>' : '') + '</div>' +
+      productFreteHtml(p) +
+      '<button type="button" class="ds-add-btn" data-add="' + p.id + '">Adicionar</button></article>';
+  }
+
+  function bindHomeCategories(root) {
+    if (!root) return;
+    root.querySelectorAll('[data-home-cat]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        homeCategory = btn.dataset.homeCat || 'all';
+        renderHomeShop();
+        var tabs = root.querySelector('.ds-category-tabs');
+        if (tabs) tabs.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+  }
+
+  function bindParodyShopsBar() {
+    var bar = $('#parody-shops-bar');
+    if (!bar || bar.dataset.bound) return;
+    bar.dataset.bound = '1';
+    bar.querySelectorAll('[data-tab]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        currentTab = btn.dataset.tab;
+        ifoodRestaurantId = null;
+        homeCategory = 'all';
+        applyShopTheme();
+        showView('shop');
+        window.scrollTo(0, 0);
+      });
+    });
+  }
+
+  function renderHomeShop() {
+    var grid = $('#product-grid');
+    if (!grid) return;
+    var all = getAllCatalogItems();
+    var items = filterHomeItems(all);
+    var therapy = UI.therapyHero ? UI.therapyHero('home') : '';
+    var flashBlock = flashDealsHtml(getFlashDeals(all, 18));
+    var cardsHtml = items.map(renderDopaminaCard).join('');
+    grid.className = 'ds-home';
+    grid.innerHTML =
+      therapy +
+      flashBlock +
+      '<section class="ds-explore" aria-label="Explorar produtos">' +
+      '<h2>Explorar produtos</h2>' +
+      exploreCategoriesHtml() +
+      '<div class="ds-product-grid">' + cardsHtml + '</div>' +
+      '</section>' +
+      adPlaceholderHtml() +
+      shopInfiniteLoaderHtml();
+    bindProductGridActions(grid);
+    bindHomeCategories(grid);
+    bindPromoArea(grid);
+  }
   let currentView = 'shop';
   const IFOOD = window.DOPAMINA_IFOOD || {};
   let ifoodCategory = 'all';
@@ -1152,7 +1290,7 @@
 
   function renderIfoodDishCard(p) {
     return '<article class="ifood-dish" data-open="' + p.id + '">' +
-      '<img class="ifood-dish-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=400&fit=crop\'" />' +
+      '<img class="ifood-dish-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="' + productImgOnerror(p) + '" />' +
       '<div class="ifood-dish-body">' +
       productBrandHtml(p) +
       (p.tag ? '<span class="ifood-tag">' + p.tag + '</span>' : '') +
@@ -1225,7 +1363,7 @@
         : '<span class="flash-deal-pct flash-deal-pct--tag">' + (p.tag || 'HOT') + '</span>';
       return '<article class="flash-deal-card" data-open="' + p.id + '">' +
         badge +
-        '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=300&h=300&fit=crop\'" />' +
+        '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="' + productImgOnerror(p) + '" />' +
         '<h4>' + p.name + '</h4>' +
         '<div class="flash-deal-price"><strong>' + formatBRL(p.price) + '</strong>' +
         (p.oldPrice ? '<s>' + formatBRL(p.oldPrice) + '</s>' : '') + '</div>' +
@@ -1276,7 +1414,7 @@
       '<div class="deal-card-img-wrap">' +
       (pct > 0 ? '<span class="deal-pct-badge">−' + pct + '%</span>' : '') +
       (p.prime ? '<span class="amazon-prime">prime</span>' : '') +
-      '<img class="amazon-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&h=600&fit=crop\'" />' +
+      '<img class="amazon-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="' + productImgOnerror(p) + '" />' +
       '</div>' +
       productBrandHtml(p) +
       '<h3>' + p.name + '</h3>' +
@@ -1294,7 +1432,7 @@
       '<div class="shenim-card-img-wrap deal-card-img-wrap">' +
       (pct > 0 ? '<span class="deal-pct-badge shenim-sale">−' + pct + '%</span>' : '') +
       brandTierBadge(p.brandTier) +
-      '<img class="shenim-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&h=800&fit=crop\'" /></div>' +
+      '<img class="shenim-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="' + productImgOnerror(p) + '" /></div>' +
       productBrandHtml(p) +
       '<h3>' + p.name + '</h3>' +
       '<p class="shenim-card-meta">' + (p.color || '') + (p.material ? ' · ' + p.material : '') + '</p>' +
@@ -1310,19 +1448,19 @@
     if (!cart.length) {
       return {
         pct: 0,
-        label: 'Cérebro em repouso. Adicione algo para ativar o rush! 🧠',
+        label: 'Cérebro em repouso. Adicione algo para liberar dopamina! 🧠',
       };
     }
     var sub = cartTotal(cart);
     var items = cart.reduce(function (s, i) { return s + i.qty; }, 0);
     var pct = Math.min(100, Math.round(Math.sqrt(sub / 100) * 7 + items * 5));
     var label;
-    if (pct < 20) label = 'Pequena dose começando… ✨';
+    if (pct < 20) label = 'Cérebro em repouso. Adicione algo para liberar dopamina! 🧠';
     else if (pct < 45) label = 'Prazer da compra ativado 🛒';
     else if (pct < 65) label = 'Fluxo de prazer constante! O carrinho está ficando lindo. ✨';
     else if (pct < 85) label = 'Rush subindo — quase no pico! 🔥';
     else if (pct < 95) label = 'Quase lá — finalize o checkout! 🚀';
-    else label = 'PICO DOPSHOP — libere no checkout! 💥';
+    else label = 'PICO MERCADOPAMINA — libere no checkout! 💥';
     return { pct: pct, label: label };
   }
 
@@ -1357,7 +1495,7 @@
     if (!p) return '';
     var meta = cartItemMetaLine(p);
     return '<article class="cart-drawer-item">' +
-      '<img class="cart-drawer-item-img" src="' + (p.image || '') + '" alt="" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop\'" />' +
+      '<img class="cart-drawer-item-img" src="' + (p.image || '') + '" alt="" loading="lazy" onerror="' + productImgOnerror(p) + '" />' +
       '<div class="cart-drawer-item-body">' +
       '<strong>' + p.name + '</strong>' +
       (meta ? '<span class="cart-drawer-item-meta">' + meta + '</span>' : '') +
@@ -1422,9 +1560,9 @@
 
   function tryApplyCouponCode(code) {
     var normalized = (code || '').trim().toUpperCase();
-    if (normalized === 'DOPSHOP10') {
-      saveCoupon({ label: 'DOPSHOP10', discount: 0.1, type: 'percent' });
-      flashToast('Cupom DOPSHOP10 aplicado — 10% OFF');
+    if (normalized === 'MERCADOPAMINA10' || normalized === 'DOPSHOP10' || normalized === 'DOPAMINA10') {
+      saveCoupon({ label: 'MERCADOPAMINA10', discount: 0.1, type: 'percent' });
+      flashToast('Cupom MERCADOPAMINA10 aplicado — 10% OFF');
       renderCart();
       return true;
     }
@@ -1482,25 +1620,22 @@
 
   function syncHeaderHeight() {
     var ticker = $('#promo-ticker');
-    var tickerH = ticker ? ticker.getBoundingClientRect().height : 0;
+    var tickerH = ticker && !ticker.hidden ? ticker.getBoundingClientRect().height : 0;
+    var header = $('#site-header');
+    var headerH = header && !header.hidden ? header.getBoundingClientRect().height : 0;
     document.documentElement.style.setProperty('--promo-ticker-h', Math.ceil(tickerH) + 'px');
-    var el = $('#main-header');
-    if (!el) return;
-    el.removeAttribute('hidden');
-    document.body.classList.add('has-dopamina-header');
-    var h = el.getBoundingClientRect().height;
-    document.documentElement.style.setProperty('--dopamina-header-h', Math.ceil(h) + 'px');
-    document.documentElement.style.setProperty('--dopamina-chrome-h', (Math.ceil(h) + Math.ceil(tickerH)) + 'px');
+    document.documentElement.style.setProperty('--dopamina-header-h', Math.ceil(headerH) + 'px');
+    document.documentElement.style.setProperty('--site-chrome-h', (Math.ceil(tickerH) + Math.ceil(headerH)) + 'px');
+    document.documentElement.style.setProperty('--dopamina-chrome-h', (Math.ceil(tickerH) + Math.ceil(headerH)) + 'px');
+    document.body.classList.add('has-site-header');
   }
 
   function updateAppChrome(view) {
     var tabChromeViews = ['shop', 'cart', 'profile'];
     var showAifoodChrome = currentTab === 'express' && tabChromeViews.indexOf(view) >= 0;
     var showShenimChrome = currentTab === 'fashion' && tabChromeViews.indexOf(view) >= 0;
-    var mainH = $('#main-header');
     var ifoodNav = $('#ifood-bottom-nav');
     var shenimNav = $('#shenim-bottom-nav');
-    if (mainH) mainH.hidden = false;
     if (ifoodNav) ifoodNav.hidden = !showAifoodChrome;
     if (shenimNav) shenimNav.hidden = !showShenimChrome;
     document.body.classList.add('has-dopamina-header');
@@ -1516,14 +1651,17 @@
   }
 
   function applyShopTheme() {
-    document.body.classList.remove('theme-express', 'theme-premium', 'theme-fashion', 'theme-market');
+    document.body.classList.remove('theme-express', 'theme-premium', 'theme-fashion', 'theme-market', 'theme-home');
     var theme = 'theme-premium';
-    if (currentTab === 'express') theme = 'theme-express';
+    if (currentTab === 'home') theme = 'theme-home';
+    else if (currentTab === 'express') theme = 'theme-express';
     else if (currentTab === 'fashion') theme = 'theme-fashion';
     else if (currentTab === 'market') theme = 'theme-market';
     document.body.classList.add(theme);
-    const shell = $('#shop-shell');
-    if (shell) shell.className = 'shop-shell ' + theme;
+    var shell = $('#shop-shell');
+    if (shell) {
+      shell.className = 'shop-shell ' + theme;
+    }
     updateAppChrome(currentView);
   }
 
@@ -1543,6 +1681,23 @@
   function renderShopHeader() {
     const zone = $('#shop-header-zone');
     if (!zone) return;
+
+    if (currentTab === 'home') {
+      zone.innerHTML =
+        '<div class="ds-home-search-wrap">' +
+        '<span class="ds-home-search-icon">🔍</span>' +
+        '<input type="search" class="ds-home-search" id="shop-search" placeholder="Buscar produtos, marcas e categorias…" value="' + (ifoodSearch || '') + '" />' +
+        '</div>';
+      var searchEl = $('#shop-search');
+      if (searchEl && !searchEl.dataset.bound) {
+        searchEl.dataset.bound = '1';
+        searchEl.addEventListener('input', function () {
+          ifoodSearch = searchEl.value;
+          renderHomeShop();
+        });
+      }
+      return;
+    }
 
     var hub = renderHubTabs();
 
@@ -1642,6 +1797,7 @@
     if (searchEl) {
       searchEl.addEventListener('input', function () {
         ifoodSearch = searchEl.value;
+        if (currentTab === 'home') renderHomeShop();
         if (currentTab === 'express' && !ifoodRestaurantId) renderExpressHome();
         if (currentTab === 'fashion') renderShenimProducts();
         if (currentTab === 'market') renderMercadaoProducts();
@@ -1787,7 +1943,7 @@
     var freeShip = p.price >= 79 || p.prime;
     return '<article class="mercadao-card" data-open="' + p.id + '">' +
       (pct > 0 ? '<span class="mercadao-off">-' + pct + '%</span>' : '') +
-      '<img class="mercadao-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=400&fit=crop\'" />' +
+      '<img class="mercadao-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="' + productImgOnerror(p) + '" />' +
       '<h3>' + p.name + '</h3>' +
       '<div class="mercadao-price">R$ ' + formatMercadaoPrice(p.price) + '</div>' +
       '<div class="mercadao-installments">em 12x ' + formatBRL(installments) + ' sem juros</div>' +
@@ -1832,7 +1988,9 @@
   function renderProducts() {
     applyShopTheme();
     renderShopHeader();
-    if (currentTab === 'express') {
+    if (currentTab === 'home') {
+      renderHomeShop();
+    } else if (currentTab === 'express') {
       if (ifoodRestaurantId) renderExpressRestaurant(ifoodRestaurantId);
       else renderExpressHome();
     } else if (currentTab === 'fashion') {
@@ -1859,7 +2017,7 @@
       var rest = IFOOD.getRestaurant && p.restaurantId ? IFOOD.getRestaurant(p.restaurantId) : null;
       panel.innerHTML =
         '<button type="button" class="modal-close" id="modal-close-btn">✕</button>' +
-        '<img class="detail-ifood-img" src="' + p.image + '" alt="' + p.name + '" onerror="this.src=\'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=500&fit=crop\'" />' +
+        '<img class="detail-ifood-img" src="' + p.image + '" alt="' + p.name + '" onerror="' + productImgOnerror(p) + '" />' +
         '<div class="detail-ifood-body">' +
         productBrandHtml(p) +
         '<span class="ifood-tag">' + p.tag + '</span>' +
@@ -1897,7 +2055,7 @@
       panel.innerHTML =
         '<button type="button" class="modal-close" id="modal-close-btn">✕</button>' +
         '<div class="detail-shenim">' +
-        '<img class="detail-shenim-img" src="' + p.image + '" alt="' + p.name + '" onerror="this.src=\'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800&h=1000&fit=crop\'" />' +
+        '<img class="detail-shenim-img" src="' + p.image + '" alt="' + p.name + '" onerror="' + productImgOnerror(p) + '" />' +
         '<div class="detail-shenim-body">' +
         productBrandHtml(p) +
         '<span class="shenim-tag">' + p.tag + '</span>' +
@@ -1922,7 +2080,7 @@
       panel.innerHTML =
         '<button type="button" class="modal-close" id="modal-close-btn">✕</button>' +
         '<div class="detail-amazon">' +
-        '<div><img class="detail-amazon-img" src="' + p.image + '" alt="' + p.name + '" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&h=800&fit=crop\'" /></div>' +
+        '<div><img class="detail-amazon-img" src="' + p.image + '" alt="' + p.name + '" onerror="' + productImgOnerror(p) + '" /></div>' +
         '<div>' +
         productBrandHtml(p) +
         '<h2>' + p.name + '</h2>' +
@@ -1948,6 +2106,7 @@
     }
 
     modal.hidden = false;
+    document.body.classList.add('product-modal-open');
     document.body.style.overflow = 'hidden';
 
     $('#modal-close-btn').onclick = closeProductModal;
@@ -1963,6 +2122,7 @@
   function closeProductModal() {
     const modal = $('#product-modal');
     if (modal) modal.hidden = true;
+    document.body.classList.remove('product-modal-open');
     document.body.style.overflow = '';
   }
 
@@ -2014,7 +2174,7 @@
   function flashToast(msg, dopaminaPct) {
     const t = $('#toast');
     var dopaLine = typeof dopaminaPct === 'number'
-      ? '<span class="toast-dopa">Rush DopShop: ' + dopaminaPct + '%</span>'
+      ? '<span class="toast-dopa">Rush Mercadopamina: ' + dopaminaPct + '%</span>'
       : '';
     t.innerHTML = '<strong>' + msg + '</strong>' + dopaLine;
     t.classList.add('show');
@@ -2107,13 +2267,13 @@
     var emptyDrawerHtml =
       '<div class="cart-drawer-empty">' +
       '<p class="empty">Seu carrinho está vazio.</p>' +
-      '<p class="empty-sub">Que tal garantir aquela dose de rush agora?</p>' +
+      '<p class="empty-sub">Que tal garantir aquela dose de dopamina agora?</p>' +
       '<button type="button" class="btn btn-primary cart-drawer-explore-btn">Explorar ofertas</button>' +
       '</div>';
     var emptyPageHtml =
       '<div class="empty-state">' +
       '<p class="empty">Seu carrinho está vazio.</p>' +
-      '<p class="empty-sub">Que tal garantir aquela dose de rush agora?</p>' +
+      '<p class="empty-sub">Que tal garantir aquela dose de dopamina agora?</p>' +
       '<button type="button" class="btn btn-primary nav-link" data-view="shop">Explorar ofertas</button>' +
       '</div>';
 
@@ -2576,6 +2736,11 @@
       var nav = e.target.closest('[data-view]');
       if (nav && nav.tagName !== 'FORM') {
         e.preventDefault();
+        if (nav.dataset.tab) {
+          currentTab = nav.dataset.tab;
+          ifoodRestaurantId = null;
+          homeCategory = 'all';
+        }
         showView(nav.dataset.view);
       }
     });
@@ -2679,10 +2844,10 @@
     try {
       runInit();
     } catch (err) {
-      console.error('DopShop erro:', err);
+      console.error('Mercadopamina erro:', err);
       const box = document.createElement('div');
       box.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#1a1228;color:#fff;padding:24px;font-family:sans-serif;overflow:auto';
-      box.innerHTML = '<h2>DopShop — erro ao carregar</h2><p>' + err.message + '</p><p>Use <strong>INICIAR.bat</strong> na pasta dopamina ou abra via <code>http://localhost:8765</code></p>';
+      box.innerHTML = '<h2>Mercadopamina — erro ao carregar</h2><p>' + err.message + '</p><p>Use <strong>INICIAR.bat</strong> na pasta dopamina ou abra via <code>http://localhost:8765</code></p>';
       document.body.appendChild(box);
     }
   }
@@ -2696,12 +2861,13 @@
       }, 900);
     }
     document.body.classList.add('has-dopamina-header');
-    var mainH = $('#main-header');
-    if (mainH) mainH.removeAttribute('hidden');
+    document.body.classList.add('has-site-header');
     var siteLogo = $('#site-logo-mark');
     var B = BRANDS().site;
     if (siteLogo && B && B.logoMark) siteLogo.innerHTML = B.logoMark;
+    syncHeaderHeight();
     updateHeader();
+    bindParodyShopsBar();
     applyShopTheme();
     bindGlobalUI();
     bindCartDrawer();

@@ -460,6 +460,53 @@ body.theme-premium .footer {
   .product-modal-panel { border-radius: 12px; max-height: 85vh; }
 }
 
+/* Modal imersivo — esconde chrome ao ver produto */
+body.product-modal-open #site-header,
+body.product-modal-open #main-header,
+body.product-modal-open #promo-ticker,
+body.product-modal-open #shop-header-zone,
+body.product-modal-open #active-order-banner,
+body.product-modal-open .ifood-bottom-nav,
+body.product-modal-open .shenim-bottom-nav,
+body.product-modal-open .footer {
+  display: none !important;
+}
+
+body.product-modal-open {
+  padding-top: 0 !important;
+}
+
+body.product-modal-open .product-modal {
+  align-items: stretch;
+  padding: 0;
+  z-index: 5000;
+}
+
+body.product-modal-open .product-modal-backdrop {
+  background: #0b0b0f;
+}
+
+body.product-modal-open .product-modal-panel {
+  max-height: 100dvh;
+  height: 100dvh;
+  border-radius: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  body.product-modal-open .product-modal {
+    align-items: center;
+    padding: 16px;
+  }
+  body.product-modal-open .product-modal-panel {
+    max-height: 92vh;
+    height: auto;
+    border-radius: 12px;
+    max-width: 900px;
+  }
+}
+
 @keyframes slideUp {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
@@ -594,6 +641,7 @@ body.theme-premium .footer {
   width: 100%;
   max-height: 400px;
   object-fit: contain;
+  background: #fff;
 }
 
 .detail-amazon-buybox {
@@ -1386,13 +1434,15 @@ body.theme-fashion .btn-primary { background: #111; color: #fff; }
   position: relative;
   aspect-ratio: 3/4;
   overflow: hidden;
-  background: #f0f0f0;
+  background: #fff;
 }
 
 .shenim-card-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .shenim-sale {
@@ -1467,8 +1517,11 @@ body.theme-fashion .btn-primary { background: #111; color: #fff; }
 
 .detail-shenim-img {
   width: 100%;
-  max-height: 420px;
-  object-fit: cover;
+  max-height: 55vh;
+  object-fit: contain;
+  background: #fff;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
 .detail-shenim-body { padding: 20px; }
