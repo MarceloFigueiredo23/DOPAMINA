@@ -73,7 +73,7 @@ body::before {
 
 .brand-logo-mark {
   display: block;
-  height: 48px;
+  height: 52px;
   width: auto;
   object-fit: contain;
   object-position: left center;
@@ -89,9 +89,9 @@ body::before {
   align-items: center;
 }
 
-.mp-wm-full {
+.site-logo .mp-wm-full {
   font-family: var(--dopa-font-display);
-  font-size: 1.35rem;
+  font-size: 1.55rem;
   font-weight: 700;
   letter-spacing: -0.04em;
   color: var(--mp-ink);
@@ -104,30 +104,30 @@ body::before {
 }
 
 @media (min-width: 721px) {
-  .brand-logo-mark {
-    height: 52px;
+  .site-logo .brand-logo-mark {
+    height: 58px;
   }
 
-  .mp-wm-full {
-    font-size: 1.55rem;
+  .site-logo .mp-wm-full {
+    font-size: 1.85rem;
   }
 
   .mp-brand-lockup {
-    gap: 10px;
+    gap: 12px;
   }
 }
 
 @media (max-width: 720px) {
-  .brand-logo-mark {
-    height: 40px;
+  .site-logo .brand-logo-mark {
+    height: 46px;
   }
 
-  .mp-wm-full {
-    font-size: 1.15rem;
+  .site-logo .mp-wm-full {
+    font-size: 1.45rem;
   }
 
   .mp-brand-lockup {
-    gap: 6px;
+    gap: 8px;
   }
 }
 
@@ -141,12 +141,12 @@ body::before {
 .site-header-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 6px 12px !important;
+  padding: 8px 12px !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  min-height: 56px;
+  min-height: 60px;
 }
 
 .mp-header-nav {
@@ -1072,12 +1072,12 @@ body.theme-mercadopamina .ds-home-search-wrap {
     gap: 8px;
   }
 
-  .brand-logo-mark {
-    height: 38px;
+  .site-logo .brand-logo-mark {
+    height: 48px;
   }
 
-  .mp-wm-full {
-    font-size: 1.2rem;
+  .site-logo .mp-wm-full {
+    font-size: 1.5rem;
   }
 
   .mp-header-nav {
@@ -1198,12 +1198,12 @@ body.theme-mercadopamina .ds-home-search-wrap {
     min-height: 58px;
   }
 
-  .brand-logo-mark {
-    height: 44px;
+  .site-logo .brand-logo-mark {
+    height: 56px;
   }
 
-  .mp-wm-full {
-    font-size: 1.45rem;
+  .site-logo .mp-wm-full {
+    font-size: 1.95rem;
   }
 
   .mp-tab {
@@ -1241,20 +1241,20 @@ body.theme-mercadopamina .ds-home-search-wrap {
 
   .site-header-inner {
     padding: 10px 24px !important;
-    min-height: 64px;
+    min-height: 70px;
     gap: 24px;
   }
 
-  .brand-logo-mark {
-    height: 54px;
+  .site-logo .brand-logo-mark {
+    height: 64px;
   }
 
-  .mp-wm-full {
-    font-size: 1.65rem;
+  .site-logo .mp-wm-full {
+    font-size: 2.15rem;
   }
 
   .mp-brand-lockup {
-    gap: 12px;
+    gap: 14px;
   }
 
   .mp-header-nav {
