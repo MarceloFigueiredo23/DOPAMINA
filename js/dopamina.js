@@ -36,6 +36,65 @@
 
   const UI = window.DOPAMINA_UI || {};
 
+  function AUTH() {
+    return window.DOPAMINA_AUTH || {};
+  }
+
+  function trackBehavior(type, payload) {
+    var A = AUTH();
+    if (A.logBehaviorEvent) A.logBehaviorEvent(type, payload || {});
+  }
+
+  var LEGAL_DOCS = {
+    terms: {
+      title: 'Termos de Uso — Piloto',
+      html:
+        '<h3>1. Natureza do serviço</h3>' +
+        '<p>O DOPAMINA SHOP é uma experiência demonstrativa de e-commerce simulado. Nenhuma cobrança real é processada.</p>' +
+        '<h3>2. Conta piloto</h3>' +
+        '<p>Os dados de cadastro ficam armazenados localmente no seu navegador até você excluir a conta ou limpar os dados do site.</p>' +
+        '<h3>3. Marcas paródia</h3>' +
+        '<p>AIFOOD, AMAZOOM e SHENIM são marcas fictícias de paródia, sem vínculo com empresas reais.</p>' +
+        '<h3>4. Uso aceitável</h3>' +
+        '<p>Proibido uso para fraude, engenharia reversa maliciosa ou tentativa de burlar sistemas de terceiros.</p>',
+    },
+    privacy: {
+      title: 'Política de Privacidade — Piloto',
+      html:
+        '<h3>Controlador</h3>' +
+        '<p>DOPAMINA SHOP (experiência piloto). Contato: canal definido pelo operador do projeto.</p>' +
+        '<h3>Dados coletados no cadastro</h3>' +
+        '<ul><li>Nome, e-mail, cidade (opcional) e senha simulada (local)</li><li>Pedidos simulados e preferências de navegação</li></ul>' +
+        '<h3>Camada 2 — dados agregados e anônimos (opt-in)</h3>' +
+        '<p>Se você autorizar, registramos eventos como troca de loja, itens adicionados à sacola e faixas de valor — <strong>sem</strong> enviar nome, e-mail ou endereço nos eventos do piloto.</p>' +
+        '<h3>Camada futura — identificáveis</h3>' +
+        '<p>Compartilhamento com dados que permitam identificação exigirá consentimento específico, ainda não disponível nesta versão.</p>' +
+        '<h3>Seus direitos</h3>' +
+        '<p>Você pode revogar marketing e dados agregados na conta, ou excluir todos os dados com &quot;Excluir conta&quot;.</p>' +
+        '<h3>Retenção</h3>' +
+        '<p>Nesta versão piloto, os dados permanecem no dispositivo até exclusão manual. Futuras versões poderão sincronizar na nuvem com aviso prévio.</p>',
+    },
+  };
+
+  function openLegalModal(docKey) {
+    var doc = LEGAL_DOCS[docKey];
+    if (!doc) return;
+    var modal = $('#legal-modal');
+    var title = $('#legal-modal-title');
+    var body = $('#legal-modal-body');
+    if (!modal || !body) return;
+    if (title) title.textContent = doc.title;
+    body.innerHTML = doc.html;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLegalModal() {
+    var modal = $('#legal-modal');
+    if (modal) modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
   const UNLIMITED_WALLET = 999999999.99;
 
   function loadWallet() {
@@ -892,6 +951,7 @@
         ifoodRestaurantId = null;
         applyShopTheme();
         renderShop();
+        trackBehavior('tab_switch', { tab: currentTab });
         if (currentTab === 'fashion' && !localStorage.getItem(KEYS.shenimCoupons)) {
           setTimeout(function () { openCouponSheet(); }, 700);
         }
@@ -1295,6 +1355,12 @@
     saveCart(cart);
     updateHeader();
     flashToast('Adicionado à sacola');
+    var p = getProduct(id);
+    trackBehavior('add_to_cart', {
+      productId: id,
+      tab: currentTab,
+      category: p && p.tag ? p.tag : undefined,
+    });
     if (currentView === 'cart') renderCart();
   }
 
@@ -1320,7 +1386,10 @@
 
     updateAppChrome(view);
 
-    if (view === 'shop') renderShop();
+    if (view === 'shop') {
+      renderShop();
+      trackBehavior('view_shop', { tab: currentTab });
+    }
     if (view === 'cart') renderCart();
     if (view === 'profile') renderProfile();
     if (view === 'checkout') {
@@ -1466,6 +1535,45 @@
   }
 
   function renderProfile() {
+    var A = AUTH();
+    var guest = $('#profile-guest');
+    var member = $('#profile-member');
+    var loggedIn = A.isLoggedIn && A.isLoggedIn();
+
+    if (guest) guest.hidden = loggedIn;
+    if (member) member.hidden = !loggedIn;
+
+    if (!loggedIn) return;
+
+    var user = A.loadUser();
+    var greet = $('#profile-greeting');
+    var emailEl = $('#profile-email');
+    if (greet) greet.textContent = 'Olá, ' + (user.name || 'Cliente') + '!';
+    if (emailEl) emailEl.textContent = user.email || '';
+
+    var verEl = $('#consent-terms-version');
+    if (verEl && user.consents && user.consents.terms) {
+      verEl.textContent = user.consents.terms.version || A.TERMS_VERSION || '1.0';
+    }
+
+    var tm = $('#toggle-marketing');
+    var ta = $('#toggle-aggregated');
+    if (tm && user.consents) tm.checked = !!user.consents.marketing.accepted;
+    if (ta && user.consents) ta.checked = !!user.consents.aggregatedData.accepted;
+
+    var pilotStats = $('#pilot-stats');
+    if (pilotStats) {
+      if (user.consents.aggregatedData.accepted && A.getAggregatedSummary) {
+        var summary = A.getAggregatedSummary();
+        pilotStats.hidden = false;
+        pilotStats.textContent =
+          'Piloto ativo neste aparelho: ' + summary.total + ' eventos agregados (ainda sem envio à nuvem).';
+      } else {
+        pilotStats.hidden = true;
+        pilotStats.textContent = '';
+      }
+    }
+
     const savings = loadSavings();
     const orders = loadOrders();
     const days = Object.keys(savings).sort().slice(-7);
@@ -1555,6 +1663,13 @@
     saveCart([]);
     updateHeader();
 
+    var A = AUTH();
+    trackBehavior('order_placed', {
+      orderType: orderType,
+      itemCount: cart.length,
+      totalBand: A.totalBand ? A.totalBand(finalTotal) : undefined,
+    });
+
     showTracking(order);
   }
 
@@ -1632,6 +1747,19 @@
 
   function bindGlobalUI() {
     document.body.addEventListener('click', function (e) {
+      var legalLink = e.target.closest('[data-legal]');
+      if (legalLink) {
+        e.preventDefault();
+        openLegalModal(legalLink.dataset.legal);
+        return;
+      }
+
+      if (e.target.closest('#legal-modal-close') || e.target.id === 'legal-modal') {
+        e.preventDefault();
+        closeLegalModal();
+        return;
+      }
+
       var trackBtn = e.target.closest('.order-track-btn, .active-order-profile-btn, #active-order-banner-btn');
       var bannerEl = e.target.closest('#active-order-banner');
       if (trackBtn || bannerEl) {
@@ -1688,8 +1816,79 @@
   function prefillCheckout() {
     var nameEl = $('#checkout-name');
     var addrEl = $('#checkout-address');
+    var A = AUTH();
+    if (A.isLoggedIn && A.isLoggedIn()) {
+      var u = A.loadUser();
+      if (nameEl && !nameEl.value && u.name) nameEl.value = u.name;
+      if (addrEl && !addrEl.value && u.city) addrEl.value = u.city;
+    }
     if (nameEl && !nameEl.value) nameEl.value = UI.USER_NAME || 'Marcelo';
     if (addrEl && !addrEl.value) addrEl.value = 'Rua Augusta, 1200, Consolação, São Paulo';
+  }
+
+  function bindAuthUI() {
+    var regForm = $('#register-form');
+    if (regForm && !regForm._bound) {
+      regForm._bound = true;
+      regForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var A = AUTH();
+        if (!A.register) return;
+        var terms = $('#reg-terms');
+        if (!terms || !terms.checked) {
+          flashToast('Aceite os termos para criar a conta');
+          return;
+        }
+        A.register({
+          name: $('#reg-name').value,
+          email: $('#reg-email').value,
+          city: $('#reg-city').value,
+          marketing: $('#reg-marketing') && $('#reg-marketing').checked,
+          aggregatedData: $('#reg-aggregated') && $('#reg-aggregated').checked,
+        });
+        flashToast('Conta piloto criada! 🎉');
+        renderProfile();
+      });
+    }
+
+    var logoutBtn = $('#btn-logout');
+    if (logoutBtn && !logoutBtn._bound) {
+      logoutBtn._bound = true;
+      logoutBtn.addEventListener('click', function () {
+        AUTH().logout();
+        flashToast('Você saiu da conta');
+        renderProfile();
+      });
+    }
+
+    var deleteBtn = $('#btn-delete-account');
+    if (deleteBtn && !deleteBtn._bound) {
+      deleteBtn._bound = true;
+      deleteBtn.addEventListener('click', function () {
+        if (!window.confirm('Excluir conta e eventos do piloto neste aparelho?')) return;
+        AUTH().deleteAccount();
+        flashToast('Conta e dados locais removidos');
+        renderProfile();
+      });
+    }
+
+    var consentPanel = $('#consent-panel');
+    if (consentPanel && !consentPanel._bound) {
+      consentPanel._bound = true;
+      consentPanel.addEventListener('change', function (e) {
+        var A = AUTH();
+        if (!A.updateConsents) return;
+        if (e.target.id === 'toggle-marketing') {
+          A.updateConsents({ marketing: e.target.checked });
+          flashToast(e.target.checked ? 'Marketing ativado' : 'Marketing desativado');
+        }
+        if (e.target.id === 'toggle-aggregated') {
+          A.updateConsents({ aggregatedData: e.target.checked });
+          flashToast(e.target.checked ? 'Piloto de dados ativo' : 'Piloto de dados pausado');
+          renderProfile();
+        }
+      });
+    }
   }
 
   function init() {
@@ -1712,6 +1911,7 @@
     updateHeader();
     applyShopTheme();
     bindGlobalUI();
+    bindAuthUI();
 
     const checkoutForm = $('#checkout-form');
     if (checkoutForm) checkoutForm.addEventListener('submit', processCheckout);
@@ -1750,12 +1950,22 @@
       }, 1200);
     }
 
+    if (AUTH().isLoggedIn && !AUTH().isLoggedIn() && !sessionStorage.getItem('dopamina_register_hint')) {
+      sessionStorage.setItem('dopamina_register_hint', '1');
+      setTimeout(function () {
+        flashToast('👤 Crie sua conta em Perfil — piloto de dados opcional');
+      }, 4500);
+    }
+
     updateCouponBadge();
     showView('shop');
   }
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeProductModal();
+    if (e.key === 'Escape') {
+      closeLegalModal();
+      closeProductModal();
+    }
   });
 
   document.addEventListener('DOMContentLoaded', init);
