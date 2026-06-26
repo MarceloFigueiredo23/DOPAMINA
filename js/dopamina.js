@@ -2898,11 +2898,9 @@
     }
     document.body.classList.add('has-dopamina-header');
     document.body.classList.add('has-site-header');
-    var siteLogo = $('#site-logo-mark');
-    var siteWm = $('#site-logo-wordmark');
+    var lockupEl = $('#site-logo-lockup');
     var B = BRANDS().site;
-    if (siteLogo && B && B.logoMark) siteLogo.innerHTML = B.logoMark;
-    if (siteWm && B && B.wordmark) siteWm.innerHTML = B.wordmark;
+    if (lockupEl && B && B.logoMark) lockupEl.innerHTML = B.logoMark;
     syncHeaderHeight();
     updateHeader();
     applyShopTheme();

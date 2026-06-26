@@ -46,68 +46,86 @@ body::before {
   display: none !important;
 }
 
-/* Logo — duende + nome ao lado */
+/* Logo — lockup duende + nome */
 .site-logo {
-  display: flex !important;
-  flex-direction: row !important;
+  display: inline-flex !important;
   align-items: center !important;
-  gap: 10px !important;
-  padding: 4px 6px !important;
+  padding: 2px 4px !important;
   border: none !important;
-  border-radius: 12px !important;
+  border-radius: 10px !important;
   background: transparent !important;
   text-decoration: none !important;
   flex-shrink: 0;
-  max-width: min(48vw, 240px);
+  max-width: none;
 }
 
 .site-logo:hover {
   background: var(--mp-yellow-pale) !important;
-  box-shadow: none !important;
 }
 
-#site-logo-mark {
-  display: flex;
+.mp-brand-lockup {
+  display: inline-flex;
   align-items: center;
-  flex-shrink: 0;
+  gap: 8px;
+  min-width: 0;
+  line-height: 1;
 }
 
 .brand-logo-mark {
   display: block;
-  height: 44px;
-  width: auto;
-  max-width: none;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
   flex-shrink: 0;
-}
-
-#site-logo-wordmark {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-}
-
-#site-logo-wordmark:empty {
-  display: none;
 }
 
 .mp-wordmark {
   display: flex;
   align-items: center;
-  line-height: 1;
 }
 
 .mp-wm-full {
   font-family: var(--dopa-font-display);
-  font-size: clamp(1.15rem, 3.5vw, 1.5rem);
+  font-size: 1.35rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   color: var(--mp-ink);
   white-space: nowrap;
+  line-height: 1;
 }
 
 .mp-wm-highlight {
   color: var(--mp-yellow-dark);
+}
+
+@media (min-width: 721px) {
+  .brand-logo-mark {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mp-wm-full {
+    font-size: 1.55rem;
+  }
+
+  .mp-brand-lockup {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 720px) {
+  .brand-logo-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mp-wm-full {
+    font-size: 1.15rem;
+  }
+
+  .mp-brand-lockup {
+    gap: 6px;
+  }
 }
 
 /* Header compacto + nav única */
@@ -227,37 +245,12 @@ body::before {
   .site-header-inner {
     padding: 6px 10px !important;
   }
-
-  .brand-logo-mark {
-    height: 40px;
-  }
-
-  .mp-wm-full {
-    font-size: 1.05rem;
-  }
-
-  .site-logo {
-    gap: 8px !important;
-    max-width: 42vw;
-  }
 }
 
 @media (min-width: 721px) {
   .mp-tab {
     padding: 6px 10px;
     font-size: 0.78rem;
-  }
-
-  .brand-logo-mark {
-    height: 48px;
-  }
-
-  .mp-wm-full {
-    font-size: 1.5rem;
-  }
-
-  .site-logo {
-    max-width: 280px;
   }
 }
 
@@ -797,4 +790,99 @@ body.theme-mercadopamina.flow-checkout .bar-wrap small {
   body.theme-mercadopamina .profile-stats--challenge {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+/* ── Checkout legível (tema Mercadopamina) ── */
+body.theme-mercadopamina.flow-checkout #view-checkout,
+body.theme-mercadopamina.flow-checkout #view-cart {
+  color: var(--mp-ink) !important;
+}
+
+body.theme-mercadopamina.flow-checkout .checkout-section-label {
+  color: var(--mp-ink) !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 4px !important;
+}
+
+body.theme-mercadopamina.flow-checkout .checkout-form label {
+  color: var(--mp-ink-soft) !important;
+  font-weight: 600 !important;
+}
+
+body.theme-mercadopamina.flow-checkout .checkout-form input,
+body.theme-mercadopamina.flow-checkout .checkout-form select,
+body.theme-mercadopamina.flow-checkout .checkout-total-box {
+  background: var(--mp-white) !important;
+  color: var(--mp-ink) !important;
+  border: 2px solid #e8e8e8 !important;
+}
+
+body.theme-mercadopamina.flow-checkout .pay-option {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 14px 16px !important;
+  margin: 0 !important;
+  border: 2px solid #e0e0e0 !important;
+  border-radius: 12px !important;
+  background: var(--mp-white) !important;
+  color: var(--mp-ink) !important;
+  cursor: pointer;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+body.theme-mercadopamina.flow-checkout .pay-option:hover {
+  border-color: #ffe082 !important;
+  background: var(--mp-yellow-pale) !important;
+}
+
+body.theme-mercadopamina.flow-checkout .pay-option.selected {
+  border-color: var(--mp-yellow-dark) !important;
+  background: var(--mp-yellow-soft) !important;
+  box-shadow: 0 0 0 1px rgba(249, 168, 37, 0.25);
+}
+
+body.theme-mercadopamina.flow-checkout .pay-option input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--mp-yellow-dark);
+}
+
+body.theme-mercadopamina.flow-checkout .pay-option__icon {
+  font-size: 1.35rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+body.theme-mercadopamina.flow-checkout .pay-option__text {
+  flex: 1;
+  color: var(--mp-ink) !important;
+  font-weight: 600 !important;
+  line-height: 1.35;
+}
+
+body.theme-mercadopamina.flow-checkout .pay-option__text strong {
+  color: var(--mp-ink) !important;
+  font-weight: 700 !important;
+}
+
+body.theme-mercadopamina.flow-checkout .summary-row {
+  color: var(--mp-ink-soft) !important;
+}
+
+body.theme-mercadopamina.flow-checkout .summary-row.total {
+  color: var(--mp-ink) !important;
+  border-top-color: #ffe082 !important;
+}
+
+body.theme-mercadopamina.flow-checkout .summary-row.total span:last-child {
+  color: var(--mp-yellow-dark) !important;
+  font-weight: 800 !important;
 }

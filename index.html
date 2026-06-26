@@ -7,20 +7,20 @@
   <meta name="application-name" content="Mercadopamina" />
   <title>Mercadopamina — Terapia de Varejo</title>
   <meta name="theme-color" content="#FFC107" />
-  <link rel="icon" type="image/png" href="img/favicon.png?v=25" />
+  <link rel="icon" type="image/png" href="img/favicon.png?v=26" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/styles.css?v=25" />
-  <link rel="stylesheet" href="css/themes.css?v=25" />
-  <link rel="stylesheet" href="css/interactive.css?v=25" />
-  <link rel="stylesheet" href="css/readability.css?v=25" />
-  <link rel="stylesheet" href="css/brand.css?v=25" />
-  <link rel="stylesheet" href="css/brands.css?v=25" />
-  <link rel="stylesheet" href="css/auth.css?v=25" />
-  <link rel="stylesheet" href="css/dopamina-home.css?v=25" />
-  <link rel="stylesheet" href="css/mercadopamina-brand.css?v=25" />
+  <link rel="stylesheet" href="css/styles.css?v=26" />
+  <link rel="stylesheet" href="css/themes.css?v=26" />
+  <link rel="stylesheet" href="css/interactive.css?v=26" />
+  <link rel="stylesheet" href="css/readability.css?v=26" />
+  <link rel="stylesheet" href="css/brand.css?v=26" />
+  <link rel="stylesheet" href="css/brands.css?v=26" />
+  <link rel="stylesheet" href="css/auth.css?v=26" />
+  <link rel="stylesheet" href="css/dopamina-home.css?v=26" />
+  <link rel="stylesheet" href="css/mercadopamina-brand.css?v=26" />
 </head>
 <body>
   <div class="promo-ticker" id="promo-ticker" aria-hidden="true">
@@ -42,8 +42,7 @@
   <header class="site-header" id="site-header">
     <div class="site-header-inner">
       <a href="#" class="site-logo" data-view="shop" data-tab="home" aria-label="Mercadopamina — início">
-        <span id="site-logo-mark" aria-hidden="true"></span>
-        <span id="site-logo-wordmark"></span>
+        <span id="site-logo-lockup" class="mp-brand-lockup"></span>
       </a>
       <nav class="mp-header-nav" id="mp-header-nav" aria-label="Navegação principal">
         <button type="button" class="mp-tab active" data-view="shop" data-tab="home" aria-label="Início">
@@ -230,11 +229,13 @@
           <p class="checkout-section-label">Forma de pagamento</p>
           <label class="pay-option selected">
             <input type="radio" name="pay" value="card" checked />
-            <span>💳 Visa crédito •••• 4821</span>
+            <span class="pay-option__icon" aria-hidden="true">💳</span>
+            <span class="pay-option__text">Visa crédito <strong>•••• 4821</strong></span>
           </label>
           <label class="pay-option">
             <input type="radio" name="pay" value="pix" />
-            <span>PIX — aprovação instantânea</span>
+            <span class="pay-option__icon" aria-hidden="true">⚡</span>
+            <span class="pay-option__text">PIX <strong>— aprovação instantânea</strong></span>
           </label>
         </div>
         <div id="checkout-total-box" class="checkout-total-box"></div>
@@ -434,13 +435,13 @@
     </div>
   </div>
 
-  <script src="js/catalog-photos.js?v=25"></script>
-  <script src="js/catalog-data.js?v=25"></script>
-  <script src="js/brands.js?v=25"></script>
-  <script src="js/auth.js?v=25"></script>
-  <script src="js/realism.js?v=25"></script>
-  <script src="js/interactive.js?v=25"></script>
+  <script src="js/catalog-photos.js?v=26"></script>
+  <script src="js/catalog-data.js?v=26"></script>
+  <script src="js/brands.js?v=26"></script>
+  <script src="js/auth.js?v=26"></script>
+  <script src="js/realism.js?v=26"></script>
+  <script src="js/interactive.js?v=26"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/dopamina.js?v=25"></script>
+  <script src="js/dopamina.js?v=26"></script>
 </body>
 </html>
