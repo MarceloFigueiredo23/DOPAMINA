@@ -1,24 +1,26 @@
 /**
- * Mercadopamina — logo PNG (duende + wordmark integrado)
+ * Mercadopamina — duende + wordmark horizontal no header
  */
 (function (w) {
   'use strict';
 
-  var LOGO_MERCADOPAMINA =
-    '<img class="brand-logo-img" src="img/mercadopamina-logo.png" ' +
-    'srcset="img/mercadopamina-logo.png 1x" ' +
-    'width="180" height="120" alt="Mercadopamina" decoding="async" fetchpriority="high">';
+  var LOGO_MARK =
+    '<img class="brand-logo-mark" src="img/mercadopamina-gnome.png" ' +
+    'width="52" height="48" alt="" decoding="async" fetchpriority="high">';
 
-  var WM_MERCADOPAMINA = '';
+  var WM_MERCADOPAMINA =
+    '<span class="mp-wordmark" aria-label="Mercadopamina">' +
+    '<span class="mp-wm-full">Mercado<span class="mp-wm-highlight">pamina</span></span>' +
+    '</span>';
 
   var BRANDS = {
     site: {
       name: 'Mercadopamina',
-      logoMark: LOGO_MERCADOPAMINA,
+      logoMark: LOGO_MARK,
       wordmark: WM_MERCADOPAMINA,
       color: '#FFC107',
     },
-    lockup: function () { return ''; },
+    lockup: function () { return LOGO_MARK + WM_MERCADOPAMINA; },
     wordmark: function () { return WM_MERCADOPAMINA; },
   };
 

@@ -237,38 +237,55 @@
 
   function therapyHero(tab) {
     var subs = {
-      home: 'Navegue, monte seu carrinho e sinta a emoção de comprar — sem gastar de verdade. Só Mercadopamina.',
+      home: 'Monte seu carrinho, sinta o checkout e acompanhe a entrega — tudo simulado, zero cobrança real.',
       market: 'Tudo que você procura em um só lugar — com a cara do marketplace brasileiro.',
       premium: 'Navegue ofertas, monte o carrinho e acompanhe entregas simuladas em tempo real.',
       fashion: 'Looks, tendências e descontos — a emoção é real, a cobrança não.',
       default: 'Sinta a dopamina sem gastar dinheiro real. A emoção é real, a conta não.',
     };
     return (
-      '<section class="therapy-hero therapy-hero--' + (tab || 'default') + '">' +
-      '<span class="therapy-hero-kicker">Mega ofertas do dia</span>' +
-      '<h1 class="therapy-hero-title">Simulador de Compras para Terapia de Varejo.</h1>' +
-      '<p class="therapy-hero-sub">' + (subs[tab] || subs.default) + '</p>' +
-      '<div class="therapy-hero-tags">' +
-      '<span>🚚 Frete grátis hoje</span><span>Até 60% OFF</span><span>🎰 Roleta de cupons</span>' +
-      '</div></section>'
+      '<section class="mp-store-hero therapy-hero therapy-hero--' + (tab || 'default') + '">' +
+      '<div class="mp-store-hero__glow" aria-hidden="true"></div>' +
+      '<div class="mp-store-hero__inner">' +
+      '<span class="mp-store-hero__kicker">Mega ofertas do dia</span>' +
+      '<h1 class="mp-store-hero__title">Terapia de varejo <em>sem gastar de verdade</em></h1>' +
+      '<p class="mp-store-hero__sub">' + (subs[tab] || subs.default) + '</p>' +
+      '<div class="mp-store-hero__chips">' +
+      '<span class="mp-chip">🚚 Frete grátis hoje</span>' +
+      '<span class="mp-chip">🔥 Até 60% OFF</span>' +
+      '<button type="button" class="mp-chip mp-chip--btn" data-action="roulette">🎰 Roleta de cupons</button>' +
+      '</div></div></section>'
     );
   }
 
   function promoHubHtml() {
     return (
-      '<section class="promo-hub" aria-label="Cupons e ofertas">' +
-      '<div class="promo-hub-grid promo-hub-grid--3">' +
-      '<button type="button" class="promo-hub-card promo-hub-card--roulette" data-action="roulette">' +
-      '<span class="promo-hub-icon">🎰</span><strong>Roleta de cupons</strong>' +
-      '<span>Gire e ganhe até 50% OFF</span></button>' +
-      '<button type="button" class="promo-hub-card promo-hub-card--coupon" data-promo-coupon="MERCADOPAMINA10">' +
-      '<span class="promo-hub-icon">🎟️</span><strong>MERCADOPAMINA10</strong>' +
-      '<span>10% OFF no checkout</span></button>' +
-      '<div class="promo-hub-card promo-hub-card--timer">' +
-      '<span class="promo-hub-icon">⚡</span><strong>Ofertas relâmpago</strong>' +
-      '<span>Termina em <b data-countdown="hub">02:47:59</b></span></div>' +
-      '</div></section>'
+      '<section class="mp-promo-row promo-hub" aria-label="Cupons e ofertas">' +
+      '<button type="button" class="mp-promo-tile promo-hub-card promo-hub-card--roulette" data-action="roulette">' +
+      '<span class="mp-promo-tile__icon promo-hub-icon">🎰</span>' +
+      '<div class="mp-promo-tile__text">' +
+      '<strong>Roleta de cupons</strong>' +
+      '<span>Gire e ganhe até <b>50% OFF</b></span>' +
+      '</div>' +
+      '<span class="mp-promo-tile__action">Girar →</span></button>' +
+      '<button type="button" class="mp-promo-tile promo-hub-card promo-hub-card--coupon" data-promo-coupon="MERCADOPAMINA10">' +
+      '<span class="mp-promo-tile__icon promo-hub-icon">🎟️</span>' +
+      '<div class="mp-promo-tile__text">' +
+      '<strong>MERCADOPAMINA10</strong>' +
+      '<span><b>10% OFF</b> no checkout</span>' +
+      '</div>' +
+      '<span class="mp-promo-tile__action">Usar</span></button>' +
+      '<div class="mp-promo-tile mp-promo-tile--timer promo-hub-card promo-hub-card--timer">' +
+      '<span class="mp-promo-tile__icon promo-hub-icon">⚡</span>' +
+      '<div class="mp-promo-tile__text">' +
+      '<strong>Ofertas relâmpago</strong>' +
+      '<span>Termina em <b data-countdown="hub">02:47:59</b></span>' +
+      '</div></div></section>'
     );
+  }
+
+  function mpHomeTopHtml() {
+    return '<div class="mp-home-top">' + therapyHero('home') + promoHubHtml() + '</div>';
   }
 
   function shenimCategories() {
@@ -435,6 +452,7 @@
     shenimHero: shenimHero,
     therapyHero: therapyHero,
     promoHubHtml: promoHubHtml,
+    mpHomeTopHtml: mpHomeTopHtml,
     shenimCategories: shenimCategories,
     couponSheetHtml: couponSheetHtml,
     bindInteractive: bindInteractive,

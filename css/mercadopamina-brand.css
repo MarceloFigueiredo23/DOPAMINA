@@ -46,33 +46,68 @@ body::before {
   display: none !important;
 }
 
-/* Logo */
-.brand-logo-img {
+/* Logo — duende + nome ao lado */
+.site-logo {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 4px 6px !important;
+  border: none !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  text-decoration: none !important;
+  flex-shrink: 0;
+  max-width: min(48vw, 240px);
+}
+
+.site-logo:hover {
+  background: var(--mp-yellow-pale) !important;
+  box-shadow: none !important;
+}
+
+#site-logo-mark {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.brand-logo-mark {
   display: block;
-  height: 32px;
+  height: 44px;
   width: auto;
-  max-width: min(150px, 42vw);
+  max-width: none;
   object-fit: contain;
   flex-shrink: 0;
+}
+
+#site-logo-wordmark {
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
 #site-logo-wordmark:empty {
   display: none;
 }
 
-.site-logo {
-  gap: 0 !important;
-  padding: 2px 4px !important;
-  border: none !important;
-  border-radius: 8px !important;
-  background: transparent !important;
-  text-decoration: none !important;
-  flex-shrink: 0;
+.mp-wordmark {
+  display: flex;
+  align-items: center;
+  line-height: 1;
 }
 
-.site-logo:hover {
-  background: var(--mp-yellow-pale) !important;
-  box-shadow: none !important;
+.mp-wm-full {
+  font-family: var(--dopa-font-display);
+  font-size: clamp(1.15rem, 3.5vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--mp-ink);
+  white-space: nowrap;
+}
+
+.mp-wm-highlight {
+  color: var(--mp-yellow-dark);
 }
 
 /* Header compacto + nav única */
@@ -85,12 +120,12 @@ body::before {
 .site-header-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 4px 10px !important;
+  padding: 6px 12px !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  min-height: 44px;
+  gap: 10px;
+  min-height: 56px;
 }
 
 .mp-header-nav {
@@ -190,12 +225,20 @@ body::before {
   }
 
   .site-header-inner {
-    padding: 4px 8px !important;
+    padding: 6px 10px !important;
   }
 
-  .brand-logo-img {
-    height: 28px;
-    max-width: 120px;
+  .brand-logo-mark {
+    height: 40px;
+  }
+
+  .mp-wm-full {
+    font-size: 1.05rem;
+  }
+
+  .site-logo {
+    gap: 8px !important;
+    max-width: 42vw;
   }
 }
 
@@ -203,6 +246,18 @@ body::before {
   .mp-tab {
     padding: 6px 10px;
     font-size: 0.78rem;
+  }
+
+  .brand-logo-mark {
+    height: 48px;
+  }
+
+  .mp-wm-full {
+    font-size: 1.5rem;
+  }
+
+  .site-logo {
+    max-width: 280px;
   }
 }
 
@@ -224,42 +279,238 @@ body::before {
   text-transform: none !important;
 }
 
-/* Home */
+/* Home — banner + promo */
+.mp-home-top {
+  margin: 0 0 20px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid #ffe082;
+  background: linear-gradient(160deg, #fffef8 0%, #fff8e1 55%, #fff3c4 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 12px 40px rgba(255, 193, 7, 0.14);
+}
+
+.mp-store-hero {
+  position: relative;
+  padding: 22px 20px 18px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  overflow: hidden;
+}
+
+.mp-store-hero__glow {
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 193, 7, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.mp-store-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+
+.mp-store-hero__kicker {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #ffe082;
+  color: var(--mp-yellow-dark) !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mp-store-hero__title {
+  margin: 0 0 10px;
+  font-family: var(--dopa-font-display) !important;
+  font-size: clamp(1.45rem, 4.5vw, 2rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  color: var(--mp-ink) !important;
+}
+
+.mp-store-hero__title em {
+  font-style: normal;
+  color: var(--mp-yellow-dark);
+}
+
+.mp-store-hero__sub {
+  margin: 0 0 16px;
+  font-size: 0.95rem !important;
+  line-height: 1.5;
+  color: var(--mp-ink-soft) !important;
+  max-width: 52ch;
+}
+
+.mp-store-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--mp-white);
+  border: 1px solid #ffe082;
+  color: var(--mp-ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mp-chip--btn {
+  cursor: pointer;
+  font-family: inherit;
+  background: linear-gradient(180deg, #ffd54f, #ffc107);
+  border-color: #f9a825;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mp-chip--btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(255, 193, 7, 0.35);
+}
+
+.mp-promo-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-top: 1px solid rgba(255, 224, 130, 0.65);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.mp-promo-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px;
+  border: none;
+  border-right: 1px solid rgba(255, 224, 130, 0.5);
+  background: transparent;
+  color: var(--mp-ink);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.mp-promo-tile:last-child {
+  border-right: none;
+}
+
+.mp-promo-tile:hover {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.mp-promo-tile__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--mp-white);
+  border: 1px solid #ffe082;
+  font-size: 1.25rem;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.12);
+}
+
+.mp-promo-tile__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mp-promo-tile__text strong {
+  font-family: var(--dopa-font-display) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: var(--mp-ink);
+}
+
+.mp-promo-tile__text span {
+  font-size: 0.75rem !important;
+  color: var(--mp-ink-soft) !important;
+  line-height: 1.3;
+}
+
+.mp-promo-tile__text b,
+.mp-promo-tile__text b[data-countdown] {
+  color: #e65100;
+  font-weight: 800;
+}
+
+.mp-promo-tile__action {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--mp-yellow-dark);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--mp-yellow-pale);
+  border: 1px solid #ffe082;
+}
+
+.mp-promo-tile--timer {
+  cursor: default;
+}
+
+.mp-promo-tile--timer:hover {
+  background: transparent;
+}
+
+@media (max-width: 720px) {
+  .mp-promo-row {
+    grid-template-columns: 1fr;
+  }
+
+  .mp-promo-tile {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 224, 130, 0.5);
+  }
+
+  .mp-promo-tile:last-child {
+    border-bottom: none;
+  }
+
+  .mp-store-hero {
+    padding: 18px 16px 14px !important;
+  }
+}
+
+/* Flash deals */
+.flash-deals-block {
+  margin-bottom: 20px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid #ffe082;
+  background: var(--mp-white);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
 .theme-home .shop-shell,
 .ds-home {
   background: var(--mp-white) !important;
-}
-
-.therapy-hero {
-  background: var(--mp-yellow-pale) !important;
-  border: 2px solid #ffe082 !important;
-  border-radius: var(--mp-radius) !important;
-  padding: 24px !important;
-}
-
-.therapy-hero-title {
-  font-family: var(--dopa-font-display) !important;
-  font-size: clamp(1.6rem, 5vw, 2.25rem) !important;
-  color: var(--mp-ink) !important;
-}
-
-.therapy-hero-sub {
-  font-size: 1.1rem !important;
-  color: var(--mp-ink-soft) !important;
-}
-
-.therapy-hero-kicker {
-  color: var(--mp-yellow-dark) !important;
-  font-weight: 800 !important;
-  font-size: 0.9rem !important;
-}
-
-.therapy-hero-tags span {
-  background: var(--mp-white) !important;
-  border: 2px solid #ffe082 !important;
-  color: var(--mp-ink) !important;
-  font-size: 0.9rem !important;
-  font-weight: 700 !important;
 }
 
 .ds-explore > h2,
@@ -323,10 +574,10 @@ body::before {
   color: var(--mp-ink) !important;
 }
 
-/* Promo hub */
+/* Promo hub — legado */
 .promo-hub-card {
-  background: var(--mp-yellow-pale) !important;
-  border: 2px solid #ffe082 !important;
+  background: transparent !important;
+  border: none !important;
   color: var(--mp-ink) !important;
 }
 

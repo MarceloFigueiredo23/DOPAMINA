@@ -1181,14 +1181,12 @@
     if (!grid) return;
     var all = getAllCatalogItems();
     var items = filterHomeItems(all);
-    var therapy = UI.therapyHero ? UI.therapyHero('home') : '';
-    var promoHub = UI.promoHubHtml ? UI.promoHubHtml() : '';
+    var homeTop = UI.mpHomeTopHtml ? UI.mpHomeTopHtml() : ((UI.therapyHero ? UI.therapyHero('home') : '') + (UI.promoHubHtml ? UI.promoHubHtml() : ''));
     var flashBlock = flashDealsHtml(getFlashDeals(all, 18));
     var cardsHtml = items.map(renderDopaminaCard).join('');
     grid.className = 'ds-home';
     grid.innerHTML =
-      therapy +
-      promoHub +
+      homeTop +
       flashBlock +
       '<section class="ds-explore" aria-label="Explorar produtos">' +
       '<h2>Explorar produtos</h2>' +
