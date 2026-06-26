@@ -10,6 +10,59 @@
   overflow: hidden;
 }
 
+/* Moedas caindo ao adicionar ao carrinho */
+.fx-coin-fall {
+  position: fixed;
+  font-size: 1.55rem;
+  z-index: 6002;
+  animation: fx-coin-fall 1s cubic-bezier(0.25, 0.85, 0.35, 1) forwards;
+  filter: drop-shadow(0 3px 8px rgba(180, 120, 0, 0.45));
+  will-change: transform, opacity;
+}
+
+@keyframes fx-coin-fall {
+  0% {
+    opacity: 0;
+    transform: translate(0, -24px) scale(0.35) rotate(0deg);
+  }
+  12% {
+    opacity: 1;
+    transform: translate(calc(var(--fall-dx) * 0.15), 0) scale(1.05) rotate(60deg);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(calc(var(--fall-dx) * 0.55), calc(var(--fall-dy) * 0.55)) scale(1) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--fall-dx), var(--fall-dy)) scale(0.55) rotate(var(--fall-rot));
+  }
+}
+
+/* Chuva de moedas no checkout */
+.fx-coin-rain {
+  position: fixed;
+  font-size: 1.4rem;
+  z-index: 6003;
+  animation: fx-coin-rain 1.4s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  filter: drop-shadow(0 4px 10px rgba(200, 140, 0, 0.35));
+}
+
+@keyframes fx-coin-rain {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+  }
+  8% {
+    opacity: 1;
+    transform: translate(calc(var(--rain-dx) * 0.1), 40px) scale(1) rotate(90deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--rain-dx), var(--rain-dy)) scale(0.7) rotate(var(--rain-rot));
+  }
+}
+
 .fx-coin {
   position: fixed;
   font-size: 1.35rem;
@@ -20,12 +73,13 @@
 .fx-coin-pop {
   position: fixed;
   transform: translateX(-50%);
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 800;
-  color: #ffd54f;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  color: #f9a825;
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9), 0 2px 8px rgba(0, 0, 0, 0.15);
   animation: fx-pop-rise 1.1s ease-out forwards;
   white-space: nowrap;
+  z-index: 6004;
 }
 
 .fx-sparkle {
@@ -49,7 +103,7 @@
 @keyframes fx-pop-rise {
   0% { opacity: 0; transform: translateX(-50%) translateY(0) scale(0.8); }
   20% { opacity: 1; transform: translateX(-50%) translateY(-8px) scale(1.05); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-48px) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-52px) scale(1); }
 }
 
 @keyframes fx-sparkle {
@@ -67,15 +121,17 @@
 .header-coins {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #ffd54f;
-  background: rgba(255, 213, 79, 0.12);
-  border: 1px solid rgba(255, 213, 79, 0.35);
-  padding: 6px 10px;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #f57f17;
+  background: linear-gradient(135deg, #fff8e1, #ffecb3);
+  border: 2px solid #ffc107;
+  padding: 6px 12px;
   border-radius: 999px;
   transition: transform 0.2s;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.25);
 }
 
 .header-coins.coin-pulse {
@@ -84,7 +140,7 @@
 
 @keyframes coin-pulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.12); box-shadow: 0 0 12px rgba(255, 213, 79, 0.5); }
+  50% { transform: scale(1.14); box-shadow: 0 0 16px rgba(255, 193, 7, 0.55); }
 }
 
 .promo-hub {
@@ -181,9 +237,9 @@
 .toast.toast--cart-add .toast-reaction {
   display: block;
   font-size: 0.78rem;
-  color: #c4b5fd;
+  color: #f57f17;
   margin-top: 4px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .toast.toast--cart-add .toast-coins {
@@ -193,9 +249,9 @@
   margin-top: 6px;
   font-size: 0.75rem;
   font-weight: 800;
-  color: #ffd54f;
-  background: rgba(255, 213, 79, 0.15);
-  padding: 3px 8px;
+  color: #f57f17;
+  background: rgba(255, 193, 7, 0.2);
+  padding: 3px 10px;
   border-radius: 999px;
 }
 
@@ -214,6 +270,82 @@
 @keyframes cart-icon-pulse {
   0%, 100% { transform: scale(1); }
   40% { transform: scale(1.15); }
+}
+
+/* Roleta — polish */
+.roulette-wheel.is-spinning {
+  animation: roulette-spin-glow 0.35s ease-in-out infinite alternate;
+}
+
+@keyframes roulette-spin-glow {
+  from { box-shadow: 0 0 0 4px #fff, 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 20px rgba(255, 193, 7, 0.3); }
+  to { box-shadow: 0 0 0 4px #fff, 0 8px 32px rgba(0, 0, 0, 0.45), 0 0 36px rgba(255, 193, 7, 0.55); }
+}
+
+.roulette-prize {
+  animation: roulette-prize-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes roulette-prize-in {
+  from { opacity: 0; transform: scale(0.85) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.roulette-prize .prize-icon {
+  animation: roulette-prize-bounce 0.6s ease 0.2s both;
+}
+
+@keyframes roulette-prize-bounce {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+body.theme-mercadopamina .roulette-modal {
+  border-color: #ffc107 !important;
+  box-shadow: 0 12px 48px rgba(255, 193, 7, 0.35) !important;
+  background: #fffef8 !important;
+}
+
+body.theme-mercadopamina .roulette-modal h1 {
+  color: #2c2c2c !important;
+}
+
+body.theme-mercadopamina .roulette-hub {
+  background: #ffc107 !important;
+  color: #2c2c2c !important;
+  font-weight: 900 !important;
+}
+
+body.theme-mercadopamina .roulette-pointer {
+  color: #f57f17 !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+@media (max-width: 767px) {
+  .header-coins {
+    font-size: 0.72rem;
+    padding: 5px 8px;
+  }
+
+  .site-header-inner .header-coins {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .promo-hub-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fx-coin-fall {
+    font-size: 1.35rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .site-header-inner .header-coins {
+    margin-right: 8px;
+  }
 }
 
 @media (max-width: 720px) {

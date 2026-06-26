@@ -513,6 +513,12 @@
     spinning = false;
     if (stage) stage.hidden = true;
     if (spinBtn) spinBtn.hidden = true;
+    var wheel = document.getElementById('roulette-wheel');
+    if (wheel) wheel.classList.remove('is-spinning');
+
+    if (prize.type !== 'none' && window.DOPAMINA_REWARDS && DOPAMINA_REWARDS.onRouletteWin) {
+      DOPAMINA_REWARDS.onRouletteWin();
+    }
 
     if (!result) {
       finishRoulette(overlay, prize, onComplete);
@@ -540,12 +546,18 @@
     if (spinning) return;
     spinning = true;
     spinBtn.disabled = true;
+    if (window.DOPAMINA_REWARDS && DOPAMINA_REWARDS.unlockAudio) DOPAMINA_REWARDS.unlockAudio();
+    wheel.classList.add('is-spinning');
 
     const PRIZES = getPrizes();
     const winIndex = Math.floor(Math.random() * PRIZES.length);
     const sliceDeg = 360 / PRIZES.length;
     const spins = 5 + Math.floor(Math.random() * 3);
     const targetDeg = spins * 360 + (360 - winIndex * sliceDeg - sliceDeg / 2);
+
+    var tickIv = setInterval(function () {
+      if (window.DOPAMINA_REWARDS && DOPAMINA_REWARDS.playSpinTick) DOPAMINA_REWARDS.playSpinTick();
+    }, 140);
 
     wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
     wheel.style.transform = 'rotate(' + targetDeg + 'deg)';
@@ -555,6 +567,7 @@
     function onEnd() {
       if (finished) return;
       finished = true;
+      clearInterval(tickIv);
       wheel.removeEventListener('transitionend', onEnd);
       showPrize(PRIZES[winIndex], overlay, result, stage, spinBtn, onComplete);
     }
@@ -2145,7 +2158,11 @@
     updateHeader();
     var level = calcDopaminaLevel(cart);
     var p = getProduct(id);
-    flashAddToast(p, level.pct);
+    var reward = null;
+    if (window.DOPAMINA_REWARDS && DOPAMINA_REWARDS.onAddToCart) {
+      reward = DOPAMINA_REWARDS.onAddToCart(p, level.pct, evt);
+    }
+    flashAddToast(p, level.pct, reward);
     pulseCartIcon();
     renderDopaminaMeter();
     trackBehavior('add_to_cart', {
@@ -2161,7 +2178,7 @@
     closeProductModal();
   }
 
-  function flashAddToast(p, dopaminaPct) {
+  function flashAddToast(p, dopaminaPct, reward) {
     const t = $('#toast');
     if (!t) return;
     if (!p) {
@@ -2172,16 +2189,25 @@
     var dopaLine = typeof dopaminaPct === 'number'
       ? '<span class="toast-dopa">Rush Mercadopamina: ' + dopaminaPct + '%</span>'
       : '';
+    var coinsLine = reward && reward.coins
+      ? '<span class="toast-coins">🪙 +' + reward.coins + ' moedas</span>'
+      : '';
+    var reactionLine = reward && reward.reaction
+      ? '<span class="toast-reaction">' + reward.reaction + '</span>'
+      : '';
+    var savingsLine = reward && reward.savings > 0
+      ? '<span class="toast-savings">Você “economizou” ' + formatBRL(reward.savings) + '</span>'
+      : '';
     t.className = 'toast toast--cart-add show';
     t.innerHTML =
       '<img src="' + (p.image || '') + '" alt="" onerror="this.style.display=\'none\'" />' +
       '<div><strong>Adicionado ao carrinho!</strong>' +
       '<span class="toast-product-name">' + name + '</span>' +
-      dopaLine + '</div>';
+      dopaLine + coinsLine + reactionLine + savingsLine + '</div>';
     setTimeout(function () {
       t.classList.remove('show');
       t.className = 'toast';
-    }, 2800);
+    }, 3200);
   }
 
   function flashToast(msg, dopaminaPct) {
@@ -2610,6 +2636,10 @@
     saveCart([]);
     updateHeader();
 
+    if (window.DOPAMINA_REWARDS && DOPAMINA_REWARDS.onCheckoutComplete) {
+      DOPAMINA_REWARDS.onCheckoutComplete();
+    }
+
     flashToast('Pedido confirmado! Saldo restante: ' + formatBRL(payment.wallet));
 
     var A = AUTH();
@@ -2953,6 +2983,9 @@
     }
 
     updateCouponBadge();
+    if (window.DOPAMINA_REWARDS && DOPAMINA_REWARDS.updateCoinDisplay) {
+      DOPAMINA_REWARDS.updateCoinDisplay();
+    }
     syncHeaderHeight();
     window.addEventListener('resize', syncHeaderHeight);
     if (!window._dopaminaBannerIv) {
