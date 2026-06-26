@@ -651,6 +651,10 @@ body.flow-checkout .checkout-section-label {
   color: #444;
 }
 
+body.flow-checkout #view-tracking .tracking-eta {
+  color: #c41623;
+}
+
 body.flow-checkout #view-tracking .tracking-status,
 body.flow-checkout #view-tracking .timeline-item {
   background: #fff;

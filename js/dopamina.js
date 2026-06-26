@@ -417,12 +417,55 @@
   }
 
   /* ── tracking.js ── */
-  const WAREHOUSE = { lat: -23.35, lng: -46.88, label: 'Centro de distribuição — Cajamar, SP' };
-  const BRAZIL_HUB = { lat: -23.55, lng: -46.65, label: 'Unidade de entrega — São Paulo' };
+  const FIJI = { lat: -17.7134, lng: 178.065, label: 'Ilhas Fiji — ponto de partida' };
+  const BRAZIL_COAST = { lat: -23.0, lng: -43.5 };
 
-  function buildDeliveryPath(dest) {
-    var mid = { lat: lerp(BRAZIL_HUB.lat, dest.lat, 0.45), lng: lerp(BRAZIL_HUB.lng, dest.lng, 0.45) };
-    return [WAREHOUSE, BRAZIL_HUB, mid, dest];
+  const DELIVERY_META = {
+    express: { eta: 'Previsão de entrega: até 1 hora (AIFOOD)', animMs: 50000 },
+    premium: { eta: 'Previsão de entrega: 5 dias úteis (AMAZOOM)', animMs: 22000 },
+    fashion: { eta: 'Previsão de entrega: 3 dias úteis (SHENIM)', animMs: 16000 },
+    mixed: { eta: 'Comida em até 1h · Produtos em 3–5 dias', animMs: 22000 },
+  };
+
+  function getDeliveryMeta(orderType) {
+    return DELIVERY_META[orderType] || DELIVERY_META.premium;
+  }
+
+  function buildOceanPath(dest) {
+    return [
+      FIJI,
+      { lat: -10, lng: 160 },
+      { lat: 0, lng: 120 },
+      { lat: 5, lng: 80 },
+      { lat: -5, lng: 40 },
+      { lat: -15, lng: -10 },
+      BRAZIL_COAST,
+      { lat: lerp(BRAZIL_COAST.lat, dest.lat, 0.5), lng: lerp(BRAZIL_COAST.lng, dest.lng, 0.5) },
+      dest,
+    ];
+  }
+
+  function mapStatusForProgress(orderType, progress) {
+    if (orderType === 'express') {
+      if (progress > 0.15 && progress < 0.2) return '🐋 Pedido saiu das Ilhas Fiji';
+      if (progress > 0.45 && progress < 0.5) return '🌊 Atravessando o Pacífico em direção ao Brasil';
+      if (progress > 0.75 && progress < 0.8) return '🛵 Entregador a caminho do seu endereço';
+      if (progress >= 1) return '✅ Entregue — dentro de 1 hora';
+      return 'Rota ativa: Fiji → seu endereço';
+    }
+    if (orderType === 'fashion') {
+      if (progress > 0.2 && progress < 0.28) return 'Dia 1 — Pacote saiu das Fiji (SHENIM)';
+      if (progress > 0.5 && progress < 0.58) return 'Dia 2 — Em trânsito internacional';
+      if (progress > 0.8 && progress < 0.88) return 'Dia 3 — Chegando ao seu endereço';
+      if (progress >= 1) return '✅ Entregue em 3 dias úteis';
+      return 'Rota ativa: Fiji → seu endereço (3 dias)';
+    }
+    if (progress > 0.15 && progress < 0.22) return '🐋 Pacote saiu das Ilhas Fiji';
+    if (progress > 0.35 && progress < 0.42) return 'Dia 2 — Travessia do Pacífico';
+    if (progress > 0.55 && progress < 0.62) return 'Dia 3 — Desembarque no Brasil';
+    if (progress > 0.75 && progress < 0.82) return 'Dia 5 — Entrega na sua região';
+    if (progress >= 1) return '✅ Entregue em 5 dias úteis (AMAZOOM)';
+    return 'Rota ativa: Fiji → seu endereço (5 dias)';
   }
 
   function geocodeAddress(address) {
@@ -492,9 +535,19 @@
     });
   }
 
-  function runProductTracking(container, address, onStatus) {
+  function runProductTracking(container, address, orderType, onStatus) {
+    var meta = getDeliveryMeta(orderType);
+    var animMs = meta.animMs;
+    var lastMsg = '';
+
+    function setStatus(msg) {
+      if (!msg || msg === lastMsg) return;
+      lastMsg = msg;
+      if (onStatus) onStatus(msg);
+    }
+
     return geocodeAddress(address).then(function (dest) {
-      if (onStatus) onStatus('Localizando endereço de entrega…');
+      setStatus('Localizando endereço de entrega…');
 
       container.innerHTML = '';
       if (container._leaflet_map) {
@@ -508,45 +561,57 @@
         maxZoom: 18,
       }).addTo(map);
 
-      const route = buildDeliveryPath(dest);
-      map.setView([WAREHOUSE.lat, WAREHOUSE.lng], 10);
+      const oceanPath = buildOceanPath(dest);
+      map.setView([FIJI.lat, FIJI.lng], 3);
 
       const routeLine = L.polyline(
-        route.map(function (p) {
+        oceanPath.map(function (p) {
           return [p.lat, p.lng];
         }),
-        { color: '#ff9900', weight: 4, opacity: 0.85 }
+        { color: '#7c3aed', weight: 3, dashArray: '8 8', opacity: 0.75 }
       ).addTo(map);
 
-      L.marker([WAREHOUSE.lat, WAREHOUSE.lng], { icon: makeEmojiIcon('🏭', 28) })
-        .bindPopup(WAREHOUSE.label)
+      L.marker([FIJI.lat, FIJI.lng], { icon: makeEmojiIcon('🏝️', 32) })
+        .bindPopup(FIJI.label)
         .addTo(map);
 
-      if (onStatus) onStatus('Pacote separado no centro de distribuição');
+      setStatus('🐋 Pedido saiu das Ilhas Fiji em direção ao Brasil');
 
-      const packageIcon = makeEmojiIcon('📦', 36);
-      return animateAlong(map, route, packageIcon, 14000, function (p) {
-        if (p > 0.2 && p < 0.25 && onStatus) onStatus('Saiu para transporte — São Paulo');
-        if (p > 0.55 && p < 0.6 && onStatus) onStatus('Saiu para entrega na sua região');
-        if (p > 0.85 && onStatus) onStatus('Entregador a caminho do endereço');
+      const whaleIcon = makeEmojiIcon('🐋', 44);
+      const oceanLeg = oceanPath.slice(0, 7);
+      const whaleMs = Math.round(animMs * 0.55);
+
+      return animateAlong(map, oceanLeg, whaleIcon, whaleMs, function (p) {
+        setStatus(mapStatusForProgress(orderType, p * 0.55));
+      }).then(function () {
+        setStatus('🏖️ Chegou ao Brasil — transferindo para entrega final');
+        routeLine.setStyle({ color: orderType === 'fashion' ? '#ff2d6a' : '#ff9900', dashArray: null, weight: 4 });
+
+        const landPath = [oceanPath[6], oceanPath[7], dest];
+        const packageIcon = makeEmojiIcon(orderType === 'express' ? '🛵' : '📦', 36);
+        const landMs = Math.round(animMs * 0.45);
+
+        return animateAlong(map, landPath, packageIcon, landMs, function (p) {
+          setStatus(mapStatusForProgress(orderType, 0.55 + p * 0.45));
+        });
       }).then(function () {
         L.marker([dest.lat, dest.lng], { icon: makeEmojiIcon('🏠', 32) })
           .bindPopup('Entrega: ' + dest.label)
           .addTo(map);
 
         map.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
-        if (onStatus) onStatus('Pedido entregue');
+        setStatus(mapStatusForProgress(orderType, 1));
       });
     });
   }
 
   function runExpressTracking(statusEl, onComplete) {
     const steps = [
-      { text: 'Restaurante confirmou seu pedido', delay: 0 },
-      { text: 'Pedido em preparo', delay: 8000 },
-      { text: 'Entregador a caminho', delay: 20000 },
-      { text: 'Entregador está chegando', delay: 35000 },
-      { text: 'Pedido entregue', delay: 50000 },
+      { text: '🏝️ Pedido saiu das Ilhas Fiji', delay: 0 },
+      { text: 'Restaurante confirmou e está preparando', delay: 10000 },
+      { text: 'Pedido em preparo — previsão até 1 hora', delay: 22000 },
+      { text: 'Entregador a caminho do seu endereço', delay: 36000 },
+      { text: '✅ Pedido entregue — dentro de 1 hora', delay: 48000 },
     ];
 
     const list = document.createElement('div');
@@ -1267,6 +1332,8 @@
     const statusEl = $('#tracking-status');
     const expressTitle = $('#tracking-express-title');
     const mapTitle = $('#tracking-map-title');
+    const etaEl = $('#tracking-eta');
+    const meta = getDeliveryMeta(order.type);
 
     if (!mapEl || !expressEl || !statusEl) return;
 
@@ -1277,42 +1344,45 @@
       mapEl._leaflet_map = null;
     }
 
-    mapEl.hidden = true;
     expressEl.hidden = true;
     if (expressTitle) expressTitle.hidden = true;
-    if (mapTitle) mapTitle.hidden = true;
+    mapEl.hidden = false;
+    if (mapTitle) {
+      mapTitle.hidden = false;
+      mapTitle.textContent = 'Rastreamento · saída Ilhas Fiji';
+    }
+    if (etaEl) etaEl.textContent = meta.eta;
 
     statusEl.textContent = 'Confirmando pagamento…';
 
     setTimeout(function () {
-      statusEl.textContent = 'Pagamento aprovado. Preparando seu pedido.';
+      statusEl.textContent = 'Pagamento aprovado. Pedido em rota a partir das Fiji.';
 
       if (order.type === 'express' || order.type === 'mixed') {
         expressEl.hidden = false;
-        if (expressTitle) expressTitle.hidden = false;
+        if (expressTitle) {
+          expressTitle.hidden = false;
+          expressTitle.textContent = 'Entrega rápida · AIFOOD (até 1 hora)';
+        }
         runExpressTracking(expressEl, function () {});
       }
 
-      if (order.type === 'premium' || order.type === 'fashion' || order.type === 'mixed') {
-        mapEl.hidden = false;
-        if (mapTitle) mapTitle.hidden = false;
-        setTimeout(function () {
-          if (typeof L === 'undefined') {
-            mapEl.innerHTML = '<p class="empty">Mapa indisponível — pedido em transporte.</p>';
-            statusEl.textContent = 'Pacote a caminho do endereço de entrega';
-            return;
-          }
-          try {
-            runProductTracking(mapEl, order.address, function (msg) {
-              statusEl.textContent = msg;
-            }).catch(function () {
-              mapEl.innerHTML = '<p class="empty">Rastreio ativo — entrega em andamento.</p>';
-            });
-          } catch (err) {
-            mapEl.innerHTML = '<p class="empty">Rastreio ativo — entrega em andamento.</p>';
-          }
-        }, order.type === 'mixed' ? 15000 : 500);
-      }
+      setTimeout(function () {
+        if (typeof L === 'undefined') {
+          mapEl.innerHTML = '<p class="empty">Mapa indisponível — pedido a caminho das Fiji até seu endereço.</p>';
+          statusEl.textContent = 'Rota ativa: Ilhas Fiji → ' + order.address;
+          return;
+        }
+        try {
+          runProductTracking(mapEl, order.address, order.type, function (msg) {
+            statusEl.textContent = msg;
+          }).catch(function () {
+            mapEl.innerHTML = '<p class="empty">Rastreio ativo — saída Fiji, entrega em andamento.</p>';
+          });
+        } catch (err) {
+          mapEl.innerHTML = '<p class="empty">Rastreio ativo — saída Fiji, entrega em andamento.</p>';
+        }
+      }, order.type === 'express' ? 400 : 800);
     }, 1500);
   }
 

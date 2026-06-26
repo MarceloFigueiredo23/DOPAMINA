@@ -529,6 +529,13 @@ body {
   color: var(--track-muted);
 }
 
+#view-tracking .tracking-eta {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ea1d2c;
+  margin-bottom: 12px;
+}
+
 .tracking-meta {
   color: var(--text-muted);
   margin-bottom: 16px;
