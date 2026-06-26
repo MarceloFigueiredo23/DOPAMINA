@@ -117,19 +117,53 @@
 
     <section id="view-checkout" class="view">
       <button type="button" class="view-back nav-link" data-view="cart">← Voltar à sacola</button>
-      <h2 class="view-title">Pagamento</h2>
+      <h2 class="view-title">Finalizar pedido</h2>
       <form id="checkout-form" class="checkout-form">
+        <p class="checkout-section-label">Seus dados</p>
         <label>
           Nome completo
-          <input type="text" id="checkout-name" placeholder="Como está no cartão" required />
+          <input type="text" id="checkout-name" name="name" placeholder="Seu nome completo" required autocomplete="name" />
+        </label>
+        <div class="checkout-field-row">
+          <label>
+            Idade
+            <input type="number" id="checkout-age" name="age" placeholder="Ex.: 28" min="13" max="120" required inputmode="numeric" />
+          </label>
+          <label>
+            Sexo
+            <select id="checkout-gender" name="gender" required>
+              <option value="">Selecione</option>
+              <option value="feminino">Feminino</option>
+              <option value="masculino">Masculino</option>
+              <option value="outro">Outro</option>
+              <option value="nao_informar">Prefiro não informar</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          E-mail
+          <input type="email" id="checkout-email" name="email" placeholder="voce@email.com" required autocomplete="email" />
         </label>
         <label>
+          Região
+          <select id="checkout-region" name="region" required>
+            <option value="">Selecione sua região</option>
+            <option value="norte">Norte</option>
+            <option value="nordeste">Nordeste</option>
+            <option value="centro-oeste">Centro-Oeste</option>
+            <option value="sudeste">Sudeste</option>
+            <option value="sul">Sul</option>
+          </select>
+        </label>
+
+        <p class="checkout-section-label">Entrega</p>
+        <label>
           Endereço de entrega
-          <input type="text" id="checkout-address" placeholder="Rua, número, bairro, cidade" required />
+          <input type="text" id="checkout-address" name="address" placeholder="Rua, número, bairro, cidade" required autocomplete="street-address" />
         </label>
         <label>
           Complemento e referência
-          <input type="text" id="checkout-complement" placeholder="Apto, bloco, ponto de referência" />
+          <input type="text" id="checkout-complement" name="complement" placeholder="Apto, bloco, ponto de referência" autocomplete="address-line2" />
         </label>
         <div class="checkout-payment-block">
           <p class="checkout-section-label">Forma de pagamento</p>

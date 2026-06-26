@@ -32,12 +32,67 @@
     coupon: 'dopamina_coupon',
     savings: 'dopamina_savings',
     shenimCoupons: 'dopamina_shenim_coupons',
+    buyerProfile: 'dopamina_buyer_profile',
   };
 
   const UI = window.DOPAMINA_UI || {};
 
   function AUTH() {
     return window.DOPAMINA_AUTH || {};
+  }
+
+  function loadBuyerProfile() {
+    try {
+      return JSON.parse(localStorage.getItem(KEYS.buyerProfile) || 'null');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveBuyerProfile(profile) {
+    localStorage.setItem(KEYS.buyerProfile, JSON.stringify(profile));
+  }
+
+  function readCheckoutBuyer() {
+    var ageRaw = $('#checkout-age') ? $('#checkout-age').value.trim() : '';
+    var age = parseInt(ageRaw, 10);
+    return {
+      name: $('#checkout-name') ? $('#checkout-name').value.trim() : '',
+      age: age,
+      email: $('#checkout-email') ? $('#checkout-email').value.trim().toLowerCase() : '',
+      gender: $('#checkout-gender') ? $('#checkout-gender').value : '',
+      region: $('#checkout-region') ? $('#checkout-region').value : '',
+    };
+  }
+
+  function validateCheckoutBuyer(buyer) {
+    if (!buyer.name) return 'Informe seu nome completo.';
+    if (!buyer.email || buyer.email.indexOf('@') < 1) return 'Informe um e-mail válido.';
+    if (!buyer.gender) return 'Selecione o sexo.';
+    if (!buyer.region) return 'Selecione sua região.';
+    if (!buyer.age || buyer.age < 13 || buyer.age > 120) return 'Informe uma idade válida (13 a 120 anos).';
+    return '';
+  }
+
+  function genderLabel(value) {
+    var map = {
+      feminino: 'Feminino',
+      masculino: 'Masculino',
+      outro: 'Outro',
+      nao_informar: 'Prefiro não informar',
+    };
+    return map[value] || value;
+  }
+
+  function regionLabel(value) {
+    var map = {
+      norte: 'Norte',
+      nordeste: 'Nordeste',
+      'centro-oeste': 'Centro-Oeste',
+      sudeste: 'Sudeste',
+      sul: 'Sul',
+    };
+    return map[value] || value;
   }
 
   function trackBehavior(type, payload) {
@@ -64,7 +119,7 @@
         '<h3>Controlador</h3>' +
         '<p>DOPAMINA SHOP (experiência piloto). Contato: canal definido pelo operador do projeto.</p>' +
         '<h3>Dados coletados no cadastro</h3>' +
-        '<ul><li>Nome, e-mail, cidade (opcional) e senha simulada (local)</li><li>Pedidos simulados e preferências de navegação</li></ul>' +
+        '<ul><li>Nome, e-mail, cidade (opcional) e senha simulada (local)</li><li>Pedidos simulados e preferências de navegação</li><li>No checkout: nome, idade, e-mail, sexo e região para finalizar cada pedido</li></ul>' +
         '<h3>Notificações de envio (opt-in)</h3>' +
         '<p>Se você autorizar, podemos enviar e-mails simulados sobre o status do pedido (confirmação, saída para entrega e entrega concluída). Você pode desativar a qualquer momento na conta.</p>' +
         '<h3>Camada 2 — dados agregados e anônimos (opt-in)</h3>' +
@@ -1657,10 +1712,16 @@
     const cart = loadCart();
     if (!cart.length) return;
 
+    const buyer = readCheckoutBuyer();
+    const buyerError = validateCheckoutBuyer(buyer);
+    if (buyerError) {
+      flashToast(buyerError);
+      return;
+    }
+
     const address = $('#checkout-address').value.trim();
-    const name = $('#checkout-name').value.trim();
-    if (!address || !name) {
-      flashToast('Preencha nome e endereço!');
+    if (!address) {
+      flashToast('Informe o endereço de entrega!');
       return;
     }
 
@@ -1668,6 +1729,14 @@
     const finalTotal = t.total;
     const complement = $('#checkout-complement') ? $('#checkout-complement').value.trim() : '';
     const fullAddress = complement ? address + ' — ' + complement : address;
+
+    saveBuyerProfile({
+      name: buyer.name,
+      age: buyer.age,
+      email: buyer.email,
+      gender: buyer.gender,
+      region: buyer.region,
+    });
 
     saveWallet();
     addSavings(finalTotal);
@@ -1689,7 +1758,16 @@
       items: cart.slice(),
       total: finalTotal,
       address: fullAddress,
-      name: name,
+      name: buyer.name,
+      buyer: {
+        name: buyer.name,
+        age: buyer.age,
+        email: buyer.email,
+        gender: buyer.gender,
+        genderLabel: genderLabel(buyer.gender),
+        region: buyer.region,
+        regionLabel: regionLabel(buyer.region),
+      },
       type: orderType,
       createdAt: new Date().toISOString(),
       deliveryDurationMs: getDeliveryDurationMs(orderType),
@@ -1854,14 +1932,30 @@
 
   function prefillCheckout() {
     var nameEl = $('#checkout-name');
+    var ageEl = $('#checkout-age');
+    var emailEl = $('#checkout-email');
+    var genderEl = $('#checkout-gender');
+    var regionEl = $('#checkout-region');
     var addrEl = $('#checkout-address');
+    var saved = loadBuyerProfile();
     var A = AUTH();
+
+    if (saved) {
+      if (nameEl && !nameEl.value && saved.name) nameEl.value = saved.name;
+      if (ageEl && !ageEl.value && saved.age) ageEl.value = String(saved.age);
+      if (emailEl && !emailEl.value && saved.email) emailEl.value = saved.email;
+      if (genderEl && !genderEl.value && saved.gender) genderEl.value = saved.gender;
+      if (regionEl && !regionEl.value && saved.region) regionEl.value = saved.region;
+    }
+
     if (A.isLoggedIn && A.isLoggedIn()) {
       var u = A.loadUser();
       if (nameEl && !nameEl.value && u.name) nameEl.value = u.name;
+      if (emailEl && !emailEl.value && u.email) emailEl.value = u.email;
       if (addrEl && !addrEl.value && u.city) addrEl.value = u.city;
     }
-    if (nameEl && !nameEl.value) nameEl.value = UI.USER_NAME || 'Marcelo';
+
+    if (nameEl && !nameEl.value) nameEl.value = UI.USER_NAME || '';
     if (addrEl && !addrEl.value) addrEl.value = 'Rua Augusta, 1200, Consolação, São Paulo';
   }
 

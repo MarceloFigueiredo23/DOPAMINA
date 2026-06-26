@@ -676,6 +676,7 @@ body.flow-checkout .view.active {
 }
 
 body.flow-checkout .checkout-form input,
+body.flow-checkout .checkout-form select,
 body.flow-checkout .checkout-total-box,
 body.flow-checkout .cart-summary,
 body.flow-checkout .cart-item {
