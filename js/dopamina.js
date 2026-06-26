@@ -36,17 +36,27 @@
 
   const UI = window.DOPAMINA_UI || {};
 
-  const INITIAL_WALLET = 15000;
-  const SERVICE_FEE = (window.DOPAMINA_REALISM && window.DOPAMINA_REALISM.SERVICE_FEE) || 0.99;
+  const UNLIMITED_WALLET = 999999999.99;
 
   function loadWallet() {
-    const v = localStorage.getItem(KEYS.wallet);
-    return v !== null ? parseFloat(v) : INITIAL_WALLET;
+    var v = localStorage.getItem(KEYS.wallet);
+    var n = v !== null ? parseFloat(v) : UNLIMITED_WALLET;
+    if (!isFinite(n) || n < 1000000) {
+      n = UNLIMITED_WALLET;
+      localStorage.setItem(KEYS.wallet, String(n));
+    }
+    return n;
   }
 
-  function saveWallet(amount) {
-    localStorage.setItem(KEYS.wallet, String(amount));
+  function saveWallet() {
+    localStorage.setItem(KEYS.wallet, String(UNLIMITED_WALLET));
   }
+
+  function ensureUnlimitedWallet() {
+    saveWallet();
+  }
+
+  const SERVICE_FEE = (window.DOPAMINA_REALISM && window.DOPAMINA_REALISM.SERVICE_FEE) || 0.99;
 
   function loadCart() {
     try {
@@ -1071,7 +1081,10 @@
       (t.service > 0 ? '<div class="summary-row"><span>Taxa de serviço</span><span>' + formatBRL(t.service) + '</span></div>' : '') +
       '<div class="summary-row total"><span>Total do pedido</span><span>' + formatBRL(t.total) + '</span></div>';
     var btn = $('#checkout-submit-btn');
-    if (btn) btn.textContent = 'Fazer pedido · ' + formatBRL(t.total);
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Fazer pedido · ' + formatBRL(t.total);
+    }
   }
 
   function renderCart() {
@@ -1210,13 +1223,7 @@
     const complement = $('#checkout-complement') ? $('#checkout-complement').value.trim() : '';
     const fullAddress = complement ? address + ' — ' + complement : address;
 
-    let wallet = loadWallet();
-    if (finalTotal > wallet) {
-      wallet = INITIAL_WALLET;
-      saveWallet(wallet);
-    }
-
-    saveWallet(wallet - finalTotal);
+    saveWallet();
     addSavings(finalTotal);
     if (UI.addStamp) UI.addStamp(1);
 
@@ -1367,6 +1374,7 @@
   }
 
   function runInit() {
+    ensureUnlimitedWallet();
     updateHeader();
     applyShopTheme();
     bindGlobalUI();
