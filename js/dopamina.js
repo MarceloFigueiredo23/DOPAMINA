@@ -33,7 +33,11 @@
     savings: 'dopamina_savings',
     shenimCoupons: 'dopamina_shenim_coupons',
     buyerProfile: 'dopamina_buyer_profile',
+    walletScheme: 'dopamina_wallet_scheme',
   };
+
+  const STARTING_WALLET = 1000000;
+  const WALLET_SCHEME = 'million-v1';
 
   const UI = window.DOPAMINA_UI || {};
 
@@ -152,24 +156,94 @@
     document.body.style.overflow = '';
   }
 
-  const UNLIMITED_WALLET = 999999999.99;
+  function getTotalSpent() {
+    return loadOrders().reduce(function (sum, o) {
+      return sum + (Number(o.total) || 0);
+    }, 0);
+  }
 
-  function loadWallet() {
-    var v = localStorage.getItem(KEYS.wallet);
-    var n = v !== null ? parseFloat(v) : UNLIMITED_WALLET;
-    if (!isFinite(n) || n < 1000000) {
-      n = UNLIMITED_WALLET;
-      localStorage.setItem(KEYS.wallet, String(n));
+  function syncWalletFromOrders() {
+    var balance = Math.max(0, STARTING_WALLET - getTotalSpent());
+    saveWallet(balance);
+    return balance;
+  }
+
+  function initWallet() {
+    var scheme = localStorage.getItem(KEYS.walletScheme);
+    var stored = localStorage.getItem(KEYS.wallet);
+    if (scheme !== WALLET_SCHEME) {
+      syncWalletFromOrders();
+      localStorage.setItem(KEYS.walletScheme, WALLET_SCHEME);
+      return loadWallet();
+    }
+    if (stored === null) {
+      saveWallet(STARTING_WALLET);
+      localStorage.setItem(KEYS.walletScheme, WALLET_SCHEME);
+      return STARTING_WALLET;
+    }
+    var n = parseFloat(stored);
+    if (!isFinite(n) || n > STARTING_WALLET) {
+      return syncWalletFromOrders();
     }
     return n;
   }
 
-  function saveWallet() {
-    localStorage.setItem(KEYS.wallet, String(UNLIMITED_WALLET));
+  function loadWallet() {
+    var v = localStorage.getItem(KEYS.wallet);
+    if (v === null) return initWallet();
+    var n = parseFloat(v);
+    if (!isFinite(n) || n < 0) return syncWalletFromOrders();
+    return n;
   }
 
-  function ensureUnlimitedWallet() {
-    saveWallet();
+  function saveWallet(balance) {
+    localStorage.setItem(KEYS.wallet, String(Math.max(0, Math.min(STARTING_WALLET, balance))));
+  }
+
+  function deductWallet(amount) {
+    var wallet = loadWallet();
+    var total = Number(amount) || 0;
+    if (total > wallet) {
+      return { ok: false, wallet: wallet, shortfall: total - wallet };
+    }
+    var next = wallet - total;
+    saveWallet(next);
+    return { ok: true, wallet: next, spent: total };
+  }
+
+  function walletSpentAmount() {
+    return Math.max(0, STARTING_WALLET - loadWallet());
+  }
+
+  function walletProgressPct() {
+    return Math.min(100, (walletSpentAmount() / STARTING_WALLET) * 100);
+  }
+
+  function renderWalletChallenge() {
+    var spent = walletSpentAmount();
+    var balance = loadWallet();
+    var pct = walletProgressPct();
+    var fill = $('#wallet-progress-fill');
+    var spentLbl = $('#wallet-spent-label');
+    var remainLbl = $('#wallet-remaining-label');
+    var profileSaved = $('#profile-saved');
+    var profileBalance = $('#profile-balance');
+    if (fill) fill.style.width = pct.toFixed(1) + '%';
+    if (spentLbl) spentLbl.textContent = 'Gasto: ' + formatBRL(spent);
+    if (remainLbl) remainLbl.textContent = 'Restante: ' + formatBRL(balance);
+    if (profileSaved) profileSaved.textContent = formatBRL(spent);
+    if (profileBalance) profileBalance.textContent = formatBRL(balance);
+    var wrap = $('#wallet-challenge');
+    if (wrap) {
+      wrap.classList.toggle('wallet-challenge--empty', balance <= 0);
+      wrap.classList.toggle('wallet-challenge--low', balance > 0 && balance < STARTING_WALLET * 0.1);
+    }
+    var headerWallet = $('#wallet-balance');
+    if (headerWallet) {
+      headerWallet.textContent = formatBRL(balance);
+      headerWallet.classList.toggle('wallet-value--low', balance > 0 && balance < STARTING_WALLET * 0.1);
+      headerWallet.classList.toggle('wallet-value--empty', balance <= 0);
+    }
   }
 
   const SERVICE_FEE = (window.DOPAMINA_REALISM && window.DOPAMINA_REALISM.SERVICE_FEE) || 0.99;
@@ -988,8 +1062,7 @@
   function updateHeader() {
     const cart = loadCart();
     const count = cart.reduce(function (s, i) { return s + i.qty; }, 0);
-    var bal = $('#wallet-balance');
-    if (bal) bal.textContent = formatBRL(loadWallet());
+    renderWalletChallenge();
     $('#cart-count').textContent = count;
     $('#cart-count').hidden = count === 0;
     var ic = $('#aifood-cart-count');
@@ -1551,11 +1624,16 @@
       (t.discount > 0 ? '<div class="summary-row"><span>Desconto</span><span>−' + formatBRL(t.discount) + '</span></div>' : '') +
       '<div class="summary-row"><span>Entrega</span><span>' + (t.shipping === 0 ? 'Grátis' : formatBRL(t.shipping)) + '</span></div>' +
       (t.service > 0 ? '<div class="summary-row"><span>Taxa de serviço</span><span>' + formatBRL(t.service) + '</span></div>' : '') +
-      '<div class="summary-row total"><span>Total do pedido</span><span>' + formatBRL(t.total) + '</span></div>';
+      '<div class="summary-row total"><span>Total do pedido</span><span>' + formatBRL(t.total) + '</span></div>' +
+      '<div class="summary-row wallet-row"><span>Seu saldo</span><span id="checkout-wallet-balance">' + formatBRL(loadWallet()) + '</span></div>';
     var btn = $('#checkout-submit-btn');
+    var wallet = loadWallet();
+    var canPay = wallet >= t.total && t.total > 0;
     if (btn) {
-      btn.disabled = false;
-      btn.textContent = 'Fazer pedido · ' + formatBRL(t.total);
+      btn.disabled = !canPay;
+      btn.textContent = canPay
+        ? 'Fazer pedido · ' + formatBRL(t.total)
+        : (wallet <= 0 ? 'Saldo esgotado' : 'Saldo insuficiente');
     }
   }
 
@@ -1616,6 +1694,20 @@
     var svc = $('#cart-service');
     if (svc) svc.textContent = t.service > 0 ? formatBRL(t.service) : '—';
     $('#cart-total').textContent = formatBRL(t.total);
+    var walletHint = $('#cart-wallet-hint');
+    if (walletHint) {
+      var bal = loadWallet();
+      if (bal <= 0) {
+        walletHint.textContent = 'Desafio encerrado — seu R$ 1 milhão acabou.';
+        walletHint.className = 'cart-wallet-hint cart-wallet-hint--empty';
+      } else if (t.total > bal) {
+        walletHint.textContent = 'Faltam ' + formatBRL(t.total - bal) + ' para fechar este pedido.';
+        walletHint.className = 'cart-wallet-hint cart-wallet-hint--warn';
+      } else {
+        walletHint.textContent = 'Após este pedido: ' + formatBRL(bal - t.total) + ' de saldo restante.';
+        walletHint.className = 'cart-wallet-hint';
+      }
+    }
   }
 
   function changeQty(id, delta) {
@@ -1673,6 +1765,7 @@
   }
 
   function renderProfile() {
+    renderWalletChallenge();
     var A = AUTH();
     var guest = $('#profile-guest');
     var member = $('#profile-member');
@@ -1680,6 +1773,12 @@
 
     if (guest) guest.hidden = loggedIn;
     if (member) member.hidden = !loggedIn;
+
+    const orders = loadOrders();
+    $('#profile-orders').textContent = orders.length;
+    renderOrdersList(orders);
+    updateActiveOrderBanner();
+    renderSpendingChart();
 
     if (!loggedIn) return;
 
@@ -1711,19 +1810,13 @@
         pilotStats.textContent = '';
       }
     }
+  }
 
+  function renderSpendingChart() {
     const savings = loadSavings();
-    const orders = loadOrders();
-    const days = Object.keys(savings).sort().slice(-7);
-    const last7Total = days.reduce(function (sum, d) { return sum + (savings[d] || 0); }, 0);
-
-    $('#profile-saved').textContent = formatBRL(last7Total);
-    $('#profile-orders').textContent = orders.length;
-
-    renderOrdersList(orders);
-    updateActiveOrderBanner();
-
     const chart = $('#savings-chart');
+    if (!chart) return;
+    const days = Object.keys(savings).sort().slice(-7);
     var stampsHtml = UI.stampsBar ? UI.stampsBar() : '';
     if (!days.length) {
       chart.innerHTML = stampsHtml + '<p class="empty">Gráfico aparece após o primeiro pedido.</p>';
@@ -1782,7 +1875,13 @@
       region: buyer.region,
     });
 
-    saveWallet();
+    var payment = deductWallet(finalTotal);
+    if (!payment.ok) {
+      flashToast('Saldo insuficiente! Você tem ' + formatBRL(payment.wallet) + ' e o pedido custa ' + formatBRL(finalTotal));
+      renderCheckoutSummary();
+      return;
+    }
+
     addSavings(finalTotal);
     if (UI.addStamp) UI.addStamp(1);
 
@@ -1823,6 +1922,8 @@
     saveOrders(orders);
     saveCart([]);
     updateHeader();
+
+    flashToast('Pedido confirmado! Saldo restante: ' + formatBRL(payment.wallet));
 
     var A = AUTH();
     trackBehavior('order_placed', {
@@ -2081,7 +2182,13 @@
   }
 
   function runInit() {
-    ensureUnlimitedWallet();
+    initWallet();
+    if (!sessionStorage.getItem('dopamina_million_hint')) {
+      sessionStorage.setItem('dopamina_million_hint', '1');
+      setTimeout(function () {
+        flashToast('🎮 Desafio ativo: você tem R$ 1 milhão para gastar!');
+      }, 900);
+    }
     document.body.classList.add('has-dopamina-header');
     var mainH = $('#main-header');
     if (mainH) mainH.removeAttribute('hidden');

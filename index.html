@@ -10,13 +10,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/styles.css?v=6" />
-  <link rel="stylesheet" href="css/themes.css?v=6" />
-  <link rel="stylesheet" href="css/interactive.css?v=6" />
-  <link rel="stylesheet" href="css/readability.css?v=6" />
-  <link rel="stylesheet" href="css/brand.css?v=6" />
-  <link rel="stylesheet" href="css/brands.css?v=6" />
-  <link rel="stylesheet" href="css/auth.css?v=6" />
+  <link rel="stylesheet" href="css/styles.css?v=7" />
+  <link rel="stylesheet" href="css/themes.css?v=7" />
+  <link rel="stylesheet" href="css/interactive.css?v=7" />
+  <link rel="stylesheet" href="css/readability.css?v=7" />
+  <link rel="stylesheet" href="css/brand.css?v=7" />
+  <link rel="stylesheet" href="css/brands.css?v=7" />
+  <link rel="stylesheet" href="css/auth.css?v=7" />
 </head>
 <body>
   <div id="toast" class="toast" aria-live="polite"></div>
@@ -63,8 +63,8 @@
       <div class="header-right">
         <span id="coupon-badge" class="coupon-badge" hidden></span>
         <div class="wallet wallet-fintech payment-pill">
-          <span class="wallet-label">Saldo disponível</span>
-          <span class="wallet-value" id="wallet-balance">R$ —</span>
+          <span class="wallet-label">Desafio R$ 1 mi</span>
+          <span class="wallet-value" id="wallet-balance">R$ 1.000.000,00</span>
           <span class="wallet-card-hint">Visa •••• 4821</span>
         </div>
         <button type="button" class="cart-btn nav-link" data-view="cart">
@@ -111,6 +111,7 @@
         <div class="summary-row"><span>Taxa de entrega</span><span id="cart-shipping"></span></div>
         <div class="summary-row"><span>Taxa de serviço</span><span id="cart-service"></span></div>
         <div class="summary-row total"><span>Total</span><span id="cart-total"></span></div>
+        <p class="cart-wallet-hint" id="cart-wallet-hint">Você começa com R$ 1 milhão para gastar no desafio.</p>
         <button type="button" class="btn btn-primary btn-lg" id="btn-checkout">Continuar</button>
       </div>
     </section>
@@ -205,6 +206,32 @@
     </section>
 
     <section id="view-profile" class="view">
+      <div class="wallet-challenge" id="wallet-challenge">
+        <h2 class="view-title">Desafio R$ 1 milhão</h2>
+        <p class="wallet-challenge-lead">Gaste como quiser em compras simuladas. Quando o saldo zerar, o desafio acaba.</p>
+        <div class="wallet-progress-wrap">
+          <div class="wallet-progress-bar" aria-hidden="true"><div class="wallet-progress-fill" id="wallet-progress-fill"></div></div>
+          <div class="wallet-progress-labels">
+            <span id="wallet-spent-label">Gasto: R$ 0,00</span>
+            <span id="wallet-remaining-label">Restante: R$ 1.000.000,00</span>
+          </div>
+        </div>
+        <div class="profile-stats profile-stats--challenge">
+          <div class="stat-card">
+            <span class="stat-value" id="profile-balance">R$ 1.000.000,00</span>
+            <span class="stat-label">Saldo restante</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="profile-saved">R$ 0,00</span>
+            <span class="stat-label">Total gasto</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="profile-orders">0</span>
+            <span class="stat-label">Pedidos realizados</span>
+          </div>
+        </div>
+      </div>
+
       <div id="profile-guest" hidden>
         <div class="auth-card">
           <h2>Criar conta</h2>
@@ -314,16 +341,6 @@
 
         <h2 class="view-title">Minha conta</h2>
         <div id="active-order-profile" class="active-order-profile" hidden></div>
-        <div class="profile-stats">
-          <div class="stat-card">
-            <span class="stat-value" id="profile-saved">R$ 0,00</span>
-            <span class="stat-label">Total gasto simulado</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value" id="profile-orders">0</span>
-            <span class="stat-label">Pedidos realizados</span>
-          </div>
-        </div>
         <h3>Meus pedidos</h3>
         <div id="orders-list" class="orders-list"></div>
         <h3>Gastos nos últimos 7 dias</h3>
@@ -364,13 +381,13 @@
     <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Perfil</button>
   </nav>
 
-  <script src="js/catalog-data.js?v=6"></script>
-  <script src="js/ifood-data.js?v=6"></script>
-  <script src="js/brands.js?v=6"></script>
-  <script src="js/auth.js?v=6"></script>
-  <script src="js/realism.js?v=6"></script>
-  <script src="js/interactive.js?v=6"></script>
+  <script src="js/catalog-data.js?v=7"></script>
+  <script src="js/ifood-data.js?v=7"></script>
+  <script src="js/brands.js?v=7"></script>
+  <script src="js/auth.js?v=7"></script>
+  <script src="js/realism.js?v=7"></script>
+  <script src="js/interactive.js?v=7"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/dopamina.js?v=6"></script>
+  <script src="js/dopamina.js?v=7"></script>
 </body>
 </html>

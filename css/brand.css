@@ -1129,3 +1129,84 @@ body.demo-mode .footer::after {
   font-size: 0.72rem;
   color: var(--dopa-neon);
 }
+
+/* Desafio R$ 1 milhão */
+.wallet-value--low { color: #ffb020 !important; }
+.wallet-value--empty { color: #ff5c6a !important; }
+
+.wallet-challenge {
+  margin-bottom: 24px;
+  padding: 20px;
+  border-radius: var(--dopa-radius, 16px);
+  border: 1px solid var(--dopa-border, #2a2a38);
+  background: linear-gradient(135deg, rgba(176, 38, 255, 0.08), rgba(0, 255, 163, 0.05));
+}
+
+.wallet-challenge-lead {
+  margin: 0 0 16px;
+  color: var(--dopa-muted, #9b9bb0);
+  font-size: 0.9rem;
+}
+
+.wallet-progress-wrap { margin-bottom: 18px; }
+
+.wallet-progress-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.wallet-progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #b026ff, #00ffa3);
+  transition: width 0.45s ease;
+}
+
+.wallet-challenge--low .wallet-progress-fill {
+  background: linear-gradient(90deg, #ffb020, #ff5c6a);
+}
+
+.wallet-challenge--empty .wallet-progress-fill {
+  background: #ff5c6a;
+}
+
+.wallet-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--dopa-muted, #9b9bb0);
+}
+
+.profile-stats--challenge { margin-bottom: 0; }
+
+.cart-wallet-hint {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  background: rgba(0, 255, 163, 0.08);
+  border: 1px solid rgba(0, 255, 163, 0.2);
+  color: #c8ffe8;
+}
+
+.cart-wallet-hint--warn {
+  background: rgba(255, 176, 32, 0.1);
+  border-color: rgba(255, 176, 32, 0.35);
+  color: #ffd98a;
+}
+
+.cart-wallet-hint--empty {
+  background: rgba(255, 92, 106, 0.1);
+  border-color: rgba(255, 92, 106, 0.35);
+  color: #ffb3bb;
+}
+
+.summary-row.wallet-row span:last-child {
+  color: var(--dopa-neon, #00ffa3);
+  font-weight: 700;
+}
