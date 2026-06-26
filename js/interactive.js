@@ -83,7 +83,7 @@
     { icon: '🛒', label: 'Supermercado' },
   ];
 
-  var SHENIM_COUPONS = [
+  var MERCADOPAMINA_COUPONS = [
     { pct: 18, min: 'Sem gasto mín.', limit: 'R$ 9', title: 'Cupom geral' },
     { pct: 19, min: 'Pedidos R$ 69+', limit: 'R$ 15', title: 'Cupom moda' },
     { pct: 25, min: 'Pedidos R$ 99+', limit: 'R$ 25', title: 'Cupom VIP' },
@@ -237,7 +237,7 @@
 
   function therapyHero(tab) {
     var subs = {
-      home: 'Sinta a dopamina sem gastar dinheiro real. Gire a roleta, resgate cupons e acumule moedas a cada item no carrinho — a emoção é real, a conta não.',
+      home: 'Navegue, monte seu carrinho e sinta a emoção de comprar — sem gastar de verdade. Só Mercadopamina.',
       express: 'Peça, acompanhe a entrega e sinta o checkout — sem gastar de verdade.',
       market: 'Tudo que você procura em um só lugar — com a cara do marketplace brasileiro.',
       premium: 'Navegue ofertas, monte o carrinho e acompanhe entregas simuladas em tempo real.',
@@ -250,24 +250,21 @@
       '<h1 class="therapy-hero-title">Simulador de Compras para Terapia de Varejo.</h1>' +
       '<p class="therapy-hero-sub">' + (subs[tab] || subs.default) + '</p>' +
       '<div class="therapy-hero-tags">' +
-      '<span>🚚 Frete grátis hoje</span><span>Até 60% OFF</span><span>🪙 Moedas a cada compra</span>' +
+      '<span>🚚 Frete grátis hoje</span><span>Até 60% OFF</span><span>🎰 Roleta de cupons</span>' +
       '</div></section>'
     );
   }
 
   function promoHubHtml() {
     return (
-      '<section class="promo-hub" aria-label="Cupons, roleta e moedas">' +
-      '<div class="promo-hub-grid">' +
+      '<section class="promo-hub" aria-label="Cupons e ofertas">' +
+      '<div class="promo-hub-grid promo-hub-grid--3">' +
       '<button type="button" class="promo-hub-card promo-hub-card--roulette" data-action="roulette">' +
       '<span class="promo-hub-icon">🎰</span><strong>Roleta de cupons</strong>' +
       '<span>Gire e ganhe até 50% OFF</span></button>' +
       '<button type="button" class="promo-hub-card promo-hub-card--coupon" data-promo-coupon="MERCADOPAMINA10">' +
       '<span class="promo-hub-icon">🎟️</span><strong>MERCADOPAMINA10</strong>' +
       '<span>10% OFF no checkout</span></button>' +
-      '<div class="promo-hub-card promo-hub-card--coins">' +
-      '<span class="promo-hub-icon">🪙</span><strong><span id="promo-hub-coins">0</span> moedas</strong>' +
-      '<span>Ganhe a cada item no carrinho</span></div>' +
       '<div class="promo-hub-card promo-hub-card--timer">' +
       '<span class="promo-hub-icon">⚡</span><strong>Ofertas relâmpago</strong>' +
       '<span>Termina em <b data-countdown="hub">02:47:59</b></span></div>' +
@@ -427,7 +424,8 @@
     getGreeting: getGreeting,
     loadStamps: loadStamps,
     addStamp: addStamp,
-    SHENIM_COUPONS: SHENIM_COUPONS,
+    MERCADOPAMINA_COUPONS: MERCADOPAMINA_COUPONS,
+    SHENIM_COUPONS: MERCADOPAMINA_COUPONS,
     aifoodHero: aifoodHero,
     aifoodMicroPromo: aifoodMicroPromo,
     stampsBar: stampsBar,

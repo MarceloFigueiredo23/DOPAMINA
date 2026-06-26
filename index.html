@@ -6,21 +6,20 @@
   <meta name="description" content="Mercadopamina — terapia de varejo e simulador de compras. Ofertas, carrinho e entrega simulada sem cobrança real." />
   <meta name="application-name" content="Mercadopamina" />
   <title>Mercadopamina — Terapia de Varejo</title>
-  <meta name="theme-color" content="#080C14" />
+  <meta name="theme-color" content="#FFC107" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/styles.css?v=18" />
-  <link rel="stylesheet" href="css/themes.css?v=18" />
-  <link rel="stylesheet" href="css/interactive.css?v=18" />
-  <link rel="stylesheet" href="css/readability.css?v=18" />
-  <link rel="stylesheet" href="css/brand.css?v=18" />
-  <link rel="stylesheet" href="css/brands.css?v=18" />
-  <link rel="stylesheet" href="css/auth.css?v=18" />
-  <link rel="stylesheet" href="css/dopamina-home.css?v=18" />
-  <link rel="stylesheet" href="css/rewards.css?v=18" />
-  <link rel="stylesheet" href="css/mercadopamina-brand.css?v=18" />
+  <link rel="stylesheet" href="css/styles.css?v=19" />
+  <link rel="stylesheet" href="css/themes.css?v=19" />
+  <link rel="stylesheet" href="css/interactive.css?v=19" />
+  <link rel="stylesheet" href="css/readability.css?v=19" />
+  <link rel="stylesheet" href="css/brand.css?v=19" />
+  <link rel="stylesheet" href="css/brands.css?v=19" />
+  <link rel="stylesheet" href="css/auth.css?v=19" />
+  <link rel="stylesheet" href="css/dopamina-home.css?v=19" />
+  <link rel="stylesheet" href="css/mercadopamina-brand.css?v=19" />
 </head>
 <body>
   <div class="promo-ticker" id="promo-ticker" aria-hidden="true">
@@ -28,14 +27,12 @@
       <span>🚚 Frete GRÁTIS hoje em milhares de produtos</span>
       <span>⚡ Ofertas relâmpago por tempo limitado</span>
       <span>🎟️ Cupom MERCADOPAMINA10 — 10% OFF no checkout</span>
-      <span>🪙 Ganhe moedas a cada item no carrinho</span>
       <span>🎰 Roleta de cupons — gire e ganhe até 50% OFF</span>
       <span>📦 Entrega simulada em tempo real</span>
       <span>🛍️ Mercadopamina — terapia de varejo simulada</span>
       <span>🚚 Frete GRÁTIS hoje em milhares de produtos</span>
       <span>⚡ Ofertas relâmpago por tempo limitado</span>
       <span>🎟️ Cupom MERCADOPAMINA10 — 10% OFF no checkout</span>
-      <span>🪙 Ganhe moedas a cada item no carrinho</span>
       <span>🎰 Roleta de cupons — gire e ganhe até 50% OFF</span>
       <span>📦 Entrega simulada em tempo real</span>
     </div>
@@ -48,9 +45,6 @@
         <span id="site-logo-wordmark"></span>
       </a>
       <nav class="site-header-nav">
-        <span id="header-coins" class="header-coins" title="Moedas Mercadopamina — ganhe ao adicionar itens">
-          🪙 <span id="header-coins-val">0</span>
-        </span>
         <a href="#" class="nav-link" data-view="profile">Meus Pedidos</a>
         <button type="button" class="site-header-cart nav-link" data-view="cart">
           Carrinho <span id="cart-count" class="cart-count" hidden>0</span>
@@ -63,7 +57,6 @@
     <span id="coupon-badge" class="coupon-badge" hidden></span>
     <span id="wallet-balance"></span>
   </div>
-  <div id="fx-layer" aria-hidden="true"></div>
   <div id="toast" class="toast" aria-live="polite"></div>
 
   <!-- Sacola lateral (drawer) -->
@@ -242,7 +235,7 @@
         <p id="tracking-status" class="tracking-status">Aguardando confirmação…</p>
       </div>
 
-      <h3 id="tracking-express-title">Entrega rápida · AIFOOD</h3>
+      <h3 id="tracking-express-title">Entrega rápida · Mercadopamina</h3>
       <div id="tracking-express" class="tracking-express"></div>
 
       <h3 id="tracking-map-title">Rastreamento · partida Fiji</h3>
@@ -407,16 +400,7 @@
       <a href="#" class="legal-link" data-legal="privacy">Política de Privacidade</a>
       <a href="#" class="legal-link" data-legal="terms">Termos de Uso</a>
     </nav>
-    <div class="parody-shops-bar" id="parody-shops-bar">
-      <span>Modo lojas paródia:</span>
-      <button type="button" data-tab="express">AIFOOD</button>
-      <button type="button" data-tab="market">MERCADÃO</button>
-      <button type="button" data-tab="premium">AMAZOOM</button>
-      <button type="button" data-tab="fashion">SHENIM</button>
-      <button type="button" data-tab="home">← Voltar ao início</button>
-    </div>
-    <p class="brand-disclaimer">AIFOOD, MERCADÃO, AMAZOOM e SHENIM são marcas fictícias de paródia. Simulador — sem pagamentos reais.</p>
-    <p>© 2026 Mercadopamina · mercadopamina.com.br</p>
+    <p>© 2026 Mercadopamina · mercadopamina.com.br · Simulador de compras — sem pagamentos reais.</p>
   </footer>
 
   <div id="legal-modal" class="legal-modal" hidden role="dialog" aria-modal="true" aria-labelledby="legal-modal-title">
@@ -445,15 +429,14 @@
     <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Perfil</button>
   </nav>
 
-  <script src="js/rewards.js?v=18"></script>
-  <script src="js/catalog-photos.js?v=18"></script>
-  <script src="js/catalog-data.js?v=18"></script>
-  <script src="js/ifood-data.js?v=18"></script>
-  <script src="js/brands.js?v=18"></script>
-  <script src="js/auth.js?v=18"></script>
-  <script src="js/realism.js?v=18"></script>
-  <script src="js/interactive.js?v=18"></script>
+  <script src="js/catalog-photos.js?v=19"></script>
+  <script src="js/catalog-data.js?v=19"></script>
+  <script src="js/ifood-data.js?v=19"></script>
+  <script src="js/brands.js?v=19"></script>
+  <script src="js/auth.js?v=19"></script>
+  <script src="js/realism.js?v=19"></script>
+  <script src="js/interactive.js?v=19"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/dopamina.js?v=18"></script>
+  <script src="js/dopamina.js?v=19"></script>
 </body>
 </html>

@@ -13,9 +13,9 @@ body.has-site-header {
   right: 0;
   z-index: 700;
   height: var(--promo-ticker-h, 34px);
-  background: linear-gradient(90deg, #ff2d95 0%, #b026ff 50%, #7c3aed 100%);
+  background: #ffc107;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 2px solid #f9a825;
 }
 
 .promo-ticker-track {
@@ -28,11 +28,11 @@ body.has-site-header {
 }
 
 .promo-ticker-track span {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: #fff;
-  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #2c2c2c;
+  text-transform: none;
 }
 
 @keyframes promo-ticker-scroll {
@@ -46,9 +46,8 @@ body.has-site-header {
   left: 0;
   right: 0;
   z-index: 650;
-  background: rgba(11, 11, 15, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border-bottom: 2px solid #ffe082;
 }
 
 .site-header-inner {
@@ -129,7 +128,7 @@ body.has-site-header {
 
 /* Home shell */
 .theme-home .shop-shell {
-  background: #0b0b0f;
+  background: #fffde7;
 }
 
 .ds-home {
