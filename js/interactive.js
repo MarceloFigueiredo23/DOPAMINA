@@ -238,7 +238,6 @@
   function therapyHero(tab) {
     var subs = {
       home: 'Navegue, monte seu carrinho e sinta a emoção de comprar — sem gastar de verdade. Só Mercadopamina.',
-      express: 'Peça, acompanhe a entrega e sinta o checkout — sem gastar de verdade.',
       market: 'Tudo que você procura em um só lugar — com a cara do marketplace brasileiro.',
       premium: 'Navegue ofertas, monte o carrinho e acompanhe entregas simuladas em tempo real.',
       fashion: 'Looks, tendências e descontos — a emoção é real, a cobrança não.',

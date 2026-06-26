@@ -14,38 +14,6 @@
   }
 
   var PHOTOS = {
-    /* ── Comidas (f01–f30) ── */
-    f01: P(uns('photo-1568901348915-4f738b0cf8fb'), uns('photo-1550547660-22aa7fe61265')),
-    f02: P(uns('photo-1513104890138-7c749659a591'), uns('photo-1565299624946-b28f40a0ae38')),
-    f03: P(uns('photo-1550547660-22aa7fe61265'), uns('photo-1568901348915-4f738b0cf8fb')),
-    f04: P(uns('photo-1626082927389-7114cbd1651e'), uns('photo-1606755880137-68b186cae237')),
-    f05: P(uns('photo-1614430049513-ead22937d3d0'), uns('photo-1509722747451-e0aba5af8f20')),
-    f06: P(uns('photo-1604908178846-bf7191421916'), uns('photo-1606755962773-d324e0a8f6c5')),
-    f07: P(uns('photo-1550317138-10000687a491'), uns('photo-1586192440005-356cdb5d7b9a')),
-    f08: P(uns('photo-1461023058948-939a962d824f'), uns('photo-1511920170033-f8396924d10a')),
-    f09: P(uns('photo-1546834050-0b07584eeda2'), uns('photo-1600891964092-4316c3000326')),
-    f10: P(uns('photo-1606313564204-e75d5efcc254'), uns('photo-1578985545062-69928b1d9587')),
-    f11: P(uns('photo-1600891964092-4316c3000326'), uns('photo-1546834050-0b07584eeda2')),
-    f12: P(uns('photo-1579584425558-2fafd2377920'), uns('photo-1617196034796-9dfa7a1a44f5')),
-    f13: P(uns('photo-1569718212165-3a285874eb36'), uns('photo-1617096714-7cfb-640695373e9')),
-    f14: P(uns('photo-1590301159386-806fc9ca48d9'), uns('photo-1606313564204-e75d5efcc254')),
-    f15: P(uns('photo-1565299624946-b28f40a0ae38'), uns('photo-1513104890138-7c749659a591')),
-    f16: P(uns('photo-1606755962773-d324e0a8f6c5'), uns('photo-1604908178846-bf7191421916')),
-    f17: P(uns('photo-1586192440005-356cdb5d7b9a'), uns('photo-1550317138-10000687a491')),
-    f18: P(uns('photo-1546069901-ba2a88c258df'), uns('photo-1579584425558-2fafd2377920')),
-    f19: P(uns('photo-1628845242799-f419d2a72d7c'), uns('photo-1621996346565-e3dbc646d9a9')),
-    f20: P(uns('photo-1565291663046-7827f18908b'), uns('photo-1551504734-5ee1c4a1479b')),
-    f21: P(uns('photo-1619745252086-a7bd21f0449f'), uns('photo-1528735602780-2552fd46c7fe')),
-    f22: P(uns('photo-1630914442700-2112a4d2c3ad'), uns('photo-1604908178846-bf7191421916')),
-    f23: P(uns('photo-1551024506-0bccd828d307'), uns('photo-1578985545062-69928b1d9587')),
-    f24: P(uns('photo-1488477181941-7818ad7b4329'), uns('photo-1604908178846-bf7191421916')),
-    f25: P(uns('photo-1617096714-7cfb-640695373e9'), uns('photo-1569718212165-3a285874eb36')),
-    f26: P(uns('photo-1519678823-1cd43b937165'), uns('photo-1562376552-29d0c16b86fb')),
-    f27: P(uns('photo-1563805042235-50e725903d57'), uns('photo-1606313564204-e75d5efcc254')),
-    f28: P(uns('photo-1525385130511-4e37dd1de1cb'), uns('photo-1461023058948-939a962d824f')),
-    f29: P(uns('photo-1621996346565-e3dbc646d9a9'), uns('photo-1628845242799-f419d2a72d7c')),
-    f30: P(uns('photo-1562376552-29d0c16b86fb'), uns('photo-1519678823-1cd43b937165')),
-
     /* ── Eletrônicos e casa (p01–p30) ── */
     p01: P(uns('photo-1695048133144-6b33fd7b28b5'), uns('photo-1511702033304-f8f02fdda238')),
     p02: P(uns('photo-1517336714731-489689fd1ca8'), uns('photo-1496180940759-8522db4f9b27')),

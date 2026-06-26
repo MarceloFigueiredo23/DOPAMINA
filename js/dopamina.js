@@ -275,6 +275,12 @@
     localStorage.setItem(KEYS.cart, JSON.stringify(cart));
   }
 
+  function purgeFoodFromCart() {
+    var cart = loadCart();
+    var filtered = cart.filter(function (item) { return !isExpress(item.id); });
+    if (filtered.length !== cart.length) saveCart(filtered);
+  }
+
   function loadOrders() {
     try {
       return JSON.parse(localStorage.getItem(KEYS.orders) || '[]');
@@ -297,7 +303,7 @@
   }
 
   function rouletteDone() {
-    return rouletteDoneForTab('express');
+    return rouletteDoneForTab('home');
   }
 
   function markRouletteDone() {
@@ -391,7 +397,7 @@
   };
 
   function getPrizes() {
-    return TAB_PRIZES[rouletteTab] || TAB_PRIZES.express;
+    return TAB_PRIZES[rouletteTab] || TAB_PRIZES.home;
   }
 
   const SKIP_COUPON = { label: 'Sem cupom', discount: 0, type: 'none', icon: '😌' };
@@ -444,7 +450,7 @@
     });
   }
 
-  let rouletteTab = 'express';
+  let rouletteTab = 'home';
   let spinning = false;
 
   function closeOverlay(overlay) {
@@ -1075,15 +1081,13 @@
     { id: 'esportes', label: 'Esportes' },
     { id: 'beleza', label: 'Beleza' },
     { id: 'games', label: 'Games' },
-    { id: 'foods', label: 'Mercadopamina Foods' },
   ];
 
   function getAllCatalogItems() {
-    return (CATALOG.premium || []).concat(CATALOG.fashion || []).concat(CATALOG.express || []);
+    return (CATALOG.premium || []).concat(CATALOG.fashion || []);
   }
 
   function homeCategoryOf(p) {
-    if (isExpress(p.id)) return 'foods';
     if (p.category === 'Acessórios') return 'acessorios';
     if (p.category === 'Calçados') {
       if (['Nike', 'Adidas', 'New Balance', 'Puma', 'Balenciaga', 'Prada'].indexOf(p.brand) >= 0) return 'esportes';
@@ -2891,6 +2895,7 @@
 
   function runInit() {
     initWallet();
+    purgeFoodFromCart();
     if (!sessionStorage.getItem('dopamina_million_hint')) {
       sessionStorage.setItem('dopamina_million_hint', '1');
       setTimeout(function () {
