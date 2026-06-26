@@ -370,6 +370,16 @@
       { label: 'R$ 100 OFF', discount: 100, type: 'bonus', icon: '🏷️' },
       { label: 'Cupom 7.7', discount: 0.3, type: 'percent', icon: '⚡' },
     ],
+    home: [
+      { label: '50% OFF', discount: 0.5, type: 'percent', icon: '🎰' },
+      { label: 'Frete Grátis', discount: 0, type: 'shipping', icon: '🚚' },
+      { label: 'R$ 30 OFF', discount: 30, type: 'bonus', icon: '🪙' },
+      { label: '20% OFF', discount: 0.2, type: 'percent', icon: '🛍️' },
+      { label: '40% OFF', discount: 0.4, type: 'percent', icon: '🔥' },
+      { label: '15% OFF', discount: 0.15, type: 'percent', icon: '✨' },
+      { label: 'R$ 50 OFF', discount: 50, type: 'bonus', icon: '💎' },
+      { label: 'VIP Mercado', discount: 0.35, type: 'percent', icon: '👑' },
+    ],
   };
 
   function getPrizes() {
@@ -446,7 +456,8 @@
     const PRIZES = getPrizes();
     var colors = rouletteTab === 'express' ? ['#ea1d2c', '#ff6b6b'] :
       rouletteTab === 'market' ? ['#fff159', '#3483fa'] :
-      rouletteTab === 'premium' ? ['#ff9900', '#232f3e'] : ['#ff2d6a', '#111'];
+      rouletteTab === 'premium' ? ['#ff9900', '#232f3e'] :
+      rouletteTab === 'home' ? ['#ff2d95', '#00a650'] : ['#ff2d6a', '#111'];
 
     svg.innerHTML = '';
     const cx = 140;
@@ -552,7 +563,7 @@
     const stage = document.getElementById('roulette-stage');
     const closeBtn = document.getElementById('roulette-close-x');
     const modal = overlay ? overlay.querySelector('.roulette-modal') : null;
-    const tabLabel = { express: 'AIFOOD', market: 'MERCADÃO', premium: 'AMAZOOM', fashion: 'SHENIM' };
+    const tabLabel = { home: 'Mercadopamina', express: 'AIFOOD', market: 'MERCADÃO', premium: 'AMAZOOM', fashion: 'SHENIM' };
 
     if (!overlay || !wheel) return;
 
@@ -607,10 +618,13 @@
 
   function promoHandlers() {
     return {
-      onRoulette: function () { triggerRoulette(currentTab); },
+      onRoulette: function () { triggerRoulette(currentTab === 'home' ? 'home' : currentTab); },
       onHits: function () {
         flashToast('🔥 Hits do momento — até 60% OFF!');
         triggerRoulette('express');
+      },
+      onPromoCoupon: function (code) {
+        tryApplyCouponCode(code || 'MERCADOPAMINA10');
       },
       onCategory: function (cat) {
         ifoodCategory = cat;
@@ -1116,6 +1130,7 @@
       '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="' + productImgOnerror(p) + '" />' +
       '</div>' +
       urgency +
+      (p.brand ? '<span class="ds-card-brand">' + p.brand + '</span>' : '') +
       '<h3>' + p.name + '</h3>' +
       productSoldMetaHtml(p) +
       '<div class="ds-card-prices"><strong>' + formatBRL(p.price) + '</strong>' +
@@ -1158,11 +1173,13 @@
     var all = getAllCatalogItems();
     var items = filterHomeItems(all);
     var therapy = UI.therapyHero ? UI.therapyHero('home') : '';
+    var promoHub = UI.promoHubHtml ? UI.promoHubHtml() : '';
     var flashBlock = flashDealsHtml(getFlashDeals(all, 18));
     var cardsHtml = items.map(renderDopaminaCard).join('');
     grid.className = 'ds-home';
     grid.innerHTML =
       therapy +
+      promoHub +
       flashBlock +
       '<section class="ds-explore" aria-label="Explorar produtos">' +
       '<h2>Explorar produtos</h2>' +
@@ -1222,6 +1239,8 @@
     var mc = $('#mercadao-cart-count');
     if (mc) { mc.textContent = count; mc.hidden = count === 0; }
     updateActiveOrderBanner();
+    var R = window.DOPAMINA_REWARDS;
+    if (R && R.updateCoinDisplay) R.updateCoinDisplay();
   }
 
   var TAB_LABELS = { express: 'AIFOOD', market: 'MERCADÃO', premium: 'AMAZOOM', fashion: 'SHENIM' };
@@ -1387,7 +1406,7 @@
     grid.querySelectorAll('[data-add]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        addToCart(btn.dataset.add);
+        addToCart(btn.dataset.add, e);
       });
     });
     grid.querySelectorAll('[data-open]').forEach(function (el) {
@@ -1878,7 +1897,7 @@
       '<div class="ifood-rest-tabs"><button type="button" class="ifood-rest-tab' + (menuTab ? ' active' : '') + '" data-rtab="menu">Cardápio</button><button type="button" class="ifood-rest-tab' + (aboutTab ? ' active' : '') + '" data-rtab="about">Sobre</button><button type="button" class="ifood-rest-tab' + (reviewsTab ? ' active' : '') + '" data-rtab="reviews">Avaliações (' + r.reviews + ')</button></div>' +
       '<div class="ifood-rest-content">' + (menuTab ? '<div class="ifood-list">' + menuHtml + '</div>' : '') + (aboutTab ? '<div class="ifood-about"><p><strong>' + r.shop + '</strong> — restaurante parceiro AIFOOD.</p><p>Especialidades: ' + r.tags.join(', ') + '.</p><p>Pedido mínimo ' + formatBRL(r.minOrder) + ' · Entrega ' + r.delivery + ' · Taxa ' + r.fee + '</p></div>' : '') + (reviewsTab ? '<div class="ifood-reviews-summary"><div class="ifood-big-rating">' + r.rating + '</div><div><div class="stars-row">' + starsHtml(r.rating) + '</div><p>' + r.reviews + ' avaliações de clientes</p></div></div><div class="ifood-reviews-list">' + renderReviewsHtml(r.reviewList) + '</div>' : '') + '</div>';
     grid.querySelectorAll('[data-rtab]').forEach(function (btn) { btn.addEventListener('click', function () { ifoodRestaurantTab = btn.dataset.rtab; renderExpressRestaurant(restaurantId); }); });
-    grid.querySelectorAll('[data-add]').forEach(function (btn) { btn.addEventListener('click', function (e) { e.stopPropagation(); addToCart(btn.dataset.add); }); });
+    grid.querySelectorAll('[data-add]').forEach(function (btn) { btn.addEventListener('click', function (e) { e.stopPropagation(); addToCart(btn.dataset.add, e); }); });
     grid.querySelectorAll('[data-open]').forEach(function (el) { el.addEventListener('click', function (e) { if (e.target.closest('[data-add]')) return; openProductModal(el.dataset.open); }); });
   }
 
@@ -2112,8 +2131,8 @@
     $('#modal-close-btn').onclick = closeProductModal;
     $('#product-modal-backdrop').onclick = closeProductModal;
     panel.querySelectorAll('[data-add]').forEach(function (btn) {
-      btn.onclick = function () {
-        addToCart(btn.dataset.add);
+      btn.onclick = function (e) {
+        addToCart(btn.dataset.add, e);
         closeProductModal();
       };
     });
@@ -2126,7 +2145,7 @@
     document.body.style.overflow = '';
   }
 
-  function addToCart(id) {
+  function addToCart(id, evt) {
     const cart = loadCart();
     const existing = cart.find(function (i) {
       return i.id === id;
@@ -2137,12 +2156,19 @@
     updateHeader();
     var level = calcDopaminaLevel(cart);
     var p = getProduct(id);
-    flashAddToast(p, level.pct);
+    var reward = null;
+    var R = window.DOPAMINA_REWARDS;
+    if (R && R.onAddToCart) {
+      reward = R.onAddToCart(p, level.pct, evt);
+    }
+    flashAddToast(p, level.pct, reward);
     pulseCartIcon();
+    renderDopaminaMeter();
     trackBehavior('add_to_cart', {
       productId: id,
       tab: currentTab,
       category: p && p.tag ? p.tag : undefined,
+      coins: reward ? reward.coins : undefined,
     });
     if (currentView === 'shop' || currentView === 'profile') {
       openCartDrawer();
@@ -2152,7 +2178,7 @@
     closeProductModal();
   }
 
-  function flashAddToast(p, dopaminaPct) {
+  function flashAddToast(p, dopaminaPct, reward) {
     const t = $('#toast');
     if (!t) return;
     if (!p) {
@@ -2160,15 +2186,27 @@
       return;
     }
     var name = p.name.length > 52 ? p.name.slice(0, 51) + '…' : p.name;
+    var reaction = reward && reward.reaction ? reward.reaction : '';
+    var coinsLine = reward && reward.coins
+      ? '<span class="toast-coins">+' + reward.coins + ' moedas 🪙</span>'
+      : '';
+    var savingsLine = reward && reward.savings > 0
+      ? '<span class="toast-savings">Você economizaria ' + formatBRL(reward.savings) + ' nesta oferta</span>'
+      : '';
+    var dopaLine = typeof dopaminaPct === 'number'
+      ? '<span class="toast-dopa">Rush Mercadopamina: ' + dopaminaPct + '%</span>'
+      : '';
     t.className = 'toast toast--cart-add show';
     t.innerHTML =
       '<img src="' + (p.image || '') + '" alt="" onerror="this.style.display=\'none\'" />' +
       '<div><strong>Adicionado ao carrinho!</strong>' +
-      '<span class="toast-product-name">' + name + '</span></div>';
+      '<span class="toast-product-name">' + name + '</span>' +
+      (reaction ? '<span class="toast-reaction">' + reaction + '</span>' : '') +
+      coinsLine + savingsLine + dopaLine + '</div>';
     setTimeout(function () {
       t.classList.remove('show');
       t.className = 'toast';
-    }, 2800);
+    }, 3200);
   }
 
   function flashToast(msg, dopaminaPct) {
@@ -2916,6 +2954,16 @@
         flashToast('👤 Crie sua conta em Perfil — piloto de dados opcional');
       }, 4500);
     }
+
+    if (!rouletteDoneForTab('home') && !sessionStorage.getItem('dopamina_roulette_home_hint')) {
+      sessionStorage.setItem('dopamina_roulette_home_hint', '1');
+      setTimeout(function () {
+        flashToast('🎰 Gire a roleta na home e ganhe cupons exclusivos!');
+      }, 2500);
+    }
+
+    var R = window.DOPAMINA_REWARDS;
+    if (R && R.updateCoinDisplay) R.updateCoinDisplay();
 
     updateCouponBadge();
     syncHeaderHeight();

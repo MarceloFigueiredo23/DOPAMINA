@@ -237,7 +237,7 @@
 
   function therapyHero(tab) {
     var subs = {
-      home: 'Sinta a dopamina sem gastar dinheiro real. Navegue por ofertas imperdíveis, monte seu carrinho e acompanhe entregas simuladas em tempo real. A emoção é real, a conta não.',
+      home: 'Sinta a dopamina sem gastar dinheiro real. Gire a roleta, resgate cupons e acumule moedas a cada item no carrinho — a emoção é real, a conta não.',
       express: 'Peça, acompanhe a entrega e sinta o checkout — sem gastar de verdade.',
       market: 'Tudo que você procura em um só lugar — com a cara do marketplace brasileiro.',
       premium: 'Navegue ofertas, monte o carrinho e acompanhe entregas simuladas em tempo real.',
@@ -250,7 +250,27 @@
       '<h1 class="therapy-hero-title">Simulador de Compras para Terapia de Varejo.</h1>' +
       '<p class="therapy-hero-sub">' + (subs[tab] || subs.default) + '</p>' +
       '<div class="therapy-hero-tags">' +
-      '<span>🚚 Frete grátis hoje</span><span>Até 60% OFF</span>' +
+      '<span>🚚 Frete grátis hoje</span><span>Até 60% OFF</span><span>🪙 Moedas a cada compra</span>' +
+      '</div></section>'
+    );
+  }
+
+  function promoHubHtml() {
+    return (
+      '<section class="promo-hub" aria-label="Cupons, roleta e moedas">' +
+      '<div class="promo-hub-grid">' +
+      '<button type="button" class="promo-hub-card promo-hub-card--roulette" data-action="roulette">' +
+      '<span class="promo-hub-icon">🎰</span><strong>Roleta de cupons</strong>' +
+      '<span>Gire e ganhe até 50% OFF</span></button>' +
+      '<button type="button" class="promo-hub-card promo-hub-card--coupon" data-promo-coupon="MERCADOPAMINA10">' +
+      '<span class="promo-hub-icon">🎟️</span><strong>MERCADOPAMINA10</strong>' +
+      '<span>10% OFF no checkout</span></button>' +
+      '<div class="promo-hub-card promo-hub-card--coins">' +
+      '<span class="promo-hub-icon">🪙</span><strong><span id="promo-hub-coins">0</span> moedas</strong>' +
+      '<span>Ganhe a cada item no carrinho</span></div>' +
+      '<div class="promo-hub-card promo-hub-card--timer">' +
+      '<span class="promo-hub-icon">⚡</span><strong>Ofertas relâmpago</strong>' +
+      '<span>Termina em <b data-countdown="hub">02:47:59</b></span></div>' +
       '</div></section>'
     );
   }
@@ -375,6 +395,12 @@
         if (handlers.onRoulette) handlers.onRoulette();
       });
     });
+    root.querySelectorAll('[data-promo-coupon]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (handlers.onPromoCoupon) handlers.onPromoCoupon(btn.dataset.promoCoupon);
+      });
+    });
     root.querySelectorAll('[data-saction]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var a = btn.dataset.saction;
@@ -411,6 +437,7 @@
     mercadaoHomeBlocks: mercadaoHomeBlocks,
     shenimHero: shenimHero,
     therapyHero: therapyHero,
+    promoHubHtml: promoHubHtml,
     shenimCategories: shenimCategories,
     couponSheetHtml: couponSheetHtml,
     bindInteractive: bindInteractive,
