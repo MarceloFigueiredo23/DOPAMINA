@@ -167,7 +167,7 @@
   display: block;
   font-size: 0.68rem;
   font-weight: 700;
-  color: #00a650;
+  color: var(--mp-teal, #00d4aa);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-bottom: 2px;
@@ -202,7 +202,7 @@
 .toast.toast--cart-add .toast-savings {
   display: block;
   font-size: 0.72rem;
-  color: #00a650;
+  color: var(--mp-teal, #00d4aa);
   margin-top: 4px;
   font-weight: 600;
 }

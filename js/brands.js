@@ -38,14 +38,33 @@
     '<circle cx="8" cy="18" r="2" fill="#ff2d6a"/><circle cx="40" cy="16" r="2" fill="#ff2d6a"/>' +
     '</svg>';
 
-  /* Mercadopamina — hub marketplace (amarelo + verde) */
+  /* Mercadopamina — identidade Dopa Electric (pulso + spark, original) */
   var LOGO_MERCADOPAMINA =
-    '<svg class="brand-mark brand-mark--mercadopamina" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true">' +
-    '<rect x="1" y="1" width="42" height="42" rx="11" fill="#fff159" stroke="#3483fa" stroke-width="1.5"/>' +
-    '<path d="M14 28 C18 22 22 20 24 20 C26 20 30 22 34 28" stroke="#3483fa" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
-    '<circle cx="17" cy="26" r="2.5" fill="#00a650"/><circle cx="31" cy="26" r="2.5" fill="#00a650"/>' +
-    '<path d="M12 14 H32" stroke="#2d3277" stroke-width="2" stroke-linecap="round"/>' +
+    '<svg class="brand-mark brand-mark--mercadopamina" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">' +
+    '<defs>' +
+    '<linearGradient id="mpLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">' +
+    '<stop offset="0%" stop-color="#FF6B4A"/><stop offset="50%" stop-color="#FF3D8E"/><stop offset="100%" stop-color="#00D4AA"/>' +
+    '</linearGradient>' +
+    '<linearGradient id="mpLogoBg" x1="0%" y1="0%" x2="0%" y2="100%">' +
+    '<stop offset="0%" stop-color="#141A24"/><stop offset="100%" stop-color="#080C14"/>' +
+    '</linearGradient>' +
+    '<filter id="mpGlow" x="-20%" y="-20%" width="140%" height="140%">' +
+    '<feGaussianBlur stdDeviation="1.1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+    '</filter>' +
+    '</defs>' +
+    '<circle cx="24" cy="24" r="21" fill="url(#mpLogoBg)" stroke="url(#mpLogoGrad)" stroke-width="2.2"/>' +
+    '<path d="M9 27 H15 L18.5 15 L24 29 L29.5 13 L33 27 H39" stroke="url(#mpLogoGrad)" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#mpGlow)"/>' +
+    '<circle cx="24" cy="29" r="2.4" fill="#FFD166"/>' +
+    '<circle cx="29.5" cy="13" r="2" fill="#00D4AA"/>' +
+    '<path d="M24 6 V9 M20.5 7.5 L22 9.5 M27.5 7.5 L26 9.5" stroke="#FFD166" stroke-width="1.6" stroke-linecap="round"/>' +
+    '<circle cx="16" cy="33" r="1.6" fill="#FF6B4A" opacity="0.75"/>' +
+    '<circle cx="32" cy="33" r="1.6" fill="#00D4AA" opacity="0.75"/>' +
     '</svg>';
+
+  var WM_MERCADOPAMINA =
+    '<span class="mp-wordmark" aria-label="Mercadopamina">' +
+    '<span class="mp-wm-line"><span class="mp-wm-mercado">Mercado</span><span class="mp-wm-pamina">pamina</span></span>' +
+    '<span class="mp-wm-tag">terapia de varejo</span></span>';
 
   /* MERCADÃO — paródia marketplace amarelo/azul */
   var LOGO_MERCADAO =
@@ -121,6 +140,9 @@
       short: 'Mercado',
       suffix: 'pamina',
       logoMark: LOGO_MERCADOPAMINA,
+      wordmark: WM_MERCADOPAMINA,
+      color: '#FF6B4A',
+      accent: '#00D4AA',
     },
     express: { name: 'AIFOOD', logoMark: LOGO_AIFOOD, color: '#ea1d2c' },
     market: { name: 'MERCADÃO', logoMark: LOGO_MERCADAO, color: '#fff159' },

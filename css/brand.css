@@ -15,17 +15,17 @@
   --dopa-border: #2a2a38;
   --dopa-border-glow: rgba(176, 38, 255, 0.35);
 
-  --dopa-primary: #b026ff;
-  --dopa-accent: #ff2d95;
-  --dopa-neon: #00ffa3;
-  --dopa-neon-dim: rgba(0, 255, 163, 0.15);
+  --dopa-primary: #ff3d8e;
+  --dopa-accent: #ff6b4a;
+  --dopa-neon: #00d4aa;
+  --dopa-neon-dim: rgba(0, 212, 170, 0.14);
 
   --dopa-text: #f4f4f8;
   --dopa-muted: #9b9bb0;
   --dopa-muted-2: #6b6b80;
 
-  --dopa-gradient: linear-gradient(135deg, #ff2d95 0%, #b026ff 45%, #7c3aed 100%);
-  --dopa-gradient-soft: linear-gradient(135deg, rgba(255, 45, 149, 0.2), rgba(176, 38, 255, 0.15));
+  --dopa-gradient: linear-gradient(125deg, #ff6b4a 0%, #ff3d8e 48%, #00d4aa 100%);
+  --dopa-gradient-soft: linear-gradient(135deg, rgba(255, 107, 74, 0.18), rgba(0, 212, 170, 0.12));
   --dopa-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
   --dopa-shadow-glow: 0 0 40px rgba(176, 38, 255, 0.25);
   --dopa-radius: 16px;

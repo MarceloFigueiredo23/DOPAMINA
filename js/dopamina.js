@@ -457,7 +457,7 @@
     var colors = rouletteTab === 'express' ? ['#ea1d2c', '#ff6b6b'] :
       rouletteTab === 'market' ? ['#fff159', '#3483fa'] :
       rouletteTab === 'premium' ? ['#ff9900', '#232f3e'] :
-      rouletteTab === 'home' ? ['#ff2d95', '#00a650'] : ['#ff2d6a', '#111'];
+      rouletteTab === 'home' ? ['#FF6B4A', '#00D4AA'] : ['#ff2d6a', '#111'];
 
     svg.innerHTML = '';
     const cx = 140;
@@ -2901,8 +2901,10 @@
     document.body.classList.add('has-dopamina-header');
     document.body.classList.add('has-site-header');
     var siteLogo = $('#site-logo-mark');
+    var siteWm = $('#site-logo-wordmark');
     var B = BRANDS().site;
     if (siteLogo && B && B.logoMark) siteLogo.innerHTML = B.logoMark;
+    if (siteWm && B && B.wordmark) siteWm.innerHTML = B.wordmark;
     syncHeaderHeight();
     updateHeader();
     bindParodyShopsBar();

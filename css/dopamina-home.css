@@ -73,14 +73,9 @@ body.has-site-header {
 }
 
 .site-logo .brand-mark {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
-}
-
-.site-logo em {
-  font-style: normal;
-  color: #00a650;
 }
 
 .site-header-nav {
