@@ -8,9 +8,15 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/interactive.css" />
 </head>
 <body>
   <div id="toast" class="toast" aria-live="polite"></div>
+
+  <!-- Cupons estilo SHEIN -->
+  <div id="coupon-overlay" class="coupon-overlay" hidden>
+    <div class="coupon-sheet-wrap" id="coupon-sheet-wrap"></div>
+  </div>
 
   <!-- Roleta -->
   <div id="roulette-overlay" class="overlay">
@@ -155,13 +161,24 @@
 
   <nav class="ifood-bottom-nav" id="ifood-bottom-nav" hidden>
     <button type="button" class="ifood-nav-item active nav-link" data-view="shop"><span>🏠</span>Início</button>
-    <button type="button" class="ifood-nav-item nav-link" data-view="cart"><span>🛒</span>Sacola</button>
-    <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Conta</button>
+    <button type="button" class="ifood-nav-item nav-link" data-view="shop" data-focus="search"><span>🔍</span>Busca</button>
+    <button type="button" class="ifood-nav-item" id="nav-cupons" data-action="roulette"><span>🎰</span>Cupons</button>
+    <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>📋</span>Pedidos</button>
+    <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Perfil<span class="nav-dot" hidden id="profile-dot"></span></button>
+  </nav>
+
+  <nav class="shenim-bottom-nav" id="shenim-bottom-nav" hidden>
+    <button type="button" class="ifood-nav-item active nav-link" data-view="shop"><span>🏠</span>Loja</button>
+    <button type="button" class="ifood-nav-item nav-link" data-view="shop" data-focus="search"><span>☰</span>Categoria</button>
+    <button type="button" class="ifood-nav-item" id="shenim-cupons" data-action="roulette"><span>⚡</span>Tendências</button>
+    <button type="button" class="ifood-nav-item nav-link" data-view="cart"><span>🛒</span>Carrinho</button>
+    <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Perfil</button>
   </nav>
 
   <script src="js/catalog-data.js"></script>
   <script src="js/ifood-data.js"></script>
   <script src="js/realism.js"></script>
+  <script src="js/interactive.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/dopamina.js"></script>
 </body>

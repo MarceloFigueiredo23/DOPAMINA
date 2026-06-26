@@ -1,0 +1,628 @@
+/* ── Interatividade: banners, carrosséis, cupons, selos ── */
+
+.aifood-greeting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px 8px;
+  background: #fff;
+  gap: 10px;
+}
+
+.aifood-greeting-row strong { font-size: 0.95rem; color: #3e3e3e; display: block; }
+.aifood-greeting-row small { font-size: 0.75rem; color: #717171; }
+
+.aifood-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.aifood-icon-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.aifood-icon-btn .notif-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #ea1d2c;
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 999px;
+  min-width: 16px;
+}
+
+/* Hero farmácia */
+.aifood-hero-banner {
+  position: relative;
+  margin: 0 16px 12px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #ea1d2c, #ff4757);
+  border-radius: 16px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  min-height: 120px;
+}
+
+.aifood-hero-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.aifood-hero-content h3 { font-size: 1.15rem; margin-bottom: 4px; }
+.aifood-hero-content h3 strong { font-size: 1.4rem; }
+.aifood-hero-content p { font-size: 0.8rem; opacity: 0.9; margin-bottom: 10px; }
+
+.aifood-hero-cta {
+  background: #fff;
+  color: #ea1d2c;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.aifood-hero-products { font-size: 2.5rem; opacity: 0.9; }
+
+.promo-dismiss {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.aifood-micro-promo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 16px 12px;
+  padding: 10px 14px;
+  background: #f3e8ff;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  color: #5b21b6;
+}
+
+.promo-dismiss-sm {
+  margin-left: auto;
+  border: none;
+  background: none;
+  cursor: pointer;
+  opacity: 0.5;
+  font-size: 0.9rem;
+}
+
+/* Selos */
+.stamps-bar {
+  margin: 0 16px 14px;
+  padding: 12px 14px;
+  background: linear-gradient(90deg, #fff8e6, #fff);
+  border: 1px solid #ffe0a3;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stamps-info { font-size: 0.8rem; color: #3e3e3e; }
+.stamps-dots { display: flex; gap: 6px; }
+
+.stamp-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px dashed #ccc;
+  background: #fff;
+}
+
+.stamp-dot.filled {
+  background: #ea1d2c;
+  border-color: #ea1d2c;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+/* Grid serviços */
+.aifood-services {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px 8px;
+  padding: 8px 16px 16px;
+  background: #fff;
+}
+
+@media (max-width: 480px) {
+  .aifood-services { grid-template-columns: repeat(5, 1fr); }
+}
+
+.aifood-service {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+
+.service-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: transform 0.15s;
+}
+
+.aifood-service:hover .service-icon { transform: scale(1.06); }
+
+.service-label {
+  font-size: 0.65rem;
+  color: #3e3e3e;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.service-novo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #ea1d2c;
+  color: #fff;
+  font-size: 0.5rem;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+/* Carrossel */
+.promo-carousel {
+  position: relative;
+  margin: 0 16px 16px;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 160px;
+  background: #eee;
+}
+
+.carousel-track { height: 100%; position: relative; }
+
+.carousel-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.carousel-slide.active { opacity: 1; pointer-events: auto; }
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: linear-gradient(transparent, var(--slide-accent, rgba(0, 0, 0, 0.75)));
+  color: #fff;
+}
+
+.carousel-caption h4 { font-size: 1rem; margin-bottom: 2px; }
+.carousel-caption p { font-size: 0.75rem; opacity: 0.9; margin-bottom: 8px; }
+
+.carousel-cta {
+  background: #fff;
+  color: #111;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.carousel-prev { left: 8px; }
+.carousel-next { right: 8px; }
+
+.carousel-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.carousel-dot.active { background: #fff; width: 18px; border-radius: 3px; }
+
+/* AMAZOOM home */
+.amazoom-subnav {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 8px 20px;
+  background: #232f3e;
+  color: #fff;
+  font-size: 0.8rem;
+  scrollbar-width: none;
+}
+
+.amazoom-subnav a {
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+.amazoom-subnav a:hover { text-decoration: underline; }
+
+.amazoom-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 0 16px 16px;
+  margin-top: -40px;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .amazoom-cards { grid-template-columns: repeat(4, 1fr); }
+}
+
+.amazoom-card {
+  background: #fff;
+  padding: 14px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  min-height: 140px;
+}
+
+.amazoom-card h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; color: #0f1111; }
+
+.amazoom-card--prime .amazoom-prime-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 2rem;
+  color: #ff9900;
+}
+
+.amazoom-mini-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  font-size: 1.8rem;
+}
+
+.amazoom-deal { display: flex; flex-direction: column; gap: 8px; font-size: 1.5rem; }
+
+.deal-badge {
+  background: #cc0c39;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.amazoom-link {
+  color: #007185;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.amazoom-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 12px;
+}
+
+.amazoom-section-head h3 { font-size: 1.1rem; color: #0f1111; }
+
+.btn-cupom-sm {
+  border: 1px solid #ff9900;
+  background: #ffd814;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.promo-carousel[data-carousel="amazoom"] {
+  margin: 0;
+  border-radius: 0;
+  height: 200px;
+}
+
+/* SHENIM */
+.shenim-hero-banner {
+  margin: 12px 16px;
+  padding: 18px;
+  background: linear-gradient(135deg, #111, #333);
+  border-radius: 12px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.shenim-hero-hash { font-size: 0.7rem; color: #ff2d6a; font-weight: 700; }
+.shenim-hero-text h3 { font-size: 1.5rem; margin: 6px 0; }
+.shenim-hero-text h3 strong { color: #ff2d6a; }
+
+.shenim-flash-btn {
+  margin-top: 10px;
+  background: #ff2d6a;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.shenim-countdown {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 45, 106, 0.9);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.shenim-cat-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 0 16px 16px;
+  scrollbar-width: none;
+}
+
+.shenim-cat-circle {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.7rem;
+  color: #333;
+}
+
+.shenim-cat-circle img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #eee;
+}
+
+/* Cupom sheet SHEIN */
+.coupon-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+.coupon-overlay[hidden] { display: none !important; }
+
+.coupon-sheet-wrap {
+  width: 100%;
+  max-width: 420px;
+  animation: slideUp 0.35s ease;
+}
+
+.coupon-sheet {
+  background: linear-gradient(180deg, #fff5f0, #fff);
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px 32px;
+  text-align: center;
+}
+
+.coupon-sheet h3 {
+  font-size: 1.15rem;
+  color: #e67a2e;
+  margin-bottom: 18px;
+  font-weight: 800;
+}
+
+.coupon-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+
+.coupon-row {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ffe0cc;
+  text-align: left;
+}
+
+.coupon-pct {
+  flex-shrink: 0;
+  width: 90px;
+  padding: 14px 10px;
+  background: #fff8f0;
+  border-right: 2px dashed #ffd4b8;
+  text-align: center;
+  color: #e67a2e;
+}
+
+.coupon-pct strong { font-size: 1.5rem; display: block; line-height: 1; }
+.coupon-pct span { font-size: 0.75rem; font-weight: 700; }
+.coupon-pct small { display: block; font-size: 0.6rem; margin-top: 4px; color: #999; }
+
+.coupon-detail {
+  flex: 1;
+  padding: 12px 10px;
+  font-size: 0.8rem;
+}
+
+.coupon-detail strong { color: #e67a2e; }
+.coupon-limited { color: #999; font-size: 0.7rem; }
+
+.coupon-chevron { padding-right: 12px; color: #ccc; }
+
+.coupon-save-btn {
+  width: 100%;
+  padding: 16px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.coupon-footnote {
+  font-size: 0.7rem;
+  color: #999;
+  margin-top: 10px;
+}
+
+/* Roleta por app */
+.roulette-modal.roulette-aifood { border-color: #ea1d2c; }
+.roulette-modal.roulette-amazoom { border-color: #ff9900; }
+.roulette-modal.roulette-shenim { border-color: #ff2d6a; }
+
+.roulette-tab-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+/* Bottom nav expandida */
+.ifood-bottom-nav { justify-content: space-around; }
+
+.ifood-nav-item .nav-dot {
+  position: absolute;
+  top: 2px;
+  right: calc(50% - 18px);
+  width: 8px;
+  height: 8px;
+  background: #ea1d2c;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.ifood-nav-item { position: relative; }
+
+.shenim-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  background: #fff;
+  border-top: 1px solid #eee;
+  padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.has-shenim-nav .main { padding-bottom: 72px; }
+
+/* Hits flash */
+.hits-flash {
+  margin: 0 16px 12px;
+  padding: 14px;
+  background: linear-gradient(90deg, #7c3aed, #ff2d6a);
+  border-radius: 12px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: pulseGlow 2s ease infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4); }
+  50% { box-shadow: 0 0 20px 4px rgba(124, 58, 237, 0.3); }
+}
+
+.hits-flash strong { font-size: 0.95rem; }
+.hits-flash p { font-size: 0.75rem; opacity: 0.9; }
