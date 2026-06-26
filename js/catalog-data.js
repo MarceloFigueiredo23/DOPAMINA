@@ -161,6 +161,11 @@
   });
 
   if (w.DOPAMINA_PHOTOS && w.DOPAMINA_PHOTOS.apply) {
+    [express, premium, fashion].forEach(function (arr) {
+      arr.forEach(function (p) {
+        delete p.image;
+      });
+    });
     w.DOPAMINA_PHOTOS.apply(express);
     w.DOPAMINA_PHOTOS.apply(premium);
     w.DOPAMINA_PHOTOS.apply(fashion);

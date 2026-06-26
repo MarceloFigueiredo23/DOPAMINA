@@ -41,11 +41,19 @@
 
   const UI = window.DOPAMINA_UI || {};
 
-  /** Fallback por produto (nunca uma imagem genérica igual para todos) */
+  /** Fallback em cadeia: primária → backup do mapa → esmaece */
   function productImgOnerror(p) {
-    var fb = (p && (p.imageFallback || p.image)) || '';
-    if (!fb) return 'this.style.opacity=0.35';
-    return "if(!this.dataset.tried){this.dataset.tried=1;this.src='" + fb.replace(/'/g, '%27') + "'}";
+    if (!p || !p.id) {
+      var fb0 = (p && p.imageFallback) || '';
+      if (!fb0) return 'this.style.opacity=0.35';
+      return "if(!this.dataset.tried){this.dataset.tried=1;this.src='" + fb0.replace(/'/g, '%27') + "'}else{this.style.opacity=0.35}";
+    }
+    var fb = (p.imageFallback || '').replace(/'/g, '%27');
+    var pid = String(p.id).replace(/'/g, '');
+    return "if(this.dataset.tried==='2'){this.style.opacity=0.35}else if(this.dataset.tried==='1'){this.dataset.tried=2;" +
+      (fb ? "this.src='" + fb + "';" : 'this.style.opacity=0.35;') +
+      "}else{this.dataset.tried=1;var m=window.DOPAMINA_PHOTOS&&window.DOPAMINA_PHOTOS.map&&window.DOPAMINA_PHOTOS.map['" + pid + "'];" +
+      "if(m&&m.backup&&this.src!==m.backup)this.src=m.backup;else if('" + fb + "')this.src='" + fb + "';else this.style.opacity=0.35;}";
   }
 
   function AUTH() {

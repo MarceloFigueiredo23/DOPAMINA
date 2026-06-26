@@ -1,21 +1,12 @@
 /**
- * Fotos por produto — URL primária + backup únicos (Wikimedia / Unsplash).
- * Evita imagens repetidas e fallbacks genéricos iguais para todos.
+ * Fotos por produto — Unsplash primário (CDN estável) + backup único por item.
+ * Cada par primary/backup corresponde ao nome e categoria do produto no catálogo.
  */
 (function (w) {
   'use strict';
 
-  function wikiThumb(path, width) {
-    var file = path.split('/').pop();
-    return 'https://upload.wikimedia.org/wikipedia/commons/thumb/' + path + '/' + width + 'px-' + file;
-  }
-
-  function wikiFile(path) {
-    return 'https://upload.wikimedia.org/wikipedia/commons/' + path;
-  }
-
   function uns(id) {
-    return 'https://images.unsplash.com/' + id + '?w=800&h=800&fit=crop&fm=jpg&q=90&auto=format';
+    return 'https://images.unsplash.com/' + id + '?w=800&h=800&fit=crop&fm=jpg&q=88&auto=format';
   }
 
   function P(primary, backup) {
@@ -23,78 +14,78 @@
   }
 
   var PHOTOS = {
-    /* ── AIFOOD (prato real + backup food) ── */
-    f01: P(wikiThumb('8/85/Burger_King_Whopper.jpg', 800), uns('photo-1568901348915-4f738b0cf8fb')),
-    f02: P(wikiThumb('a/a3/Pizza_Hut_Pizza.jpg', 800), uns('photo-1513104890138-7c749659a591')),
-    f03: P(wikiThumb('4/4f/McDonald%27s_Big_Mac_hamburger.jpg', 800), uns('photo-1550547660-22aa7fe61265')),
-    f04: P(wikiThumb('2/2e/KFC_Original_Recipe_fried_chicken.jpg', 800), uns('photo-1626082927389-7114cbd1651e')),
-    f05: P(wikiThumb('5/57/Subway_sandwich.jpg', 800), uns('photo-1614430049513-ead22937d3d0')),
-    f06: P(wikiThumb('4/4e/Esfiha.jpg', 800), uns('photo-1604908178846-bf7191421916')),
-    f07: P(wikiThumb('6/6e/Bobs_hamburger.jpg', 800), uns('photo-1550317138-10000687a491')),
-    f08: P(wikiThumb('5/5e/Frappuccino.jpg', 800), uns('photo-1461023058948-939a962d824f')),
-    f09: P(wikiThumb('4/4f/Picanha_na_chapa.jpg', 800), uns('photo-1546834050-0b07584eeda2')),
-    f10: P(wikiThumb('9/9d/Brownie_with_ice_cream.jpg', 800), uns('photo-1606313564204-e75d5efcc254')),
-    f11: P(wikiThumb('3/3f/Plated_steak_with_rice_and_beans.jpg', 800), uns('photo-1600891964092-4316c3000326')),
-    f12: P(wikiThumb('6/60/Sushi_platter.jpg', 800), uns('photo-1579584425558-2fafd2377920')),
-    f13: P(wikiThumb('9/94/Ramen_Tonkotsu.jpg', 800), uns('photo-1569718212165-3a285874eb36')),
-    f14: P(wikiThumb('7/7a/Acai_bowl_with_fruit.jpg', 800), uns('photo-1590301159386-806fc9ca48d9')),
-    f15: P(wikiThumb('a/ae/Pepperoni_pizza.jpg', 800), uns('photo-1565299624946-b28f40a0ae38')),
-    f16: P(wikiThumb('8/8a/Coxinha_Brasil.jpg', 800), uns('photo-1606755962773-d324e0a8f6c5')),
-    f17: P(wikiThumb('6/6d/Cheeseburger.jpg', 800), uns('photo-1586192440005-356cdb5d7b9a')),
-    f18: P(wikiThumb('4/4e/Poke_bowl.jpg', 800), uns('photo-1546069901-ba2a88c258df')),
-    f19: P(wikiThumb('b/ba/Lasagna_-_Freshly_baked.jpg', 800), uns('photo-1628845242799-f419d2a72d7c')),
-    f20: P(wikiThumb('7/73/Tacos_de_carne_asada.jpg', 800), uns('photo-1565291663046-7827f18908b')),
-    f21: P(wikiThumb('4/4c/Hot_dog_with_mustard.jpg', 800), uns('photo-1619745252086-a7bd21f0449f')),
-    f22: P(wikiThumb('9/9a/Pastel_brasileiro.jpg', 800), uns('photo-1630914442700-2112a4d2c3ad')),
-    f23: P(wikiThumb('3/31/Doughnuts_in_a_box.jpg', 800), uns('photo-1551024506-0bccd828d307')),
-    f24: P(wikiThumb('6/6b/Pao_de_queijo.jpg', 800), uns('photo-1488477181941-7818ad7b4329')),
-    f25: P(wikiThumb('0/0a/Yakisoba.jpg', 800), uns('photo-1617096714-7cfb-640695373e9')),
-    f26: P(wikiThumb('1/1a/Crepes_with_Nutella_and_strawberries.jpg', 800), uns('photo-1519678823-1cd43b937165')),
-    f27: P(wikiThumb('2/2e/Ice_cream_cone.jpg', 800), uns('photo-1563805042235-50e725903d57')),
-    f28: P(wikiThumb('9/9f/Bubble_tea_taro.jpg', 800), uns('photo-1525385130511-4e37dd1de1cb')),
-    f29: P(wikiThumb('9/91/Penne_quattro_formaggi.jpg', 800), uns('photo-1621996346565-e3dbc646d9a9')),
-    f30: P(wikiThumb('3/3a/Waffles_with_strawberries.jpg', 800), uns('photo-1562376552-29d0c16b86fb')),
+    /* ── Comidas (f01–f30) ── */
+    f01: P(uns('photo-1568901348915-4f738b0cf8fb'), uns('photo-1550547660-22aa7fe61265')),
+    f02: P(uns('photo-1513104890138-7c749659a591'), uns('photo-1565299624946-b28f40a0ae38')),
+    f03: P(uns('photo-1550547660-22aa7fe61265'), uns('photo-1568901348915-4f738b0cf8fb')),
+    f04: P(uns('photo-1626082927389-7114cbd1651e'), uns('photo-1606755880137-68b186cae237')),
+    f05: P(uns('photo-1614430049513-ead22937d3d0'), uns('photo-1509722747451-e0aba5af8f20')),
+    f06: P(uns('photo-1604908178846-bf7191421916'), uns('photo-1606755962773-d324e0a8f6c5')),
+    f07: P(uns('photo-1550317138-10000687a491'), uns('photo-1586192440005-356cdb5d7b9a')),
+    f08: P(uns('photo-1461023058948-939a962d824f'), uns('photo-1511920170033-f8396924d10a')),
+    f09: P(uns('photo-1546834050-0b07584eeda2'), uns('photo-1600891964092-4316c3000326')),
+    f10: P(uns('photo-1606313564204-e75d5efcc254'), uns('photo-1578985545062-69928b1d9587')),
+    f11: P(uns('photo-1600891964092-4316c3000326'), uns('photo-1546834050-0b07584eeda2')),
+    f12: P(uns('photo-1579584425558-2fafd2377920'), uns('photo-1617196034796-9dfa7a1a44f5')),
+    f13: P(uns('photo-1569718212165-3a285874eb36'), uns('photo-1617096714-7cfb-640695373e9')),
+    f14: P(uns('photo-1590301159386-806fc9ca48d9'), uns('photo-1606313564204-e75d5efcc254')),
+    f15: P(uns('photo-1565299624946-b28f40a0ae38'), uns('photo-1513104890138-7c749659a591')),
+    f16: P(uns('photo-1606755962773-d324e0a8f6c5'), uns('photo-1604908178846-bf7191421916')),
+    f17: P(uns('photo-1586192440005-356cdb5d7b9a'), uns('photo-1550317138-10000687a491')),
+    f18: P(uns('photo-1546069901-ba2a88c258df'), uns('photo-1579584425558-2fafd2377920')),
+    f19: P(uns('photo-1628845242799-f419d2a72d7c'), uns('photo-1621996346565-e3dbc646d9a9')),
+    f20: P(uns('photo-1565291663046-7827f18908b'), uns('photo-1551504734-5ee1c4a1479b')),
+    f21: P(uns('photo-1619745252086-a7bd21f0449f'), uns('photo-1528735602780-2552fd46c7fe')),
+    f22: P(uns('photo-1630914442700-2112a4d2c3ad'), uns('photo-1604908178846-bf7191421916')),
+    f23: P(uns('photo-1551024506-0bccd828d307'), uns('photo-1578985545062-69928b1d9587')),
+    f24: P(uns('photo-1488477181941-7818ad7b4329'), uns('photo-1604908178846-bf7191421916')),
+    f25: P(uns('photo-1617096714-7cfb-640695373e9'), uns('photo-1569718212165-3a285874eb36')),
+    f26: P(uns('photo-1519678823-1cd43b937165'), uns('photo-1562376552-29d0c16b86fb')),
+    f27: P(uns('photo-1563805042235-50e725903d57'), uns('photo-1606313564204-e75d5efcc254')),
+    f28: P(uns('photo-1525385130511-4e37dd1de1cb'), uns('photo-1461023058948-939a962d824f')),
+    f29: P(uns('photo-1621996346565-e3dbc646d9a9'), uns('photo-1628845242799-f419d2a72d7c')),
+    f30: P(uns('photo-1562376552-29d0c16b86fb'), uns('photo-1519678823-1cd43b937165')),
 
-    /* ── AMAZOOM — eletrônicos reais (Wikimedia) ── */
-    p01: P(wikiFile('f/f5/IPhone_16_Pro_Max.png'), uns('photo-1695048133144-6b33fd7b28b5')),
-    p02: P(wikiThumb('1/1b/MacBook_Air_M3_2024.jpg', 800), uns('photo-1517336714731-489689fd1ca8')),
-    p03: P(wikiFile('1/1b/PlayStation_5_and_DualSense_with_transparent_background.png'), uns('photo-1606813907291-d86efa9b94db')),
-    p04: P(wikiThumb('8/8e/Samsung_Galaxy_S24_Ultra_%28cropped%29.png', 800), uns('photo-1610945265614-dcf5b43c5e63')),
-    p05: P(wikiThumb('9/9e/Refrigerator.jpg', 800), uns('photo-1585655097312-7c098090a426')),
-    p06: P(wikiThumb('4/4d/Samsung_4K_UHD_TV.jpg', 800), uns('photo-1593359677879-a670071ebdbe')),
-    p07: P(wikiThumb('3/3b/AirPods_Pro_2nd_generation.png', 800), uns('photo-1600296640924-8823b5d4a180')),
-    p08: P(wikiThumb('8/8d/Nintendo-Switch-OLED-White-Flap-Open.jpg', 800), uns('photo-1610892437321-4bafb95daed0')),
-    p09: P(wikiThumb('c/c0/Robot_vacuum_cleaner.jpg', 800), uns('photo-1558317374-a37d8b1b41ff')),
-    p10: P(wikiThumb('9/9a/Nespresso_Vertuo.jpg', 800), uns('photo-1517668808822-9ebb02f2a0e0')),
-    p11: P(wikiThumb('1/1a/Apple_Watch_Series_10_46mm.jpg', 800), uns('photo-1523275335684-37898b6baf30')),
-    p12: P(wikiThumb('4/4d/DJI_Mini_3_drone.jpg', 800), uns('photo-1473968512647-3e447244af8f')),
-    p13: P(wikiThumb('8/8e/Gaming_computer.jpg', 800), uns('photo-1593305841991-05c297ba4575')),
-    p14: P(wikiThumb('2/2f/Microwave_oven.jpg', 800), uns('photo-1574269905862-9a3d95c4d9ac')),
-    p15: P(wikiThumb('9/9a/Air_fryer.jpg', 800), uns('photo-1585515655855-d74f3e9c2d23')),
-    p16: P(wikiThumb('1/1d/Sony_WH-1000XM5_%28cropped%29.png', 800), uns('photo-1505740420928-5e560c06d30e')),
-    p17: P(wikiThumb('9/9a/IPad_11th_generation.png', 800), uns('photo-1544244015-0df4b3ffc6b0')),
-    p18: P(wikiThumb('9/9f/Canon_EOS_R50.jpg', 800), uns('photo-1516035069371-29a1b244cc32')),
-    p19: P(wikiThumb('8/8a/Samsung_Galaxy_Watch_7.jpg', 800), uns('photo-1579586337278-3befd40f17da')),
-    p20: P(wikiThumb('a/a1/JBL_Flip_5.jpg', 800), uns('photo-1608043152269-423dbba4e7e1')),
-    p21: P(wikiThumb('5/5a/Logitech_MX_Master_3.png', 800), uns('photo-1527864550417-7fd91fc51a46')),
-    p22: P(wikiThumb('d/d1/Dyson_V15_Detect.jpg', 800), uns('photo-1558618666-fcd25c85cd64')),
-    p23: P(wikiThumb('9/9e/Amazon_Kindle_11th_generation.jpg', 800), uns('photo-1544947950-fa07a98d237f')),
-    p24: P(wikiThumb('9/9e/Computer_monitor.jpg', 800), uns('photo-1527443224154-e4bbfbb1d50f')),
-    p25: P(wikiThumb('8/8e/Meta_Quest_3_headset.png', 800), uns('photo-1622979135224-d2a1098f6d8b')),
-    p26: P(wikiThumb('4/4e/Espresso_machine.jpg', 800), uns('photo-1495474472287-4d71bcdd2085')),
-    p27: P(uns('photo-1593784991095-a205069470b6'), wikiThumb('4/4d/Samsung_4K_UHD_TV.jpg', 800)),
-    p28: P(wikiThumb('8/8a/Electric_razor.jpg', 800), uns('photo-1621607512210-7f9a3af37531')),
-    p29: P(wikiThumb('5/5e/Gas_stove.jpg', 800), uns('photo-1556911220-bff31c812dba')),
-    p30: P(wikiThumb('9/9e/Gaming_laptop.jpg', 800), uns('photo-1496181133206-80ce9ccb4a7e')),
+    /* ── Eletrônicos e casa (p01–p30) ── */
+    p01: P(uns('photo-1695048133144-6b33fd7b28b5'), uns('photo-1511702033304-f8f02fdda238')),
+    p02: P(uns('photo-1517336714731-489689fd1ca8'), uns('photo-1496180940759-8522db4f9b27')),
+    p03: P(uns('photo-1606813907291-d86efa9b94db'), uns('photo-1486401899868-0e037ed01fc6')),
+    p04: P(uns('photo-1610945265614-dcf5b43c5e63'), uns('photo-1511702033304-f8f02fdda238')),
+    p05: P(uns('photo-1585655097312-7c098090a426'), uns('photo-1571172964276-91e9d7d2b0a6')),
+    p06: P(uns('photo-1593359677879-a670071ebdbe'), uns('photo-1593784991095-a205069470b6')),
+    p07: P(uns('photo-1600296640924-8823b5d4a180'), uns('photo-1572569511254-d8f795e3431f')),
+    p08: P(uns('photo-1610892437321-4bafb95daed0'), uns('photo-1578303492595-0436d4f1c825')),
+    p09: P(uns('photo-1558317374-a37d8b1b41ff'), uns('photo-1558618666-fcd25c85cd64')),
+    p10: P(uns('photo-1517668808822-9ebb02f2a0e0'), uns('photo-1495474472287-4d71bcdd2085')),
+    p11: P(uns('photo-1434493789847-2f02dc6ca35d'), uns('photo-1523275335684-37898b6baf30')),
+    p12: P(uns('photo-1473968512647-3e447244af8f'), uns('photo-1506947411479-110234fb7bca')),
+    p13: P(uns('photo-1593305841991-05c297ba4575'), uns('photo-1587202372775-e229f346b9b7')),
+    p14: P(uns('photo-1574269905862-9a3d95c4d9ac'), uns('photo-1585655097312-7c098090a426')),
+    p15: P(uns('photo-1585515655855-d74f3e9c2d23'), uns('photo-1574269905862-9a3d95c4d9ac')),
+    p16: P(uns('photo-1505740420928-5e560c06d30e'), uns('photo-1572569511254-d8f795e3431f')),
+    p17: P(uns('photo-1544244015-0df4b3ffc6b0'), uns('photo-1505740420928-5e560c06d30e')),
+    p18: P(uns('photo-1516035069371-29a1b244cc32'), uns('photo-1502920917128-1aa500764cbd')),
+    p19: P(uns('photo-1579586337278-3befd40f17da'), uns('photo-1434493789847-2f02dc6ca35d')),
+    p20: P(uns('photo-1608043152269-423dbba4e7e1'), uns('photo-1608043152269-423dbba4e7e1')),
+    p21: P(uns('photo-1527864550417-7fd91fc51a46'), uns('photo-1615663240917-5fb0a1e0b8d2')),
+    p22: P(uns('photo-1558618666-fcd25c85cd64'), uns('photo-1558317374-a37d8b1b41ff')),
+    p23: P(uns('photo-1544947950-fa07a98d237f'), uns('photo-1481627834876-b7833e8f5570')),
+    p24: P(uns('photo-1527443224154-e4bbfbb1d50f'), uns('photo-1585792180293-4d2a0a9311a8')),
+    p25: P(uns('photo-1622979135224-d2a1098f6d8b'), uns('photo-1592478412203-6159e4c4a8eb')),
+    p26: P(uns('photo-1495474472287-4d71bcdd2085'), uns('photo-1517668808822-9ebb02f2a0e0')),
+    p27: P(uns('photo-1593784991095-a205069470b6'), uns('photo-1593359677879-a670071ebdbe')),
+    p28: P(uns('photo-1621607512210-7f9a3af37531'), uns('photo-1585751119457-1df9a073b83d')),
+    p29: P(uns('photo-1556911220-bff31c812dba'), uns('photo-1556911220-e6b98d3dfc18')),
+    p30: P(uns('photo-1496181133206-80ce9ccb4a7e'), uns('photo-1593305841991-05c297ba4575')),
 
-    /* ── SHENIM — foto primária = produto real visível (Unsplash packshot) ── */
+    /* ── Moda (m01–m24) ── */
     m01: P(uns('photo-1584917865442-de89dfa41ccb'), uns('photo-1548039257-fcc5c4b4d4b0')),
     m02: P(uns('photo-1590874103328-eac3a398e716'), uns('photo-1584917865442-de89dfa41ccb')),
     m03: P(uns('photo-1548036328-c9fa89d128fa'), uns('photo-1594938291221-94f3130a4f6a')),
     m04: P(uns('photo-1549298916-b41d501d3772'), uns('photo-1606107557195-0ccc2b0a2bb0')),
     m05: P(uns('photo-1608253813970-eee5a0955d81'), uns('photo-1608231387042-66d9ac4aa44c')),
     m06: P(uns('photo-1572635196237-14b3f281503f'), uns('photo-1511499767150-a48a237f0083')),
-    m07: P(uns('photo-1606107557195-0ccc2b0a2bb0'), wikiFile('3/37/Nike_Air_Max_90.png')),
+    m07: P(uns('photo-1606107557195-0ccc2b0a2bb0'), uns('photo-1542291026-7eec264c27ff')),
     m08: P(uns('photo-1608231387042-66d9ac4aa44c'), uns('photo-1549298916-b41d501d3772')),
     m09: P(uns('photo-1608667509904-b82b1ae1df4b'), uns('photo-1606107557195-0ccc2b0a2bb0')),
     m10: P(uns('photo-1591047139829-d91aecb6caea'), uns('photo-1539533012597-729a07ea54c4')),
