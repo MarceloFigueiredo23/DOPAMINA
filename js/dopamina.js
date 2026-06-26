@@ -1003,6 +1003,15 @@
     return s;
   }
 
+  function syncHeaderHeight() {
+    var el = $('#main-header');
+    if (!el) return;
+    el.removeAttribute('hidden');
+    document.body.classList.add('has-dopamina-header');
+    var h = el.getBoundingClientRect().height;
+    document.documentElement.style.setProperty('--dopamina-header-h', Math.ceil(h) + 'px');
+  }
+
   function updateAppChrome(view) {
     var tabChromeViews = ['shop', 'cart', 'profile'];
     var showAifoodChrome = currentTab === 'express' && tabChromeViews.indexOf(view) >= 0;
@@ -1022,6 +1031,7 @@
     );
     document.body.classList.toggle('demo-mode', isDemoMode());
     updateActiveOrderBanner();
+    syncHeaderHeight();
   }
 
   function applyShopTheme() {
@@ -1924,6 +1934,9 @@
 
   function runInit() {
     ensureUnlimitedWallet();
+    document.body.classList.add('has-dopamina-header');
+    var mainH = $('#main-header');
+    if (mainH) mainH.removeAttribute('hidden');
     var siteLogo = $('#site-logo-mark');
     var B = BRANDS().site;
     if (siteLogo && B && B.logoMark) siteLogo.innerHTML = B.logoMark;
@@ -1977,6 +1990,8 @@
     }
 
     updateCouponBadge();
+    syncHeaderHeight();
+    window.addEventListener('resize', syncHeaderHeight);
     if (!window._dopaminaBannerIv) {
       window._dopaminaBannerIv = setInterval(function () {
         if (getActiveOrder()) updateActiveOrderBanner();
