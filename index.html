@@ -7,20 +7,20 @@
   <meta name="application-name" content="Mercadopamina" />
   <title>Mercadopamina — Terapia de Varejo</title>
   <meta name="theme-color" content="#FFC107" />
-  <link rel="icon" type="image/png" href="img/favicon.png?v=21" />
+  <link rel="icon" type="image/png" href="img/favicon.png?v=22" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/styles.css?v=21" />
-  <link rel="stylesheet" href="css/themes.css?v=21" />
-  <link rel="stylesheet" href="css/interactive.css?v=21" />
-  <link rel="stylesheet" href="css/readability.css?v=21" />
-  <link rel="stylesheet" href="css/brand.css?v=21" />
-  <link rel="stylesheet" href="css/brands.css?v=21" />
-  <link rel="stylesheet" href="css/auth.css?v=21" />
-  <link rel="stylesheet" href="css/dopamina-home.css?v=21" />
-  <link rel="stylesheet" href="css/mercadopamina-brand.css?v=21" />
+  <link rel="stylesheet" href="css/styles.css?v=22" />
+  <link rel="stylesheet" href="css/themes.css?v=22" />
+  <link rel="stylesheet" href="css/interactive.css?v=22" />
+  <link rel="stylesheet" href="css/readability.css?v=22" />
+  <link rel="stylesheet" href="css/brand.css?v=22" />
+  <link rel="stylesheet" href="css/brands.css?v=22" />
+  <link rel="stylesheet" href="css/auth.css?v=22" />
+  <link rel="stylesheet" href="css/dopamina-home.css?v=22" />
+  <link rel="stylesheet" href="css/mercadopamina-brand.css?v=22" />
 </head>
 <body>
   <div class="promo-ticker" id="promo-ticker" aria-hidden="true">
@@ -414,7 +414,7 @@
     </div>
   </div>
 
-  <nav class="ifood-bottom-nav" id="ifood-bottom-nav" hidden>
+  <nav class="ifood-bottom-nav" id="ifood-bottom-nav" hidden aria-hidden="true">
     <button type="button" class="ifood-nav-item active nav-link" data-view="shop"><span>🏠</span>Início</button>
     <button type="button" class="ifood-nav-item nav-link" data-view="shop" data-focus="search"><span>🔍</span>Busca</button>
     <button type="button" class="ifood-nav-item nav-link" data-view="cart"><span>🛒</span>Sacola</button>
@@ -422,22 +422,40 @@
     <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Perfil</button>
   </nav>
 
-  <nav class="shenim-bottom-nav" id="shenim-bottom-nav" hidden>
-    <button type="button" class="ifood-nav-item active nav-link" data-view="shop"><span>🏠</span>Loja</button>
-    <button type="button" class="ifood-nav-item nav-link" data-view="shop" data-focus="search"><span>☰</span>Categoria</button>
-    <button type="button" class="ifood-nav-item" id="shenim-cupons" data-action="roulette"><span>⚡</span>Tendências</button>
-    <button type="button" class="ifood-nav-item nav-link" data-view="cart"><span>🛒</span>Carrinho</button>
-    <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Perfil</button>
+  <nav class="mp-bottom-nav" id="mp-bottom-nav" hidden aria-label="Navegação principal">
+    <button type="button" class="mp-tab active" data-view="shop" data-tab="home" aria-label="Início">
+      <svg class="mp-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
+      <span class="mp-tab-label">Início</span>
+    </button>
+    <button type="button" class="mp-tab" data-view="shop" data-scroll="categories" aria-label="Categorias">
+      <svg class="mp-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="mp-tab-label">Categorias</span>
+    </button>
+    <button type="button" class="mp-tab" data-view="shop" data-scroll="offers" aria-label="Ofertas">
+      <svg class="mp-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 11 3H4v7l9.59 9.59a2 2 0 0 0 2.82 0l4.18-4.18a2 2 0 0 0 0-2.82Z"/><circle cx="7.5" cy="7.5" r="1.25" fill="currentColor" stroke="none"/></svg>
+      <span class="mp-tab-label">Ofertas</span>
+    </button>
+    <button type="button" class="mp-tab" data-view="cart" aria-label="Carrinho">
+      <span class="mp-tab-icon-wrap">
+        <svg class="mp-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M2 3h2l2.2 12.3a1 1 0 0 0 1 .8h9.6a1 1 0 0 0 1-.9L20 7H6"/></svg>
+        <span class="mp-cart-badge" id="mp-cart-badge" hidden>0</span>
+      </span>
+      <span class="mp-tab-label">Carrinho</span>
+    </button>
+    <button type="button" class="mp-tab" data-view="profile" aria-label="Conta">
+      <svg class="mp-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
+      <span class="mp-tab-label">Conta</span>
+    </button>
   </nav>
 
-  <script src="js/catalog-photos.js?v=21"></script>
-  <script src="js/catalog-data.js?v=21"></script>
-  <script src="js/ifood-data.js?v=21"></script>
-  <script src="js/brands.js?v=21"></script>
-  <script src="js/auth.js?v=21"></script>
-  <script src="js/realism.js?v=21"></script>
-  <script src="js/interactive.js?v=21"></script>
+  <script src="js/catalog-photos.js?v=22"></script>
+  <script src="js/catalog-data.js?v=22"></script>
+  <script src="js/ifood-data.js?v=22"></script>
+  <script src="js/brands.js?v=22"></script>
+  <script src="js/auth.js?v=22"></script>
+  <script src="js/realism.js?v=22"></script>
+  <script src="js/interactive.js?v=22"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/dopamina.js?v=21"></script>
+  <script src="js/dopamina.js?v=22"></script>
 </body>
 </html>

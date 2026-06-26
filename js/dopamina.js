@@ -1237,6 +1237,11 @@
     renderWalletChallenge();
     $('#cart-count').textContent = count;
     $('#cart-count').hidden = count === 0;
+    var mpBadge = $('#mp-cart-badge');
+    if (mpBadge) {
+      mpBadge.textContent = count;
+      mpBadge.hidden = count === 0;
+    }
     var ic = $('#aifood-cart-count');
     if (ic) { ic.textContent = count; ic.hidden = count === 0; }
     var ac = $('#amazoom-cart-count');
@@ -1655,10 +1660,14 @@
   function updateAppChrome(view) {
     var ifoodNav = $('#ifood-bottom-nav');
     var shenimNav = $('#shenim-bottom-nav');
+    var mpNav = $('#mp-bottom-nav');
     if (ifoodNav) ifoodNav.hidden = true;
     if (shenimNav) shenimNav.hidden = true;
+    var showMpNav = ['shop', 'cart', 'profile'].indexOf(view) >= 0;
+    if (mpNav) mpNav.hidden = !showMpNav;
     document.body.classList.add('has-dopamina-header');
     document.body.classList.remove('has-ifood-nav', 'has-shenim-nav');
+    document.body.classList.toggle('has-mp-nav', showMpNav);
     document.body.classList.toggle(
       'flow-checkout',
       ['cart', 'checkout', 'tracking', 'profile'].indexOf(view) >= 0
@@ -2233,6 +2242,14 @@
       n.classList.toggle('active', n.dataset.view === view);
     });
 
+    $$('.mp-tab').forEach(function (n) {
+      var isActive = false;
+      if (view === 'shop' && n.dataset.tab === 'home') isActive = true;
+      if (view === 'cart' && n.dataset.view === 'cart') isActive = true;
+      if (view === 'profile' && n.dataset.view === 'profile') isActive = true;
+      n.classList.toggle('active', isActive);
+    });
+
     window.scrollTo(0, 0);
   }
 
@@ -2728,6 +2745,19 @@
         return;
       }
 
+      var scrollBtn = e.target.closest('[data-scroll]');
+      if (scrollBtn) {
+        e.preventDefault();
+        currentTab = 'home';
+        showView('shop');
+        setTimeout(function () {
+          var sel = scrollBtn.dataset.scroll === 'categories' ? '.ds-category-tabs, .ds-explore' : '.flash-deals-block';
+          var el = document.querySelector(sel);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 180);
+        return;
+      }
+
       var searchBtn = e.target.closest('[data-focus="search"]');
       if (searchBtn) {
         e.preventDefault();
@@ -2747,6 +2777,7 @@
           ifoodRestaurantId = null;
           homeCategory = 'all';
         }
+        if (nav.dataset.scroll) return;
         showView(nav.dataset.view);
       }
     });
