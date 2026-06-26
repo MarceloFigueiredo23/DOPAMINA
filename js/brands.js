@@ -49,10 +49,25 @@
     '<circle cx="31" cy="13" r="2.25" fill="#00ffa3"/>' +
     '</svg>';
 
+  /* MERCADÃO — paródia marketplace amarelo/azul */
+  var LOGO_MERCADAO =
+    '<svg class="brand-mark brand-mark--mercadao" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">' +
+    '<rect x="2" y="2" width="44" height="44" rx="12" fill="#fff159"/>' +
+    '<path d="M14 28 C18 22 22 20 24 20 C26 20 30 22 34 28" stroke="#3483fa" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+    '<circle cx="17" cy="26" r="3" fill="#3483fa"/><circle cx="31" cy="26" r="3" fill="#3483fa"/>' +
+    '<path d="M12 14 H36" stroke="#2d3277" stroke-width="2.2" stroke-linecap="round"/>' +
+    '</svg>';
+
   var WM_AIFOOD =
     '<svg class="brand-wm brand-wm--aifood" viewBox="0 0 128 32" height="30" aria-hidden="true">' +
     '<text x="0" y="25" fill="currentColor" font-size="28" font-weight="400" font-style="italic" font-family="Georgia, serif">ai</text>' +
     '<text x="30" y="25" fill="currentColor" font-size="28" font-weight="900" font-family="Arial Black, Arial, sans-serif">FOOD</text>' +
+    '</svg>';
+
+  var WM_MERCADAO =
+    '<svg class="brand-wm brand-wm--mercadao" viewBox="0 0 168 34" height="30" aria-hidden="true">' +
+    '<text x="0" y="24" fill="#2d3277" font-size="22" font-weight="900" font-family="Arial Black, Arial, sans-serif">MERCAD</text>' +
+    '<text x="108" y="24" fill="#00a650" font-size="22" font-weight="900" font-family="Arial Black, Arial, sans-serif">ÃO</text>' +
     '</svg>';
 
   var WM_AMAZOOM =
@@ -80,6 +95,9 @@
     if (tab === 'fashion') {
       return '<span class="brand-wordmark brand-wordmark--shenim">SHE<span class="bw-accent">NIM</span></span>';
     }
+    if (tab === 'market') {
+      return '<span class="brand-wordmark brand-wordmark--mercadao">MERCAD<span class="bw-green">ÃO</span></span>';
+    }
     return '';
   }
 
@@ -87,6 +105,7 @@
     if (tab === 'express') return WM_AIFOOD;
     if (tab === 'premium') return WM_AMAZOOM;
     if (tab === 'fashion') return WM_SHENIM;
+    if (tab === 'market') return WM_MERCADAO;
     return '';
   }
 
@@ -106,6 +125,7 @@
       logoMark: LOGO_DOPSHOP,
     },
     express: { name: 'AIFOOD', logoMark: LOGO_AIFOOD, color: '#ea1d2c' },
+    market: { name: 'MERCADÃO', logoMark: LOGO_MERCADAO, color: '#fff159' },
     premium: { name: 'AMAZOOM', logoMark: LOGO_AMAZOOM, color: '#ff9900' },
     fashion: { name: 'SHENIM', logoMark: LOGO_SHENIM, color: '#ff2d6a' },
   };

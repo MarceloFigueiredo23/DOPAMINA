@@ -55,6 +55,34 @@
     { img: 'photo-1606813907291-d86efa9b94db', title: 'Games com até 40% OFF', sub: 'Frete GRÁTIS Prime', color: '#37475a' },
   ];
 
+  var MERCADAO_SLIDES = [
+    { img: 'photo-1556742049-0cfed4f6a45d', title: '7.7 MERCADÃO — Vem fazer compritta', sub: 'Cupons relâmpago · só simulação', color: '#fff159', textDark: true },
+    { img: 'photo-1607082349566-187342175e2f', title: 'Frete grátis na 1ª compra simulada', sub: 'Milhares de produtos', color: '#3483fa' },
+    { img: 'photo-1558618666-fcd25c85cd64', title: 'Festival de Grandes Marcas', sub: 'Até 60% OFF · parcelado sem juros', color: '#2d3277' },
+  ];
+
+  var MERCADAO_BENEFITS = [
+    { icon: '🚚', title: 'Frete grátis', sub: 'Benefício na sua primeira compra simulada.', cta: 'Mostrar produtos' },
+    { icon: '👤', title: 'Entre na sua conta', sub: 'Aproveite ofertas no DopShop.', cta: 'Entrar na conta' },
+    { icon: '📍', title: 'Insira sua localização', sub: 'Confira prazos de entrega simulados.', cta: 'Informar CEP' },
+    { icon: '💳', title: 'Meios de pagamento', sub: 'Pix, cartão e saldo do desafio R$ 1 mi.', cta: 'Ver meios' },
+    { icon: '💰', title: 'Menos de R$100', sub: 'Produtos com preços baixos.', cta: 'Mostrar produtos' },
+    { icon: '🔥', title: 'Mais vendidos', sub: 'Explore o que é tendência.', cta: 'Ir para ofertas' },
+  ];
+
+  var MERCADAO_CATEGORIES = [
+    { icon: '📱', label: 'Celulares' },
+    { icon: '💻', label: 'Informática' },
+    { icon: '🏠', label: 'Casa' },
+    { icon: '👟', label: 'Moda' },
+    { icon: '📺', label: 'Eletrônicos' },
+    { icon: '⚽', label: 'Esportes' },
+    { icon: '🐾', label: 'Pet Shop' },
+    { icon: '💄', label: 'Beleza' },
+    { icon: '🎮', label: 'Games' },
+    { icon: '🛒', label: 'Supermercado' },
+  ];
+
   var SHENIM_COUPONS = [
     { pct: 18, min: 'Sem gasto mín.', limit: 'R$ 9', title: 'Cupom geral' },
     { pct: 19, min: 'Pedidos R$ 69+', limit: 'R$ 15', title: 'Cupom moda' },
@@ -119,11 +147,11 @@
   function carouselHtml(slides, id) {
     var inner = slides.map(function (s, i) {
       return (
-        '<div class="carousel-slide' + (i === 0 ? ' active' : '') + '" style="--slide-accent:' + s.color + '">' +
+        '<div class="carousel-slide' + (i === 0 ? ' active' : '') + (s.textDark ? ' carousel-slide--dark' : '') + '" style="--slide-accent:' + s.color + '">' +
         '<img src="https://images.unsplash.com/' + s.img + '?w=800&h=400&fit=crop&q=80" alt="" />' +
         '<div class="carousel-caption">' +
         '<h4>' + s.title + '</h4><p>' + s.sub + '</p>' +
-        '<button type="button" class="carousel-cta">' + s.cta + '</button>' +
+        '<button type="button" class="carousel-cta">' + (s.cta || 'Ver ofertas') + '</button>' +
         '</div></div>'
       );
     }).join('');
@@ -135,6 +163,35 @@
       '<div class="carousel-dots">' + slides.map(function (_, i) {
         return '<span class="carousel-dot' + (i === 0 ? ' active' : '') + '" data-i="' + i + '"></span>';
       }).join('') + '</div></div>'
+    );
+  }
+
+  function mercadaoHomeBlocks() {
+    var benefits = MERCADAO_BENEFITS.map(function (b) {
+      return '<article class="mercadao-benefit-card">' +
+        '<span class="mercadao-benefit-icon">' + b.icon + '</span>' +
+        '<h4>' + b.title + '</h4>' +
+        '<p>' + b.sub + '</p>' +
+        '<button type="button" class="mercadao-benefit-cta" data-action="roulette">' + b.cta + '</button>' +
+        '</article>';
+    }).join('');
+    var cats = MERCADAO_CATEGORIES.map(function (c, i) {
+      return '<button type="button" class="mercadao-cat-pill" data-mfilter="' + (i < 4 ? ['eletronicos', 'eletronicos', 'casa', 'moda'][i] : 'all') + '">' +
+        '<span>' + c.icon + '</span><span>' + c.label + '</span></button>';
+    }).join('');
+    return (
+      carouselHtml(MERCADAO_SLIDES, 'mercadao') +
+      '<div class="mercadao-benefits-grid">' + benefits + '</div>' +
+      '<div class="mercadao-meliplus">' +
+      '<div class="mercadao-meliplus-text">' +
+      '<span class="mercadao-meliplus-badge">Dopi+</span>' +
+      '<h3>Viva a experiência MERCADÃO</h3>' +
+      '<p>Frete grátis rápido · cashback simulado · entretenimento</p>' +
+      '<button type="button" class="mercadao-meliplus-btn" data-action="roulette">Assinar a partir de R$ 9,90</button>' +
+      '</div></div>' +
+      '<div class="mercadao-categories-row"><h3>Categorias</h3><div class="mercadao-cats-scroll">' + cats + '</div></div>' +
+      '<div class="mercadao-section-head"><h3>Ofertas do dia</h3>' +
+      '<button type="button" class="mercadao-cupom-btn" data-action="roulette">🎟️ Cupons</button></div>'
     );
   }
 
@@ -181,6 +238,7 @@
   function therapyHero(tab) {
     var subs = {
       express: 'Peça, acompanhe a entrega e sinta o checkout — sem gastar de verdade.',
+      market: 'Tudo que você procura em um só lugar — com a cara do marketplace brasileiro.',
       premium: 'Navegue ofertas, monte o carrinho e acompanhe entregas simuladas em tempo real.',
       fashion: 'Looks, tendências e descontos — a emoção é real, a cobrança não.',
       default: 'Sinta a dopamina sem gastar dinheiro real. A emoção é real, a conta não.',
@@ -349,6 +407,7 @@
     serviceGrid: serviceGrid,
     carouselHtml: function () { return carouselHtml(AIFOOD_SLIDES, 'aifood'); },
     amazoomHomeBlocks: amazoomHomeBlocks,
+    mercadaoHomeBlocks: mercadaoHomeBlocks,
     shenimHero: shenimHero,
     therapyHero: therapyHero,
     shenimCategories: shenimCategories,

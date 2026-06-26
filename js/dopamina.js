@@ -113,7 +113,7 @@
         '<h3>2. Conta piloto</h3>' +
         '<p>Os dados de cadastro ficam armazenados localmente no seu navegador até você excluir a conta ou limpar os dados do site.</p>' +
         '<h3>3. Marcas paródia</h3>' +
-        '<p>AIFOOD, AMAZOOM e SHENIM são marcas fictícias de paródia, sem vínculo com empresas reais.</p>' +
+        '<p>AIFOOD, AMAZOOM, SHENIM e MERCADÃO são marcas fictícias de paródia, sem vínculo com empresas reais.</p>' +
         '<h3>4. Uso aceitável</h3>' +
         '<p>Proibido uso para fraude, engenharia reversa maliciosa ou tentativa de burlar sistemas de terceiros.</p>',
     },
@@ -353,6 +353,16 @@
       { label: '15% OFF', discount: 0.15, type: 'percent', icon: '🧥' },
       { label: 'VIP Moda', discount: 0.35, type: 'percent', icon: '✨' },
     ],
+    market: [
+      { label: '20% OFF', discount: 0.2, type: 'percent', icon: '🛒' },
+      { label: 'Frete Grátis', discount: 0, type: 'shipping', icon: '🚚' },
+      { label: 'R$ 50 OFF', discount: 50, type: 'bonus', icon: '💳' },
+      { label: '15% OFF', discount: 0.15, type: 'percent', icon: '📱' },
+      { label: '25% OFF', discount: 0.25, type: 'percent', icon: '🔥' },
+      { label: '12x s/ juros', discount: 0.1, type: 'percent', icon: '💰' },
+      { label: 'R$ 100 OFF', discount: 100, type: 'bonus', icon: '🏷️' },
+      { label: 'Cupom 7.7', discount: 0.3, type: 'percent', icon: '⚡' },
+    ],
   };
 
   function getPrizes() {
@@ -428,6 +438,7 @@
 
     const PRIZES = getPrizes();
     var colors = rouletteTab === 'express' ? ['#ea1d2c', '#ff6b6b'] :
+      rouletteTab === 'market' ? ['#fff159', '#3483fa'] :
       rouletteTab === 'premium' ? ['#ff9900', '#232f3e'] : ['#ff2d6a', '#111'];
 
     svg.innerHTML = '';
@@ -534,7 +545,7 @@
     const stage = document.getElementById('roulette-stage');
     const closeBtn = document.getElementById('roulette-close-x');
     const modal = overlay ? overlay.querySelector('.roulette-modal') : null;
-    const tabLabel = { express: 'AIFOOD', premium: 'AMAZOOM', fashion: 'SHENIM' };
+    const tabLabel = { express: 'AIFOOD', market: 'MERCADÃO', premium: 'AMAZOOM', fashion: 'SHENIM' };
 
     if (!overlay || !wheel) return;
 
@@ -1033,6 +1044,7 @@
   let ifoodRestaurantTab = 'menu';
   let ifoodSearch = '';
   let shenimFilter = 'all';
+  let marketFilter = 'all';
 
   function $(sel) {
     return document.querySelector(sel);
@@ -1069,10 +1081,12 @@
     if (ic) { ic.textContent = count; ic.hidden = count === 0; }
     var ac = $('#amazoom-cart-count');
     if (ac) { ac.textContent = count; ac.hidden = count === 0; }
+    var mc = $('#mercadao-cart-count');
+    if (mc) { mc.textContent = count; mc.hidden = count === 0; }
     updateActiveOrderBanner();
   }
 
-  var TAB_LABELS = { express: 'AIFOOD', premium: 'AMAZOOM', fashion: 'SHENIM' };
+  var TAB_LABELS = { express: 'AIFOOD', market: 'MERCADÃO', premium: 'AMAZOOM', fashion: 'SHENIM' };
   var BRANDS = function () { return window.DOPAMINA_BRANDS || {}; };
 
   function brandLockup(tab, size) {
@@ -1084,7 +1098,7 @@
   function renderHubTabs() {
     var B = BRANDS();
     return '<div class="shop-hub"><div class="shop-hub-tabs">' +
-      ['express', 'premium', 'fashion'].map(function (tab) {
+      ['express', 'market', 'premium', 'fashion'].map(function (tab) {
         var b = B[tab] || {};
         var mark = b.logoMark || '';
         return '<button type="button" class="shop-hub-tab shop-hub-tab--' + tab + (currentTab === tab ? ' active' : '') + '" data-tab="' + tab + '">' +
@@ -1502,8 +1516,11 @@
   }
 
   function applyShopTheme() {
-    document.body.classList.remove('theme-express', 'theme-premium', 'theme-fashion');
-    var theme = currentTab === 'express' ? 'theme-express' : currentTab === 'fashion' ? 'theme-fashion' : 'theme-premium';
+    document.body.classList.remove('theme-express', 'theme-premium', 'theme-fashion', 'theme-market');
+    var theme = 'theme-premium';
+    if (currentTab === 'express') theme = 'theme-express';
+    else if (currentTab === 'fashion') theme = 'theme-fashion';
+    else if (currentTab === 'market') theme = 'theme-market';
     document.body.classList.add(theme);
     const shell = $('#shop-shell');
     if (shell) shell.className = 'shop-shell ' + theme;
@@ -1559,6 +1576,30 @@
         '<div class="ifood-search-wrap"><span class="ifood-search-icon">🔍</span><input type="search" class="ifood-search-input" placeholder="Buscar restaurante ou prato…" id="shop-search" value="' + (ifoodSearch || '') + '" /></div>' +
         (ifoodRestaurantId ? '' : '<div class="ifood-categories">' + cats + '</div>') +
         '</div></div>';
+    } else if (currentTab === 'market') {
+      var mChips = [
+        { id: 'all', label: 'Tudo' },
+        { id: 'eletronicos', label: 'Eletrônicos' },
+        { id: 'moda', label: 'Moda' },
+        { id: 'casa', label: 'Casa' },
+        { id: 'top', label: 'Mais vendidos' },
+      ].map(function (c) {
+        return '<button type="button" class="mercadao-filter-chip' + (marketFilter === c.id ? ' active' : '') + '" data-mfilter="' + c.id + '">' + c.label + '</button>';
+      }).join('');
+      zone.innerHTML = hub +
+        '<div class="mercadao-shell">' +
+        '<div class="mercadao-yellow-bar">' +
+        brandLockup('market') +
+        '<div class="mercadao-search"><input type="search" id="shop-search" placeholder="Buscar produtos, marcas e muito mais…" value="' + (ifoodSearch || '') + '" /><button type="button">🔍</button></div>' +
+        '<button type="button" class="mercadao-cart nav-link" data-view="cart">🛒 <span id="mercadao-cart-count" class="cart-count"' + (loadCart().length ? '' : ' hidden') + '>' + loadCart().reduce(function (s, i) { return s + i.qty; }, 0) + '</span></button>' +
+        '</div>' +
+        '<div class="mercadao-cep-row">📍 Informe seu <strong>CEP</strong> · Frete e prazo simulados para todo o Brasil</div>' +
+        '<div class="mercadao-subnav store-subnav">' +
+        '<a href="#">Categorias</a><a href="#">Ofertas</a><a href="#">Cupons</a>' +
+        '<a href="#" data-action-link="roulette">7.7 MERCADÃO</a><a href="#">Moda</a><a href="#">Mercado Play</a>' +
+        '</div>' +
+        '<div class="mercadao-filters-row">' + mChips + '</div>' +
+        '</div>';
     } else if (currentTab === 'premium') {
       zone.innerHTML = hub +
         '<div class="amazoom-top"><div class="amazoom-top-inner">' +
@@ -1603,6 +1644,7 @@
         ifoodSearch = searchEl.value;
         if (currentTab === 'express' && !ifoodRestaurantId) renderExpressHome();
         if (currentTab === 'fashion') renderShenimProducts();
+        if (currentTab === 'market') renderMercadaoProducts();
       });
     }
     var backEl = $('#ifood-back');
@@ -1620,6 +1662,15 @@
           b.classList.toggle('active', b.dataset.sfilter === shenimFilter);
         });
         renderShenimProducts();
+      });
+    });
+    zone.querySelectorAll('[data-mfilter]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        marketFilter = btn.dataset.mfilter;
+        zone.querySelectorAll('[data-mfilter]').forEach(function (b) {
+          b.classList.toggle('active', b.dataset.mfilter === marketFilter);
+        });
+        renderMercadaoProducts();
       });
     });
   }
@@ -1700,6 +1751,70 @@
     bindProductGridActions(grid);
   }
 
+  function getMarketItems() {
+    var items = (CATALOG.premium || []).concat(CATALOG.fashion || []);
+    if (marketFilter === 'eletronicos') {
+      items = items.filter(function (p) { return p.id.charAt(0) === 'p'; });
+    } else if (marketFilter === 'moda') {
+      items = items.filter(function (p) { return p.id.charAt(0) === 'm'; });
+    } else if (marketFilter === 'casa') {
+      items = items.filter(function (p) {
+        var tag = (p.tag || '') + (p.category || '');
+        return /casa|cozinha|eletro|casa/i.test(tag);
+      });
+    } else if (marketFilter === 'top') {
+      items = items.slice().sort(function (a, b) { return (b.reviews || 0) - (a.reviews || 0); });
+    }
+    if (ifoodSearch) {
+      var q = ifoodSearch.toLowerCase();
+      items = items.filter(function (p) {
+        return p.name.toLowerCase().indexOf(q) >= 0 ||
+          (p.brand && p.brand.toLowerCase().indexOf(q) >= 0) ||
+          (p.tag && p.tag.toLowerCase().indexOf(q) >= 0);
+      });
+    }
+    return items;
+  }
+
+  function formatMercadaoPrice(value) {
+    var parts = value.toFixed(2).split('.');
+    return '<span class="mercadao-price-int">' + parseInt(parts[0], 10).toLocaleString('pt-BR') + '</span><sup>,' + parts[1] + '</sup>';
+  }
+
+  function renderMercadaoCard(p) {
+    var pct = discountPct(p);
+    var installments = Math.max(1, Math.round(p.price / 12));
+    var freeShip = p.price >= 79 || p.prime;
+    return '<article class="mercadao-card" data-open="' + p.id + '">' +
+      (pct > 0 ? '<span class="mercadao-off">-' + pct + '%</span>' : '') +
+      '<img class="mercadao-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&h=400&fit=crop\'" />' +
+      '<h3>' + p.name + '</h3>' +
+      '<div class="mercadao-price">R$ ' + formatMercadaoPrice(p.price) + '</div>' +
+      '<div class="mercadao-installments">em 12x ' + formatBRL(installments) + ' sem juros</div>' +
+      (freeShip ? '<div class="mercadao-frete">Frete grátis</div>' : '') +
+      (p.reviews >= 5000 ? '<span class="mercadao-bestseller">MAIS VENDIDO</span>' : '') +
+      '<button type="button" class="mercadao-add-btn" data-add="' + p.id + '">Comprar</button></article>';
+  }
+
+  function renderMercadaoProducts() {
+    var grid = $('#product-grid');
+    var items = getMarketItems();
+    var therapy = UI.therapyHero ? UI.therapyHero('market') : '';
+    var flashBlock = flashDealsHtml(getFlashDeals(items, 10));
+    var homeBlocks = UI.mercadaoHomeBlocks ? UI.mercadaoHomeBlocks() : '';
+    var cardsHtml = items.map(renderMercadaoCard).join('');
+    grid.className = 'mercadao-home';
+    grid.innerHTML = therapy + flashBlock + homeBlocks + '<div class="mercadao-grid">' + cardsHtml + '</div>' + shopInfiniteLoaderHtml();
+    bindProductGridActions(grid);
+    grid.querySelectorAll('.mercadao-cat-pill').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        marketFilter = btn.dataset.mfilter || 'all';
+        renderShopHeader();
+        renderMercadaoProducts();
+      });
+    });
+  }
+
   function renderAmazonProducts() {
     var grid = $('#product-grid');
     var items = CATALOG.premium || [];
@@ -1722,6 +1837,8 @@
       else renderExpressHome();
     } else if (currentTab === 'fashion') {
       renderShenimProducts();
+    } else if (currentTab === 'market') {
+      renderMercadaoProducts();
     } else {
       renderAmazonProducts();
     }

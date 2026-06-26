@@ -202,6 +202,10 @@
   transform: scale(1.1) rotate(-3deg);
 }
 
+.shop-hub-tab--market.active .brand-mark {
+  transform: scale(1.08);
+}
+
 .shop-hub-tab span.hub-tab-label {
   font-size: 0.6rem;
   font-weight: 800;
