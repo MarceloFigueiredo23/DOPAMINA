@@ -740,7 +740,10 @@
     if (shenimNav) shenimNav.hidden = !showShenimChrome;
     document.body.classList.toggle('has-ifood-nav', showAifoodChrome);
     document.body.classList.toggle('has-shenim-nav', showShenimChrome);
-    document.body.classList.toggle('flow-checkout', view === 'checkout' || view === 'tracking');
+    document.body.classList.toggle(
+      'flow-checkout',
+      ['cart', 'checkout', 'tracking', 'profile'].indexOf(view) >= 0
+    );
     var pd = $('#profile-dot');
     if (pd) pd.hidden = loadOrders().length === 0;
   }

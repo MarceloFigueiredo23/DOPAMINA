@@ -1,0 +1,265 @@
+/* Legibilidade global — contraste texto/fundo + camadas para não sumir */
+
+:root {
+  --readable-bg: #f5f5f7;
+  --readable-surface: #ffffff;
+  --readable-text: #1a1a1a;
+  --readable-muted: #5c5c5c;
+  --readable-border: #e2e2e6;
+  --readable-scrim: rgba(0, 0, 0, 0.72);
+}
+
+/* ── Empilhamento (sobreposição) ── */
+#toast.toast { z-index: 5000; }
+
+.product-modal { z-index: 3000; }
+.product-modal-panel { z-index: 3001; }
+
+#roulette-overlay.overlay,
+.coupon-overlay { z-index: 3500; }
+
+#main-header { z-index: 400; }
+
+.ifood-bottom-nav,
+.shenim-bottom-nav { z-index: 350; }
+
+.shop-hub { position: relative; z-index: 50; }
+
+.aifood-top-bar,
+.shenim-top,
+.amazoom-top { position: relative; z-index: 60; }
+
+/* ── Fluxo sacola / pagamento / rastreio / conta ── */
+body.flow-checkout {
+  background: var(--readable-bg);
+  color: var(--readable-text);
+}
+
+body.flow-checkout .header {
+  background: #fff;
+  border-bottom: 1px solid var(--readable-border);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+body.flow-checkout .logo {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: #ea1d2c;
+}
+
+body.flow-checkout .nav-link {
+  color: #555;
+}
+
+body.flow-checkout .nav-link:hover,
+body.flow-checkout .nav-link.active {
+  color: #111;
+  background: #eee;
+}
+
+body.flow-checkout .wallet-label { color: #888; }
+body.flow-checkout .coupon-badge { color: #fff; }
+
+body.flow-checkout #view-cart,
+body.flow-checkout #view-checkout,
+body.flow-checkout #view-tracking,
+body.flow-checkout #view-profile {
+  background: var(--readable-surface);
+  border: 1px solid var(--readable-border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  position: relative;
+  z-index: 20;
+}
+
+body.flow-checkout .view-title,
+body.flow-checkout #view-cart h2,
+body.flow-checkout #view-checkout h2,
+body.flow-checkout #view-tracking h2,
+body.flow-checkout #view-profile h2,
+body.flow-checkout #view-cart h3,
+body.flow-checkout #view-checkout h3,
+body.flow-checkout #view-tracking h3,
+body.flow-checkout #view-profile h3 {
+  color: var(--readable-text) !important;
+}
+
+body.flow-checkout .cart-item,
+body.flow-checkout .cart-summary,
+body.flow-checkout .checkout-form input,
+body.flow-checkout .checkout-total-box,
+body.flow-checkout .pay-option,
+body.flow-checkout .tracking-status,
+body.flow-checkout .timeline-item,
+body.flow-checkout .stat-card,
+body.flow-checkout .savings-chart {
+  background: var(--readable-surface) !important;
+  color: var(--readable-text) !important;
+  border: 1px solid var(--readable-border) !important;
+}
+
+body.flow-checkout .cart-info strong,
+body.flow-checkout .cart-info span,
+body.flow-checkout .summary-row,
+body.flow-checkout .checkout-form label,
+body.flow-checkout .checkout-section-label {
+  color: var(--readable-muted);
+}
+
+body.flow-checkout .cart-info strong,
+body.flow-checkout .summary-row.total,
+body.flow-checkout .timeline-item span:last-child {
+  color: var(--readable-text) !important;
+}
+
+body.flow-checkout .summary-row.total {
+  border-top-color: var(--readable-border) !important;
+}
+
+body.flow-checkout .pay-option.selected {
+  border-color: #ea1d2c !important;
+  background: #fff5f5 !important;
+}
+
+body.flow-checkout .pay-option span { color: var(--readable-text); }
+
+body.flow-checkout .empty {
+  color: var(--readable-muted) !important;
+}
+
+body.flow-checkout .stat-value {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: #ea1d2c !important;
+}
+
+body.flow-checkout .stat-label,
+body.flow-checkout .tracking-meta,
+body.flow-checkout .tracking-address-line {
+  color: var(--readable-muted) !important;
+}
+
+body.flow-checkout .tracking-meta strong {
+  color: var(--readable-text) !important;
+}
+
+body.flow-checkout #view-tracking .tracking-eta {
+  color: #c41623;
+  background: #fff0f0;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #ffd0d5;
+}
+
+body.flow-checkout .timeline-item {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+body.flow-checkout .btn-secondary {
+  background: #fff;
+  color: #111;
+  border: 1px solid var(--readable-border);
+}
+
+body.flow-checkout .tracking-map {
+  border-color: #ccc;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+body.flow-checkout .tracking-map .empty {
+  background: #fff;
+  padding: 16px;
+  margin: 12px;
+  border-radius: 8px;
+}
+
+body.flow-checkout .savings-chart .bar-wrap span,
+body.flow-checkout .savings-chart .bar-wrap small {
+  color: var(--readable-muted);
+}
+
+/* ── Texto sobre imagens (scrim / sombra) ── */
+.carousel-caption {
+  z-index: 3;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.45) 35%,
+    var(--readable-scrim) 100%
+  ) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+}
+
+.carousel-caption h4,
+.carousel-caption p {
+  color: #fff !important;
+}
+
+.aifood-hero-content,
+.aifood-promo-banner,
+.shenim-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.aifood-hero-content h3,
+.aifood-hero-content p,
+.aifood-promo-banner h4,
+.aifood-promo-banner p {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.shenim-sale,
+.service-novo,
+.ifood-promo-tag,
+.product-badge,
+.dish-badge {
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.modal-close {
+  z-index: 20;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* Detalhe do produto — sempre fundo claro */
+.product-modal-panel,
+.detail-ifood-body,
+.detail-amazon-body,
+.detail-shenim-body {
+  background: #fff;
+  color: #1a1a1a;
+}
+
+.detail-ifood-body h2,
+.detail-amazon-body h2,
+.detail-shenim-body h2,
+.detail-section h4 {
+  color: #1a1a1a !important;
+}
+
+.review-text,
+.detail-shenim-desc,
+.ingredient-chip {
+  color: #444 !important;
+}
+
+/* Toast legível em qualquer tema */
+.toast {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #333;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* Rodapé não some atrás da bottom nav */
+body.has-ifood-nav .footer,
+body.has-shenim-nav .footer {
+  position: relative;
+  z-index: 10;
+  background: var(--readable-bg, #f7f7f7);
+  color: #666;
+}

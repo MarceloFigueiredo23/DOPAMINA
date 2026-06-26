@@ -1403,6 +1403,8 @@ body.theme-fashion .btn-primary { background: #111; color: #fff; }
   font-weight: 800;
   padding: 4px 8px;
   border-radius: 4px;
+  z-index: 3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .shenim-card h3 {

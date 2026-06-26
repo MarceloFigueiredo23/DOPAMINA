@@ -586,6 +586,7 @@ body {
   color: var(--text);
   border-radius: 12px;
   animation: slideIn 0.4s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 #view-tracking .timeline-item {
