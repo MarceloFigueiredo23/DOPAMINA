@@ -1,5 +1,5 @@
 /**
- * DOPAMINA — Design System Premium
+ * DopShop — Design System Premium
  * Dark Mode · Neon Cyberpunk · Fintech / Delivery App
  */
 
@@ -122,7 +122,7 @@ body.has-dopamina-header {
   padding-top: var(--dopamina-chrome-h, 102px);
 }
 
-/* ── Ticker promocional (referência DopaminaShop) ── */
+/* ── Ticker promocional ── */
 .promo-ticker {
   position: fixed;
   top: 0;

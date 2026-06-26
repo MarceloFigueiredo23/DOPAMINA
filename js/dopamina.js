@@ -109,7 +109,7 @@
       title: 'Termos de Uso — Piloto',
       html:
         '<h3>1. Natureza do serviço</h3>' +
-        '<p>O DOPAMINA SHOP é uma experiência demonstrativa de e-commerce simulado. Nenhuma cobrança real é processada.</p>' +
+        '<p>O DopShop é uma experiência demonstrativa de e-commerce simulado. Nenhuma cobrança real é processada.</p>' +
         '<h3>2. Conta piloto</h3>' +
         '<p>Os dados de cadastro ficam armazenados localmente no seu navegador até você excluir a conta ou limpar os dados do site.</p>' +
         '<h3>3. Marcas paródia</h3>' +
@@ -121,7 +121,7 @@
       title: 'Política de Privacidade — Piloto',
       html:
         '<h3>Controlador</h3>' +
-        '<p>DOPAMINA SHOP (experiência piloto). Contato: canal definido pelo operador do projeto.</p>' +
+        '<p>DopShop (experiência piloto). Contato: canal definido pelo operador do projeto.</p>' +
         '<h3>Dados coletados no cadastro</h3>' +
         '<ul><li>Nome, e-mail, cidade (opcional) e senha simulada (local)</li><li>Pedidos simulados e preferências de navegação</li><li>No checkout: nome, idade, e-mail, sexo e região para finalizar cada pedido</li></ul>' +
         '<h3>Notificações de envio (opt-in)</h3>' +
@@ -542,7 +542,7 @@
       modal.className = 'roulette-modal roulette-' + rouletteTab;
       var h1 = modal.querySelector('h1');
       var p = modal.querySelector('p');
-      if (h1) h1.textContent = 'Roleta ' + (tabLabel[rouletteTab] || 'Dopamina');
+      if (h1) h1.textContent = 'Roleta ' + (tabLabel[rouletteTab] || 'DopShop');
       if (p) p.textContent = 'Gire e ganhe cupons exclusivos no ' + (tabLabel[rouletteTab] || 'app') + '!';
     }
 
@@ -1296,7 +1296,7 @@
     if (!cart.length) {
       return {
         pct: 0,
-        label: 'Cérebro em repouso. Adicione algo para liberar dopamina! 🧠',
+        label: 'Cérebro em repouso. Adicione algo para ativar o rush! 🧠',
       };
     }
     var sub = cartTotal(cart);
@@ -1307,7 +1307,7 @@
     else if (pct < 45) label = 'Prazer da compra ativado 🛒';
     else if (pct < 70) label = 'Rush de dopamina subindo! 🔥';
     else if (pct < 90) label = 'Quase no pico — finalize o checkout! 🚀';
-    else label = 'DOPAMINA MÁXIMA — libere no checkout! 💥';
+    else label = 'PICO DOPSHOP — libere no checkout! 💥';
     return { pct: pct, label: label };
   }
 
@@ -1317,7 +1317,7 @@
     var cart = loadCart();
     var level = calcDopaminaLevel(cart);
     el.innerHTML =
-      '<div class="dopamina-meter-head"><span>🧠 Nível de Dopamina Simulado</span><strong>' + level.pct + '%</strong></div>' +
+      '<div class="dopamina-meter-head"><span>🧠 Rush de compra no DopShop</span><strong>' + level.pct + '%</strong></div>' +
       '<div class="dopamina-meter-bar"><div class="dopamina-meter-fill" style="width:' + level.pct + '%"></div></div>' +
       '<p class="dopamina-meter-label">' + level.label + '</p>';
   }
@@ -1743,7 +1743,7 @@
   function flashToast(msg, dopaminaPct) {
     const t = $('#toast');
     var dopaLine = typeof dopaminaPct === 'number'
-      ? '<span class="toast-dopa">Dopamina simulada: ' + dopaminaPct + '%</span>'
+      ? '<span class="toast-dopa">Rush DopShop: ' + dopaminaPct + '%</span>'
       : '';
     t.innerHTML = '<strong>' + msg + '</strong>' + dopaLine;
     t.classList.add('show');
@@ -2343,10 +2343,10 @@
     try {
       runInit();
     } catch (err) {
-      console.error('Dopamina erro:', err);
+      console.error('DopShop erro:', err);
       const box = document.createElement('div');
       box.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#1a1228;color:#fff;padding:24px;font-family:sans-serif;overflow:auto';
-      box.innerHTML = '<h2>Dopamina — erro ao carregar</h2><p>' + err.message + '</p><p>Use <strong>INICIAR.bat</strong> na pasta dopamina ou abra via <code>http://localhost:8765</code></p>';
+      box.innerHTML = '<h2>DopShop — erro ao carregar</h2><p>' + err.message + '</p><p>Use <strong>INICIAR.bat</strong> na pasta dopamina ou abra via <code>http://localhost:8765</code></p>';
       document.body.appendChild(box);
     }
   }

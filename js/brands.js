@@ -38,8 +38,8 @@
     '<circle cx="8" cy="18" r="2" fill="#ff2d6a"/><circle cx="40" cy="16" r="2" fill="#ff2d6a"/>' +
     '</svg>';
 
-  /* DOPAMINA SHOP — monograma premium */
-  var LOGO_DOPAMINA =
+  /* DopShop — monograma premium */
+  var LOGO_DOPSHOP =
     '<svg class="brand-mark brand-mark--dopamina" viewBox="0 0 44 44" width="44" height="44" aria-hidden="true">' +
     '<defs>' +
     '<linearGradient id="dopaMarkGrad" x1="0" y1="0" x2="44" y2="44"><stop offset="0%" stop-color="#c084fc"/><stop offset="50%" stop-color="#b026ff"/><stop offset="100%" stop-color="#ff2d95"/></linearGradient>' +
@@ -100,10 +100,10 @@
 
   var BRANDS = {
     site: {
-      name: 'DOPAMINA SHOP',
-      short: 'Dopamina',
+      name: 'DopShop',
+      short: 'Dop',
       suffix: 'Shop',
-      logoMark: LOGO_DOPAMINA,
+      logoMark: LOGO_DOPSHOP,
     },
     express: { name: 'AIFOOD', logoMark: LOGO_AIFOOD, color: '#ea1d2c' },
     premium: { name: 'AMAZOOM', logoMark: LOGO_AMAZOOM, color: '#ff9900' },
