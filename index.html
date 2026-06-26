@@ -4,12 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Dopamina — delivery e marketplace com experiência completa de compra." />
+  <meta name="theme-color" content="#0B0B0F" />
   <title>Dopamina</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/themes.css" />
   <link rel="stylesheet" href="css/interactive.css" />
   <link rel="stylesheet" href="css/readability.css" />
+  <link rel="stylesheet" href="css/brand.css" />
 </head>
 <body>
   <div id="toast" class="toast" aria-live="polite"></div>
@@ -52,9 +57,10 @@
       </nav>
       <div class="header-right">
         <span id="coupon-badge" class="coupon-badge" hidden></span>
-        <div class="wallet payment-pill">
-          <span class="wallet-label">Pagamento</span>
-          <span class="wallet-value">Visa •••• 4821</span>
+        <div class="wallet wallet-fintech payment-pill">
+          <span class="wallet-label">Saldo disponível</span>
+          <span class="wallet-value" id="wallet-balance">R$ —</span>
+          <span class="wallet-card-hint">Visa •••• 4821</span>
         </div>
         <button type="button" class="cart-btn nav-link" data-view="cart">
           🛒 <span id="cart-count" class="cart-count" hidden>0</span>
