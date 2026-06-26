@@ -73,9 +73,13 @@
 
   <div id="active-order-banner" class="active-order-banner" hidden>
     <button type="button" class="active-order-banner-inner" id="active-order-banner-btn">
-      <span class="active-order-pulse" aria-hidden="true">📦</span>
-      <span class="active-order-banner-text" id="active-order-banner-text">Pedido em trânsito</span>
-      <span class="active-order-banner-cta">Rastrear →</span>
+      <span class="active-order-icon" aria-hidden="true">📦</span>
+      <span class="active-order-banner-body">
+        <span class="active-order-banner-title" id="active-order-banner-title">Pedido em trânsito</span>
+        <span class="active-order-banner-meta" id="active-order-banner-meta">—</span>
+        <span class="active-order-banner-progress" aria-hidden="true"><span id="active-order-banner-fill"></span></span>
+      </span>
+      <span class="active-order-banner-cta">Rastrear</span>
     </button>
   </div>
 
@@ -142,13 +146,17 @@
 
     <!-- RASTREIO -->
     <section id="view-tracking" class="view">
-      <h2 class="view-title">Acompanhar pedido</h2>
-      <p class="tracking-meta">Pedido <strong id="tracking-order-id"></strong></p>
-      <p class="tracking-address-line" id="tracking-address"></p>
-      <p id="tracking-eta" class="tracking-eta"></p>
-      <p id="tracking-countdown" class="tracking-countdown"></p>
-      <p id="tracking-phase" class="tracking-phase"></p>
-      <p id="tracking-status" class="tracking-status">Aguardando confirmação…</p>
+      <div class="tracking-status-panel">
+        <h2 class="view-title">Acompanhar pedido</h2>
+        <p class="tracking-meta">Pedido <strong id="tracking-order-id"></strong></p>
+        <p class="tracking-address-line" id="tracking-address"></p>
+        <div class="tracking-live-stats">
+          <p id="tracking-eta" class="tracking-eta"></p>
+          <p id="tracking-countdown" class="tracking-countdown"></p>
+          <p id="tracking-phase" class="tracking-phase"></p>
+        </div>
+        <p id="tracking-status" class="tracking-status">Aguardando confirmação…</p>
+      </div>
 
       <h3 id="tracking-express-title">Entrega rápida · AIFOOD</h3>
       <div id="tracking-express" class="tracking-express"></div>

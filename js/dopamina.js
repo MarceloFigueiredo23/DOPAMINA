@@ -574,24 +574,43 @@
 
   function updateActiveOrderBanner() {
     var banner = $('#active-order-banner');
-    var text = $('#active-order-banner-text');
-  var profileBox = $('#active-order-profile');
+    var titleEl = $('#active-order-banner-title');
+    var metaEl = $('#active-order-banner-meta');
+    var fillEl = $('#active-order-banner-fill');
+    var profileBox = $('#active-order-profile');
     var active = getActiveOrder();
     if (!banner) return;
+
+    document.body.classList.toggle('has-active-order', !!active);
+
     if (!active) {
       banner.hidden = true;
       if (profileBox) profileBox.hidden = true;
       return;
     }
-    var label = getOrderTypeLabel(active.type) + ' · ' + active.id + ' — ' + Math.round(getOrderProgress(active) * 100) + '%';
-    if (text) text.textContent = label;
+
+    var pct = Math.round(getOrderProgress(active) * 100);
+    var remaining = formatRemaining(getOrderDeliveryEnd(active) - Date.now());
+    var typeLabel = getOrderTypeLabel(active.type);
+    var title = pct >= 100 ? '✅ Pedido entregue · ' + typeLabel : '🚚 Pedido em trânsito · ' + typeLabel;
+    var meta = active.id + ' · ' + pct + '% concluído · ' + remaining;
+
+    if (titleEl) titleEl.textContent = title;
+    if (metaEl) metaEl.textContent = meta;
+    if (fillEl) fillEl.style.width = Math.max(4, pct) + '%';
+
     banner.hidden = false;
     banner.dataset.orderId = active.id;
+
     if (profileBox) {
       profileBox.hidden = false;
       profileBox.innerHTML =
         '<button type="button" class="active-order-profile-btn" data-order-id="' + active.id + '">' +
-        '<span>📦 Pedido em andamento</span><strong>' + label + '</strong><span>Rastrear →</span></button>';
+        '<span>📦 Acompanhe sua entrega</span>' +
+        '<strong>' + title + '</strong>' +
+        '<span>' + meta + '</span>' +
+        '<span class="active-order-profile-progress"><span style="width:' + Math.max(4, pct) + '%"></span></span>' +
+        '<span>Rastrear pedido →</span></button>';
     }
   }
 
@@ -1958,6 +1977,11 @@
     }
 
     updateCouponBadge();
+    if (!window._dopaminaBannerIv) {
+      window._dopaminaBannerIv = setInterval(function () {
+        if (getActiveOrder()) updateActiveOrderBanner();
+      }, 1000);
+    }
     showView('shop');
   }
 
