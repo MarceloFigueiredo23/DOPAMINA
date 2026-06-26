@@ -1048,6 +1048,35 @@
     return { subtotal: subtotal, discount: discount, shipping: shipping, service: service, total: total + shipping + service };
   }
 
+  function brandTierBadge(tier) {
+    if (tier === 'griffe') return '<span class="product-brand-tier product-brand-tier--griffe">Griffe</span>';
+    if (tier === 'premium') return '<span class="product-brand-tier product-brand-tier--premium">Premium</span>';
+    if (tier === 'popular') return '<span class="product-brand-tier product-brand-tier--popular">Essencial</span>';
+    return '';
+  }
+
+  function productBrandHtml(p) {
+    if (!p.brand) return '';
+    return '<div class="product-brand-row">' +
+      '<span class="product-brand">' + p.brand + '</span>' +
+      brandTierBadge(p.brandTier) +
+      '</div>';
+  }
+
+  function renderIfoodDishCard(p) {
+    return '<article class="ifood-dish" data-open="' + p.id + '">' +
+      '<img class="ifood-dish-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=400&fit=crop\'" />' +
+      '<div class="ifood-dish-body">' +
+      productBrandHtml(p) +
+      (p.tag ? '<span class="ifood-tag">' + p.tag + '</span>' : '') +
+      '<h3>' + p.name + '</h3>' +
+      '<p class="ifood-dish-desc">' + p.desc + '</p>' +
+      (p.portion ? '<p class="ifood-dish-meta">' + p.portion + (p.calories ? ' · ' + p.calories : '') + '</p>' : '') +
+      '<div class="ifood-stars"><span class="star">' + starsHtml(p.rating) + '</span> <span class="count">(' + p.reviews + ')</span></div>' +
+      '<div class="ifood-dish-footer"><span class="ifood-price">' + formatBRL(p.price) + '</span>' +
+      '<button type="button" class="ifood-add" data-add="' + p.id + '">Adicionar</button></div></div></article>';
+  }
+
   function starsHtml(rating) {
     const full = Math.floor(rating);
     const half = rating - full >= 0.5;
@@ -1251,7 +1280,7 @@
     var reviewsTab = ifoodRestaurantTab === 'reviews';
     var aboutTab = ifoodRestaurantTab === 'about';
     var menuHtml = dishes.map(function (p) {
-      return '<article class="ifood-dish" data-open="' + p.id + '"><img class="ifood-dish-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" /><div class="ifood-dish-body">' + (p.tag ? '<span class="ifood-tag">' + p.tag + '</span>' : '') + '<h3>' + p.name + '</h3><p class="ifood-dish-desc">' + p.desc + '</p><div class="ifood-stars"><span class="star">' + starsHtml(p.rating) + '</span> <span class="count">(' + p.reviews + ')</span></div><div class="ifood-dish-footer"><span class="ifood-price">' + formatBRL(p.price) + '</span><button type="button" class="ifood-add" data-add="' + p.id + '">Adicionar</button></div></div></article>';
+      return renderIfoodDishCard(p);
     }).join('');
     grid.innerHTML = '<div class="ifood-rest-hero"><img class="ifood-rest-hero-cover" src="' + r.cover + '" alt="" /><div class="ifood-rest-hero-info"><img class="ifood-rest-hero-logo" src="' + r.logo + '" alt="" /><div><h2>' + r.shop + '</h2><div class="ifood-stars"><span class="star">' + starsHtml(r.rating) + '</span> <strong>' + r.rating + '</strong> <span class="count"> · ' + r.reviews + ' avaliações</span></div><div class="ifood-meta"><span>🕐 ' + r.delivery + '</span><span class="' + (r.fee === 'Grátis' ? 'free' : '') + '">🛵 ' + r.fee + '</span><span>· Mín. ' + formatBRL(r.minOrder) + '</span></div><p class="ifood-rest-hero-tags">' + r.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</p></div></div></div>' +
       '<div class="ifood-rest-tabs"><button type="button" class="ifood-rest-tab' + (menuTab ? ' active' : '') + '" data-rtab="menu">Cardápio</button><button type="button" class="ifood-rest-tab' + (aboutTab ? ' active' : '') + '" data-rtab="about">Sobre</button><button type="button" class="ifood-rest-tab' + (reviewsTab ? ' active' : '') + '" data-rtab="reviews">Avaliações (' + r.reviews + ')</button></div>' +
@@ -1265,12 +1294,14 @@
     var grid = $('#product-grid');
     var items = (CATALOG.fashion || []).filter(function (p) {
       if (shenimFilter === 'all') return true;
-      return p.tag === shenimFilter || (p.tag && p.tag.indexOf(shenimFilter) >= 0);
+      return p.category === shenimFilter;
     });
     if (ifoodSearch) {
       var q = ifoodSearch.toLowerCase();
       items = items.filter(function (p) {
-        return p.name.toLowerCase().indexOf(q) >= 0 || (p.tag && p.tag.toLowerCase().indexOf(q) >= 0);
+        return p.name.toLowerCase().indexOf(q) >= 0 ||
+          (p.brand && p.brand.toLowerCase().indexOf(q) >= 0) ||
+          (p.tag && p.tag.toLowerCase().indexOf(q) >= 0);
       });
     }
     grid.className = 'shenim-home';
@@ -1280,8 +1311,11 @@
       return '<article class="shenim-card" data-open="' + p.id + '">' +
         '<div class="shenim-card-img-wrap">' +
         (pct > 0 ? '<span class="shenim-sale">−' + pct + '%</span>' : '') +
-        '<img class="shenim-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" /></div>' +
+        brandTierBadge(p.brandTier) +
+        '<img class="shenim-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&h=800&fit=crop\'" /></div>' +
+        productBrandHtml(p) +
         '<h3>' + p.name + '</h3>' +
+        '<p class="shenim-card-meta">' + (p.color || '') + (p.material ? ' · ' + p.material : '') + '</p>' +
         '<div class="shenim-stars"><span class="star">' + starsHtml(p.rating) + '</span> <span>(' + p.reviews + ')</span></div>' +
         '<div class="shenim-price-row"><span class="shenim-price">' + formatBRL(p.price) + '</span>' +
         (p.oldPrice ? '<span class="shenim-old">' + formatBRL(p.oldPrice) + '</span>' : '') + '</div>' +
@@ -1305,7 +1339,7 @@
     var items = CATALOG.premium || [];
     var homeBlocks = UI.amazoomHomeBlocks ? UI.amazoomHomeBlocks() : '';
     var cardsHtml = items.map(function (p) {
-      return '<article class="amazon-card" data-open="' + p.id + '"><img class="amazon-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" />' + (p.prime ? '<span class="amazon-prime">prime</span>' : '') + '<h3>' + p.name + '</h3><div class="amazon-stars"><span class="star">' + starsHtml(p.rating) + '</span> <a href="#">' + p.reviews + ' avaliações</a></div><div class="amazon-price-block"><div class="amazon-price">' + formatBRL(p.price) + '</div>' + (p.oldPrice ? '<div class="amazon-old-price">De: ' + formatBRL(p.oldPrice) + '</div>' : '') + '</div><button type="button" class="amazon-add-btn" data-add="' + p.id + '">Adicionar ao carrinho</button></article>';
+      return '<article class="amazon-card" data-open="' + p.id + '"><img class="amazon-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&h=600&fit=crop\'" />' + (p.prime ? '<span class="amazon-prime">prime</span>' : '') + productBrandHtml(p) + '<h3>' + p.name + '</h3><div class="amazon-stars"><span class="star">' + starsHtml(p.rating) + '</span> <a href="#">' + p.reviews + ' avaliações</a></div><div class="amazon-price-block"><div class="amazon-price">' + formatBRL(p.price) + '</div>' + (p.oldPrice ? '<div class="amazon-old-price">De: ' + formatBRL(p.oldPrice) + '</div>' : '') + '</div><button type="button" class="amazon-add-btn" data-add="' + p.id + '">Adicionar ao carrinho</button></article>';
     }).join('');
     grid.className = 'amazoom-home';
     grid.innerHTML = homeBlocks + '<div class="amazon-grid">' + cardsHtml + '</div>';
@@ -1342,13 +1376,18 @@
       var rest = IFOOD.getRestaurant && p.restaurantId ? IFOOD.getRestaurant(p.restaurantId) : null;
       panel.innerHTML =
         '<button type="button" class="modal-close" id="modal-close-btn">✕</button>' +
-        '<img class="detail-ifood-img" src="' + p.image + '" alt="' + p.name + '" />' +
+        '<img class="detail-ifood-img" src="' + p.image + '" alt="' + p.name + '" onerror="this.src=\'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=500&fit=crop\'" />' +
         '<div class="detail-ifood-body">' +
+        productBrandHtml(p) +
         '<span class="ifood-tag">' + p.tag + '</span>' +
         '<h2>' + p.name + '</h2>' +
         '<p class="ifood-dish-shop">' + (rest ? '<a href="#" id="modal-goto-rest">' + rest.shop + '</a>' : p.shop) + ' · 🕐 ' + p.delivery + '</p>' +
         '<div class="ifood-stars"><span class="stars-row">' + starsHtml(p.rating) + '</span> <strong>' + p.rating + '</strong> (' + p.reviews + ' avaliações do prato)</div>' +
         '<p style="margin-top:12px;color:var(--shop-muted)">' + p.desc + '</p>' +
+        (p.portion || p.calories ? '<div class="detail-section"><h4>Informações</h4><ul class="specs-list">' +
+          (p.portion ? '<li>Porção: ' + p.portion + '</li>' : '') +
+          (p.calories ? '<li>Calorias: ' + p.calories + '</li>' : '') +
+          '</ul></div>' : '') +
         '<div class="detail-section"><h4>Ingredientes</h4><div class="ingredients-list">' +
         (p.ingredients || []).map(function (ing) { return '<span class="ingredient-chip">' + ing + '</span>'; }).join('') +
         '</div></div>' +
@@ -1375,12 +1414,16 @@
       panel.innerHTML =
         '<button type="button" class="modal-close" id="modal-close-btn">✕</button>' +
         '<div class="detail-shenim">' +
-        '<img class="detail-shenim-img" src="' + p.image + '" alt="' + p.name + '" />' +
+        '<img class="detail-shenim-img" src="' + p.image + '" alt="' + p.name + '" onerror="this.src=\'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=800&h=1000&fit=crop\'" />' +
         '<div class="detail-shenim-body">' +
+        productBrandHtml(p) +
         '<span class="shenim-tag">' + p.tag + '</span>' +
         '<h2>' + p.name + '</h2>' +
         '<div class="shenim-stars"><span class="stars-row">' + starsHtml(p.rating) + '</span> (' + p.reviews + ' avaliações)</div>' +
         '<p class="detail-shenim-desc">' + p.desc + '</p>' +
+        '<div class="detail-section"><h4>Características</h4><ul class="specs-list">' +
+        (p.specs || []).map(function (s) { return '<li>' + s + '</li>'; }).join('') +
+        '</ul></div>' +
         '<div class="shenim-price-row"><span class="shenim-price">' + formatBRL(p.price) + '</span>' +
         (p.oldPrice ? '<span class="shenim-old">' + formatBRL(p.oldPrice) + '</span>' : '') + '</div>' +
         '<div class="detail-section"><h4>Tamanho</h4><div class="shenim-sizes">' + sizesHtml + '</div></div>' +
@@ -1396,8 +1439,9 @@
       panel.innerHTML =
         '<button type="button" class="modal-close" id="modal-close-btn">✕</button>' +
         '<div class="detail-amazon">' +
-        '<div><img class="detail-amazon-img" src="' + p.image + '" alt="' + p.name + '" /></div>' +
+        '<div><img class="detail-amazon-img" src="' + p.image + '" alt="' + p.name + '" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&h=800&fit=crop\'" /></div>' +
         '<div>' +
+        productBrandHtml(p) +
         '<h2>' + p.name + '</h2>' +
         '<div class="amazon-stars"><span class="stars-row">' + starsHtml(p.rating) + '</span> <a href="#">' + p.reviews + ' avaliações globais</a></div>' +
         '<p style="margin:12px 0;color:var(--shop-muted)">' + p.desc + '</p>' +

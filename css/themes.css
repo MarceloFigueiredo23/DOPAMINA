@@ -1515,3 +1515,68 @@ body.theme-fashion .cart-summary {
   border-color: var(--shop-border);
   color: var(--shop-text);
 }
+
+/* Marcas nos cards e modais */
+.product-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.product-brand {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--shop-muted, #888);
+}
+
+.product-brand-tier {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.product-brand-tier--griffe {
+  background: linear-gradient(135deg, #1a1a1a, #3d2b1f);
+  color: #f5d78e;
+  border: 1px solid rgba(245, 215, 142, 0.35);
+}
+
+.product-brand-tier--premium {
+  background: #13131a;
+  color: #e879f9;
+  border: 1px solid rgba(232, 121, 249, 0.25);
+}
+
+.product-brand-tier--popular {
+  background: #f0f0f5;
+  color: #444;
+}
+
+.shenim-card-img-wrap .product-brand-tier {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+}
+
+.shenim-card-meta,
+.ifood-dish-meta {
+  font-size: 0.75rem;
+  color: var(--shop-muted, #888);
+  margin: 4px 0 6px;
+  line-height: 1.35;
+}
+
+.ifood-rest-logo {
+  object-fit: contain;
+  background: #fff;
+  border-radius: 8px;
+  padding: 4px;
+}
