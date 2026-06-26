@@ -206,11 +206,12 @@ body.theme-premium .footer {
 .ifood-dish:last-child { border-bottom: none; }
 
 .ifood-dish-img {
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
+  width: 112px;
+  height: 112px;
+  border-radius: 10px;
   object-fit: cover;
   flex-shrink: 0;
+  background: #f5f5f5;
 }
 
 .ifood-dish-body { flex: 1; min-width: 0; }
