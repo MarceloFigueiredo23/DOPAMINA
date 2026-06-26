@@ -468,7 +468,7 @@ body.product-modal-open #shop-header-zone,
 body.product-modal-open #active-order-banner,
 body.product-modal-open .ifood-bottom-nav,
 body.product-modal-open .shenim-bottom-nav,
-body.product-modal-open .mp-bottom-nav,
+body.product-modal-open .mp-header-nav,
 body.product-modal-open .footer {
   display: none !important;
 }

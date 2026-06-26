@@ -1664,14 +1664,10 @@
   function updateAppChrome(view) {
     var ifoodNav = $('#ifood-bottom-nav');
     var shenimNav = $('#shenim-bottom-nav');
-    var mpNav = $('#mp-bottom-nav');
     if (ifoodNav) ifoodNav.hidden = true;
     if (shenimNav) shenimNav.hidden = true;
-    var showMpNav = ['shop', 'cart', 'profile'].indexOf(view) >= 0;
-    if (mpNav) mpNav.hidden = !showMpNav;
     document.body.classList.add('has-dopamina-header');
-    document.body.classList.remove('has-ifood-nav', 'has-shenim-nav');
-    document.body.classList.toggle('has-mp-nav', showMpNav);
+    document.body.classList.remove('has-ifood-nav', 'has-shenim-nav', 'has-mp-nav');
     document.body.classList.toggle(
       'flow-checkout',
       ['cart', 'checkout', 'tracking', 'profile'].indexOf(view) >= 0
