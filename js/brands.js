@@ -5,7 +5,7 @@
   'use strict';
 
   var LOGO_LOCKUP =
-    '<img class="brand-logo-mark" src="img/mercadopamina-gnome.png?v=29" ' +
+    '<img class="brand-logo-mark" src="img/mercadopamina-gnome.png?v=30" ' +
     'width="50" height="50" alt="" decoding="async" fetchpriority="high">' +
     '<span class="mp-wordmark" aria-hidden="true">' +
     '<span class="mp-wm-full">Mercado<span class="mp-wm-highlight">pamina</span></span>' +
