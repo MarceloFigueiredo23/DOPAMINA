@@ -242,14 +242,17 @@ body.has-site-header {
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 10px;
+  border: 1px solid #f0f0f0;
 }
 
 .ds-card-img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 8px;
+  object-position: center;
+  padding: 10px;
   box-sizing: border-box;
+  background: #fff;
 }
 
 .ds-card h3 {

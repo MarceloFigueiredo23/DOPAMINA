@@ -41,7 +41,7 @@
 
   const UI = window.DOPAMINA_UI || {};
 
-  /** Fallback em cadeia: primária → backup do mapa → esmaece */
+  /** Fallback em cadeia: local → primária → backup do mapa */
   function productImgOnerror(p) {
     if (!p || !p.id) {
       var fb0 = (p && p.imageFallback) || '';
@@ -49,11 +49,14 @@
       return "if(!this.dataset.tried){this.dataset.tried=1;this.src='" + fb0.replace(/'/g, '%27') + "'}else{this.style.opacity=0.35}";
     }
     var fb = (p.imageFallback || '').replace(/'/g, '%27');
+    var fb2 = (p.imageAltFallback || '').replace(/'/g, '%27');
     var pid = String(p.id).replace(/'/g, '');
-    return "if(this.dataset.tried==='2'){this.style.opacity=0.35}else if(this.dataset.tried==='1'){this.dataset.tried=2;" +
+    return "if(this.dataset.tried==='2'){" + (fb2 ? "this.src='" + fb2 + "';this.dataset.tried=3;" : 'this.style.opacity=0.35;') +
+      "}else if(this.dataset.tried==='3'){this.style.opacity=0.35;" +
+      "}else if(this.dataset.tried==='1'){this.dataset.tried=2;" +
       (fb ? "this.src='" + fb + "';" : 'this.style.opacity=0.35;') +
       "}else{this.dataset.tried=1;var m=window.DOPAMINA_PHOTOS&&window.DOPAMINA_PHOTOS.map&&window.DOPAMINA_PHOTOS.map['" + pid + "'];" +
-      "if(m&&m.backup&&this.src!==m.backup)this.src=m.backup;else if('" + fb + "')this.src='" + fb + "';else this.style.opacity=0.35;}";
+      "if(m&&m.primary)this.src=m.primary;else if('" + fb + "')this.src='" + fb + "';else this.style.opacity=0.35;}";
   }
 
   function AUTH() {
@@ -2190,7 +2193,7 @@
       ? '<span class="toast-dopa">Rush Mercadopamina: ' + dopaminaPct + '%</span>'
       : '';
     var coinsLine = reward && reward.coins
-      ? '<span class="toast-coins">🪙 +' + reward.coins + ' moedas</span>'
+      ? '<span class="toast-coins">🪙 +' + reward.coins + ' na sacola</span>'
       : '';
     var reactionLine = reward && reward.reaction
       ? '<span class="toast-reaction">' + reward.reaction + '</span>'
@@ -2983,9 +2986,6 @@
     }
 
     updateCouponBadge();
-    if (window.DOPAMINA_REWARDS && DOPAMINA_REWARDS.updateCoinDisplay) {
-      DOPAMINA_REWARDS.updateCoinDisplay();
-    }
     syncHeaderHeight();
     window.addEventListener('resize', syncHeaderHeight);
     if (!window._dopaminaBannerIv) {

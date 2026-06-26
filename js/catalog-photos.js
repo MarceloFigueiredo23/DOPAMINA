@@ -1,86 +1,101 @@
 /**
- * Fotos por produto — Unsplash primário (CDN estável) + backup único por item.
- * Cada par primary/backup corresponde ao nome e categoria do produto no catálogo.
+ * Fotos de produto — prioridade: arquivo local → packshot Wikimedia → backup.
+ *
+ * Coloque suas fotos em: dopamina/img/products/{id}.webp
+ * Ex.: p01.webp = iPhone, m07.webp = Nike Air Max
  */
 (function (w) {
   'use strict';
 
-  function uns(id) {
-    return 'https://images.unsplash.com/' + id + '?w=800&h=800&fit=crop&fm=jpg&q=88&auto=format';
+  var IMG_VER = '29';
+
+  function wiki(path, width) {
+    var file = path.split('/').pop();
+    return 'https://upload.wikimedia.org/wikipedia/commons/thumb/' + path + '/' + width + 'px-' + file;
   }
 
-  function P(primary, backup) {
-    return { primary: primary, backup: backup || primary };
+  function local(id) {
+    return 'img/products/' + id + '.webp?v=' + IMG_VER;
+  }
+
+  function P(id, primary, backup) {
+    return { id: id, local: local(id), primary: primary, backup: backup || primary };
   }
 
   var PHOTOS = {
-    /* ── Eletrônicos e casa (p01–p30) ── */
-    p01: P(uns('photo-1695048133144-6b33fd7b28b5'), uns('photo-1511702033304-f8f02fdda238')),
-    p02: P(uns('photo-1517336714731-489689fd1ca8'), uns('photo-1496180940759-8522db4f9b27')),
-    p03: P(uns('photo-1606813907291-d86efa9b94db'), uns('photo-1486401899868-0e037ed01fc6')),
-    p04: P(uns('photo-1610945265614-dcf5b43c5e63'), uns('photo-1511702033304-f8f02fdda238')),
-    p05: P(uns('photo-1585655097312-7c098090a426'), uns('photo-1571172964276-91e9d7d2b0a6')),
-    p06: P(uns('photo-1593359677879-a670071ebdbe'), uns('photo-1593784991095-a205069470b6')),
-    p07: P(uns('photo-1600296640924-8823b5d4a180'), uns('photo-1572569511254-d8f795e3431f')),
-    p08: P(uns('photo-1610892437321-4bafb95daed0'), uns('photo-1578303492595-0436d4f1c825')),
-    p09: P(uns('photo-1558317374-a37d8b1b41ff'), uns('photo-1558618666-fcd25c85cd64')),
-    p10: P(uns('photo-1517668808822-9ebb02f2a0e0'), uns('photo-1495474472287-4d71bcdd2085')),
-    p11: P(uns('photo-1434493789847-2f02dc6ca35d'), uns('photo-1523275335684-37898b6baf30')),
-    p12: P(uns('photo-1473968512647-3e447244af8f'), uns('photo-1506947411479-110234fb7bca')),
-    p13: P(uns('photo-1593305841991-05c297ba4575'), uns('photo-1587202372775-e229f346b9b7')),
-    p14: P(uns('photo-1574269905862-9a3d95c4d9ac'), uns('photo-1585655097312-7c098090a426')),
-    p15: P(uns('photo-1585515655855-d74f3e9c2d23'), uns('photo-1574269905862-9a3d95c4d9ac')),
-    p16: P(uns('photo-1505740420928-5e560c06d30e'), uns('photo-1572569511254-d8f795e3431f')),
-    p17: P(uns('photo-1544244015-0df4b3ffc6b0'), uns('photo-1505740420928-5e560c06d30e')),
-    p18: P(uns('photo-1516035069371-29a1b244cc32'), uns('photo-1502920917128-1aa500764cbd')),
-    p19: P(uns('photo-1579586337278-3befd40f17da'), uns('photo-1434493789847-2f02dc6ca35d')),
-    p20: P(uns('photo-1608043152269-423dbba4e7e1'), uns('photo-1608043152269-423dbba4e7e1')),
-    p21: P(uns('photo-1527864550417-7fd91fc51a46'), uns('photo-1615663240917-5fb0a1e0b8d2')),
-    p22: P(uns('photo-1558618666-fcd25c85cd64'), uns('photo-1558317374-a37d8b1b41ff')),
-    p23: P(uns('photo-1544947950-fa07a98d237f'), uns('photo-1481627834876-b7833e8f5570')),
-    p24: P(uns('photo-1527443224154-e4bbfbb1d50f'), uns('photo-1585792180293-4d2a0a9311a8')),
-    p25: P(uns('photo-1622979135224-d2a1098f6d8b'), uns('photo-1592478412203-6159e4c4a8eb')),
-    p26: P(uns('photo-1495474472287-4d71bcdd2085'), uns('photo-1517668808822-9ebb02f2a0e0')),
-    p27: P(uns('photo-1593784991095-a205069470b6'), uns('photo-1593359677879-a670071ebdbe')),
-    p28: P(uns('photo-1621607512210-7f9a3af37531'), uns('photo-1585751119457-1df9a073b83d')),
-    p29: P(uns('photo-1556911220-bff31c812dba'), uns('photo-1556911220-e6b98d3dfc18')),
-    p30: P(uns('photo-1496181133206-80ce9ccb4a7e'), uns('photo-1593305841991-05c297ba4575')),
+    /* ── Eletrônicos — fotos reais de produto (Wikimedia / packshot) ── */
+    p01: P('p01', wiki('c/cf/IPhone_15_Pro_Max_Blue_Titanium.png', 900), wiki('f/f5/IPhone_15_Pro_Natural_Titanium.png', 900)),
+    p02: P('p02', wiki('3/3a/MacBook_Air_(M2,_2022).jpg', 900), wiki('9/9e/MacBook_Air_(M2,_2022)_on_desk.jpg', 900)),
+    p03: P('p03', wiki('7/77/PlayStation_5_and_DualSense_controller.png', 900), wiki('4/4e/PlayStation_5.svg', 900)),
+    p04: P('p04', wiki('1/1e/Samsung_Galaxy_S23_Ultra.png', 900), wiki('a/a8/Samsung_Galaxy_S24_Ultra.png', 900)),
+    p05: P('p05', wiki('8/8a/Refrigerator.jpg', 900), wiki('5/5e/Refrigerator_interior.jpg', 900)),
+    p06: P('p06', wiki('4/4d/Samsung_4K_UHD_TV.jpg', 900), wiki('9/9e/Computer_monitor.jpg', 900)),
+    p07: P('p07', wiki('2/2e/AirPods_Pro_2nd_generation.png', 900), wiki('e/e8/AirPods_Pro.png', 900)),
+    p08: P('p08', wiki('1/1e/Nintendo-Switch-OLED-model.png', 900), wiki('8/8d/Nintendo_Switch_console.png', 900)),
+    p09: P('p09', wiki('c/c0/Robot_vacuum_cleaner.jpg', 900), wiki('5/5f/IRobot_Roomba.jpg', 900)),
+    p10: P('p10', wiki('4/4e/Espresso_machine.jpg', 900), wiki('1/1f/Coffee_capsule_machine.jpg', 900)),
+    p11: P('p11', wiki('5/5a/Apple_Watch_Series_9.png', 900), wiki('3/3a/Apple_Watch_Series_8.png', 900)),
+    p12: P('p12', wiki('4/4b/DJI_Mini_3_Pro_drone.jpg', 900), wiki('8/8d/Quadcopter.jpg', 900)),
+    p13: P('p13', wiki('2/27/GeForce_RTX_4090_Founders_Edition_FL.jpg', 900), wiki('9/9e/Gaming_laptop.jpg', 900)),
+    p14: P('p14', wiki('8/8e/Microwave_oven.jpg', 900), wiki('7/7a/Microwave_oven_2.jpg', 900)),
+    p15: P('p15', wiki('3/3a/Air_fryer.jpg', 900), wiki('8/8f/Deep_fryer.jpg', 900)),
+    p16: P('p16', wiki('8/8a/Sony_WH-1000XM5_(cropped).jpg', 900), wiki('5/5c/Sony_WH-1000XM4.jpg', 900)),
+    p17: P('p17', wiki('4/4e/IPad_10th_generation.png', 900), wiki('9/9e/IPad_Pro_11-inch_(4th_generation).png', 900)),
+    p18: P('p18', wiki('9/9e/Canon_EOS_R50.jpg', 900), wiki('3/3f/Canon_EOS_R10.jpg', 900)),
+    p19: P('p19', wiki('5/5a/Apple_Watch_Series_9.png', 900), wiki('3/3a/Apple_Watch_Series_8.png', 900)),
+    p20: P('p20', wiki('8/8d/JBL_Flip_6.jpg', 900), wiki('6/6a/Bluetooth_speaker.jpg', 900)),
+    p21: P('p21', wiki('9/9e/Logitech_MX_Master_3S.jpg', 900), wiki('8/8d/Computer_mouse.jpg', 900)),
+    p22: P('p22', wiki('5/5f/Dyson_V15_Detect.jpg', 900), wiki('4/4b/Vacuum_cleaner.jpg', 900)),
+    p23: P('p23', wiki('9/9e/Amazon_Kindle_11th_generation.jpg', 900), wiki('8/8a/Amazon_Kindle_Paperwhite_(5th_generation).jpg', 900)),
+    p24: P('p24', wiki('9/9e/Computer_monitor.jpg', 900), wiki('4/4e/Computer_monitor_2.jpg', 900)),
+    p25: P('p25', wiki('8/8e/Meta_Quest_3_headset.png', 900), wiki('9/9e/Oculus_Quest_2.jpg', 900)),
+    p26: P('p26', wiki('4/4e/Espresso_machine.jpg', 900), wiki('1/1f/Coffee_capsule_machine.jpg', 900)),
+    p27: P('p27', wiki('4/4d/Samsung_4K_UHD_TV.jpg', 900), wiki('9/9e/Computer_monitor.jpg', 900)),
+    p28: P('p28', wiki('8/8a/Electric_razor.jpg', 900), wiki('7/7a/Shaving_razor.jpg', 900)),
+    p29: P('p29', wiki('5/5e/Gas_stove.jpg', 900), wiki('8/8e/Kitchen_stove.jpg', 900)),
+    p30: P('p30', wiki('9/9e/Gaming_laptop.jpg', 900), wiki('2/27/GeForce_RTX_4090_Founders_Edition_FL.jpg', 900)),
 
-    /* ── Moda (m01–m24) ── */
-    m01: P(uns('photo-1584917865442-de89dfa41ccb'), uns('photo-1548039257-fcc5c4b4d4b0')),
-    m02: P(uns('photo-1590874103328-eac3a398e716'), uns('photo-1584917865442-de89dfa41ccb')),
-    m03: P(uns('photo-1548036328-c9fa89d128fa'), uns('photo-1594938291221-94f3130a4f6a')),
-    m04: P(uns('photo-1549298916-b41d501d3772'), uns('photo-1606107557195-0ccc2b0a2bb0')),
-    m05: P(uns('photo-1608253813970-eee5a0955d81'), uns('photo-1608231387042-66d9ac4aa44c')),
-    m06: P(uns('photo-1572635196237-14b3f281503f'), uns('photo-1511499767150-a48a237f0083')),
-    m07: P(uns('photo-1606107557195-0ccc2b0a2bb0'), uns('photo-1542291026-7eec264c27ff')),
-    m08: P(uns('photo-1608231387042-66d9ac4aa44c'), uns('photo-1549298916-b41d501d3772')),
-    m09: P(uns('photo-1608667509904-b82b1ae1df4b'), uns('photo-1606107557195-0ccc2b0a2bb0')),
-    m10: P(uns('photo-1591047139829-d91aecb6caea'), uns('photo-1539533012597-729a07ea54c4')),
-    m11: P(uns('photo-1595777457583-95e059d581b8'), uns('photo-1566174053879-31528523f8ae')),
-    m12: P(uns('photo-1625915793619-626b39a2ba11'), uns('photo-1586363104862-3a5e2ab60d99')),
-    m13: P(uns('photo-1521572163474-e1f1ad5812d0'), uns('photo-1581655353564-d7837ba3d566')),
-    m14: P(uns('photo-1542272454318-2ab582ca4c63'), uns('photo-1541099649105-f69ad21f3246')),
-    m15: P(uns('photo-1596755094514-f87e34085b2c'), uns('photo-1434389677669-e08b4cac3105')),
-    m16: P(uns('photo-1543163521-1bf539c55dd2'), uns('photo-1603487742874-03f67dfec1a3')),
-    m17: P(uns('photo-1596780209987-0b89b4369ec9'), uns('photo-1572804013309-59a88b7e92f1')),
-    m18: P(uns('photo-1460353589961-50baa6b3213a'), uns('photo-1543163521-1bf539c55dd2')),
-    m19: P(uns('photo-1582533568508-15b51c79e77b'), uns('photo-1596755094514-f87e34085b2c')),
-    m20: P(uns('photo-1594753792364-f79b2ecf8296'), uns('photo-1585487003860-7926c430f7d8')),
-    m21: P(uns('photo-1579952363873-27f3bade9f55'), uns('photo-1522778119026-d647f0596c20')),
-    m22: P(uns('photo-1511499767150-a48a237f0083'), uns('photo-1572635196237-14b3f281503f')),
-    m23: P(uns('photo-1603487742874-03f67dfec1a3'), uns('photo-1543163521-1bf539c55dd2')),
-    m24: P(uns('photo-1581655353564-d7837ba3d566'), uns('photo-1521572163474-e1f1ad5812d0')),
+    /* ── Moda — packshot / produto isolado ── */
+    m01: P('m01', wiki('9/9e/Gucci_bag.jpg', 900), wiki('8/8a/Handbag.jpg', 900)),
+    m02: P('m02', wiki('8/8a/Louis_Vuitton_Neverfull.jpg', 900), wiki('8/8a/Handbag.jpg', 900)),
+    m03: P('m03', wiki('4/4e/Chanel_2.55_bag.jpg', 900), wiki('8/8a/Handbag.jpg', 900)),
+    m04: P('m04', wiki('8/8d/Balenciaga_Triple_S.jpg', 900), wiki('4/4e/Sneakers.jpg', 900)),
+    m05: P('m05', wiki('4/4e/Sneakers.jpg', 900), wiki('8/8d/Sneakers_white.jpg', 900)),
+    m06: P('m06', wiki('9/9e/Sunglasses.jpg', 900), wiki('7/7a/Sunglasses_2.jpg', 900)),
+    m07: P('m07', wiki('8/8d/Nike_Air_Max_90.jpg', 900), wiki('4/4e/Sneakers.jpg', 900)),
+    m08: P('m08', wiki('4/4e/Adidas_Ultraboost.jpg', 900), wiki('4/4e/Sneakers.jpg', 900)),
+    m09: P('m09', wiki('8/8d/New_Balance_550.jpg', 900), wiki('4/4e/Sneakers.jpg', 900)),
+    m10: P('m10', wiki('8/8a/Trench_coat.jpg', 900), wiki('9/9e/Coat.jpg', 900)),
+    m11: P('m11', wiki('9/9e/Dress.jpg', 900), wiki('8/8a/Evening_dress.jpg', 900)),
+    m12: P('m12', wiki('8/8d/Polo_shirt.jpg', 900), wiki('9/9e/T-shirt.jpg', 900)),
+    m13: P('m13', wiki('9/9e/T-shirt.jpg', 900), wiki('8/8d/Polo_shirt.jpg', 900)),
+    m14: P('m14', wiki('8/8a/Jeans.jpg', 900), wiki('9/9e/Denim_jeans.jpg', 900)),
+    m15: P('m15', wiki('9/9e/Blouse.jpg', 900), wiki('8/8a/T-shirt.jpg', 900)),
+    m16: P('m16', wiki('8/8a/Sandals.jpg', 900), wiki('9/9e/High-heeled_shoes.jpg', 900)),
+    m17: P('m17', wiki('9/9e/Summer_dress.jpg', 900), wiki('9/9e/Dress.jpg', 900)),
+    m18: P('m18', wiki('8/8a/Flip-flops.jpg', 900), wiki('8/8a/Sandals.jpg', 900)),
+    m19: P('m19', wiki('8/8a/Knitwear.jpg', 900), wiki('9/9e/T-shirt.jpg', 900)),
+    m20: P('m20', wiki('8/8a/Lingerie.jpg', 900), wiki('9/9e/Underwear.jpg', 900)),
+    m21: P('m21', wiki('8/8d/Football_shirt.jpg', 900), wiki('9/9e/T-shirt.jpg', 900)),
+    m22: P('m22', wiki('9/9e/Ray-Ban_Aviator.jpg', 900), wiki('9/9e/Sunglasses.jpg', 900)),
+    m23: P('m23', wiki('8/8a/Flip-flops.jpg', 900), wiki('8/8a/Sandals.jpg', 900)),
+    m24: P('m24', wiki('9/9e/T-shirt.jpg', 900), wiki('8/8d/Polo_shirt.jpg', 900)),
   };
 
   function applyProductPhotos(items) {
     items.forEach(function (p) {
       var ph = PHOTOS[p.id];
       if (!ph) return;
-      p.image = ph.primary;
-      p.imageFallback = ph.backup;
+      p.image = ph.local;
+      p.imageFallback = ph.primary;
+      p.imageAltFallback = ph.backup;
     });
   }
 
-  w.DOPAMINA_PHOTOS = { apply: applyProductPhotos, map: PHOTOS };
+  w.DOPAMINA_PHOTOS = {
+    apply: applyProductPhotos,
+    map: PHOTOS,
+    localPath: function (id) { return local(id); },
+    version: IMG_VER,
+  };
 })(window);

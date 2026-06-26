@@ -1,10 +1,9 @@
 /**
- * Mercadopamina — moedas, sons, reações e efeitos ao adicionar ao carrinho.
+ * Mercadopamina — efeitos visuais e sons ao adicionar ao carrinho / checkout.
  */
 (function (w) {
   'use strict';
 
-  var KEY = 'dopamina_coins';
   var SOUND_KEY = 'dopamina_sound_on';
   var audioCtx = null;
 
@@ -84,21 +83,6 @@
     playTone(180 + Math.random() * 40, 120, 0.04, 0.03, 'square');
   }
 
-  function loadCoins() {
-    return parseInt(localStorage.getItem(KEY) || '0', 10) || 0;
-  }
-
-  function saveCoins(n) {
-    localStorage.setItem(KEY, String(Math.max(0, n)));
-    updateCoinDisplay();
-  }
-
-  function addCoins(amount) {
-    var total = loadCoins() + Math.max(0, amount);
-    saveCoins(total);
-    return total;
-  }
-
   function coinsForProduct(p) {
     if (!p) return 3;
     var price = p.price || 10;
@@ -118,7 +102,7 @@
 
   function burstCoords(evt) {
     if (evt && evt.clientX) return { x: evt.clientX, y: evt.clientY };
-    var cart = document.querySelector('[data-view="cart"]') || document.querySelector('.site-header-cart');
+    var cart = document.querySelector('[data-view="cart"]');
     if (cart) {
       var r = cart.getBoundingClientRect();
       return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
@@ -181,7 +165,7 @@
     }
     var pop = document.createElement('span');
     pop.className = 'fx-coin-pop';
-    pop.textContent = '+' + amount + ' moedas';
+    pop.textContent = '+' + amount;
     pop.style.left = x + 'px';
     pop.style.top = (y - 28) + 'px';
     layer.appendChild(pop);
@@ -190,15 +174,15 @@
 
   function spawnCheckoutRain() {
     var layer = getFxLayer();
-    var w = window.innerWidth;
-    var count = Math.min(28, Math.max(14, Math.floor(w / 40)));
+    var wW = window.innerWidth;
+    var count = Math.min(28, Math.max(14, Math.floor(wW / 40)));
     var i;
     for (i = 0; i < count; i++) {
       (function (idx) {
         var coin = document.createElement('span');
         coin.className = 'fx-coin-rain';
         coin.textContent = '🪙';
-        coin.style.left = (Math.random() * w) + 'px';
+        coin.style.left = (Math.random() * wW) + 'px';
         coin.style.top = (-20 - Math.random() * 80) + 'px';
         coin.style.setProperty('--rain-dy', (window.innerHeight + 80 + Math.random() * 120) + 'px');
         coin.style.setProperty('--rain-dx', ((Math.random() - 0.5) * 60) + 'px');
@@ -226,49 +210,15 @@
     }
   }
 
-  function flyToHeader(x, y) {
-    var target = document.getElementById('header-coins');
-    if (!target) return;
-    var layer = getFxLayer();
-    var tr = target.getBoundingClientRect();
-    var fly = document.createElement('span');
-    fly.className = 'fx-coin-fly';
-    fly.textContent = '🪙';
-    fly.style.left = x + 'px';
-    fly.style.top = y + 'px';
-    fly.style.setProperty('--tx', (tr.left + tr.width / 2 - x) + 'px');
-    fly.style.setProperty('--ty', (tr.top + tr.height / 2 - y) + 'px');
-    layer.appendChild(fly);
-    fly.addEventListener('animationend', function () {
-      fly.remove();
-      target.classList.add('coin-pulse');
-      setTimeout(function () { target.classList.remove('coin-pulse'); }, 500);
-    });
-  }
-
-  function updateCoinDisplay() {
-    var n = loadCoins();
-    var txt = n.toLocaleString('pt-BR');
-    ['header-coins-val', 'promo-hub-coins'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = txt;
-    });
-    var wrap = document.getElementById('header-coins');
-    if (wrap) wrap.hidden = false;
-  }
-
   function onAddToCart(p, dopaPct, evt) {
     unlockAudio();
     var coins = coinsForProduct(p);
-    var total = addCoins(coins);
     var c = burstCoords(evt);
     spawnFallingCoins(c.x, c.y, coins);
     spawnCoinBurst(c.x, c.y, coins);
-    flyToHeader(c.x, c.y);
     if (dopaPct >= 50) spawnSparkle(c.x, c.y);
     return {
       coins: coins,
-      total: total,
       reaction: pickReaction(p, dopaPct),
       savings: p && p.oldPrice && p.oldPrice > p.price ? p.oldPrice - p.price : 0,
     };
@@ -302,15 +252,11 @@
   bindAudioUnlock();
 
   w.DOPAMINA_REWARDS = {
-    loadCoins: loadCoins,
-    addCoins: addCoins,
     coinsForProduct: coinsForProduct,
     pickReaction: pickReaction,
-    spawnCoinBurst: spawnCoinBurst,
     spawnFallingCoins: spawnFallingCoins,
     spawnCheckoutRain: spawnCheckoutRain,
     spawnSparkle: spawnSparkle,
-    updateCoinDisplay: updateCoinDisplay,
     onAddToCart: onAddToCart,
     onCheckoutComplete: onCheckoutComplete,
     onRouletteWin: onRouletteWin,

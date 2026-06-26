@@ -118,31 +118,6 @@
   100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.35); }
 }
 
-.header-coins {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: #f57f17;
-  background: linear-gradient(135deg, #fff8e1, #ffecb3);
-  border: 2px solid #ffc107;
-  padding: 6px 12px;
-  border-radius: 999px;
-  transition: transform 0.2s;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.25);
-}
-
-.header-coins.coin-pulse {
-  animation: coin-pulse 0.45s ease;
-}
-
-@keyframes coin-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.14); box-shadow: 0 0 16px rgba(255, 193, 7, 0.55); }
-}
-
 .promo-hub {
   margin: 0 0 20px;
   padding: 0 4px;
@@ -322,34 +297,12 @@ body.theme-mercadopamina .roulette-pointer {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-@media (max-width: 767px) {
-  .header-coins {
-    font-size: 0.72rem;
-    padding: 5px 8px;
-  }
-
-  .site-header-inner .header-coins {
-    order: 2;
-    margin-left: auto;
-  }
-
+@media (max-width: 720px) {
   .promo-hub-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .fx-coin-fall {
     font-size: 1.35rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .site-header-inner .header-coins {
-    margin-right: 8px;
-  }
-}
-
-@media (max-width: 720px) {
-  .promo-hub-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 }

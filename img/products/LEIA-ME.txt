@@ -1,0 +1,38 @@
+COMO MELHORAR AS FOTOS DO CATÁLOGO
+==================================
+
+O app tenta primeiro carregar: img/products/{ID}.webp
+Se não existir, usa foto de produto da Wikimedia. Se falhar, usa backup.
+
+IDs dos produtos (veja js/catalog-data.js):
+  p01–p30 = eletrônicos, casa, games
+  m01–m24 = moda (roupas, calçados, acessórios)
+
+PASSO A PASSO
+-------------
+1. Salve cada foto com o ID exato:
+   Ex.: p01.webp = iPhone | m07.webp = Nike Air Max | m22.webp = Ray-Ban
+
+2. Formato recomendado:
+   - WebP ou JPG
+   - 1000×1000 px (quadrado)
+   - Fundo branco ou cinza claro (estilo Mercado Livre / Amazon)
+   - Produto centralizado, sem texto na imagem
+
+3. Onde pegar fotos boas (demo / uso pessoal):
+   - Site oficial da marca (área de imprensa / media kit)
+   - Print da página do produto no ML, Amazon ou magazine
+   - Wikimedia Commons (já usamos como fallback automático)
+
+4. Me envie de um destes jeitos:
+   a) Pasta zipada com os arquivos nomeados (p01.webp, m01.webp…)
+   b) Links diretos das imagens (1 link por produto)
+   c) Planilha: id | nome | url_da_foto
+   d) “Quero melhorar só moda” ou “só eletrônicos” — priorizo esses
+
+5. Para ROUPAS ficarem nível e-commerce:
+   - Foto do item sozinho (flat lay ou manequim fundo branco)
+   - Mesma cor do produto no catálogo
+   - Evitar foto genérica de modelo na rua (parece stock)
+
+Depois de colocar os arquivos aqui, rode PUBLICAR.bat ou peça para publicar.
