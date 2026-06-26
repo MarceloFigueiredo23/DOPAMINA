@@ -1007,13 +1007,13 @@
     var tabChromeViews = ['shop', 'cart', 'profile'];
     var showAifoodChrome = currentTab === 'express' && tabChromeViews.indexOf(view) >= 0;
     var showShenimChrome = currentTab === 'fashion' && tabChromeViews.indexOf(view) >= 0;
-    var showMainHeader = !showAifoodChrome && !showShenimChrome;
     var mainH = $('#main-header');
     var ifoodNav = $('#ifood-bottom-nav');
     var shenimNav = $('#shenim-bottom-nav');
-    if (mainH) mainH.hidden = !showMainHeader;
+    if (mainH) mainH.hidden = false;
     if (ifoodNav) ifoodNav.hidden = !showAifoodChrome;
     if (shenimNav) shenimNav.hidden = !showShenimChrome;
+    document.body.classList.add('has-dopamina-header');
     document.body.classList.toggle('has-ifood-nav', showAifoodChrome);
     document.body.classList.toggle('has-shenim-nav', showShenimChrome);
     document.body.classList.toggle(

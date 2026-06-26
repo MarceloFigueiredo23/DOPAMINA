@@ -4,6 +4,7 @@
  */
 
 :root {
+  --dopamina-header-h: 68px;
   --dopa-bg: #0b0b0f;
   --dopa-bg-2: #101018;
   --dopa-surface: #13131a;
@@ -114,7 +115,50 @@ h3 {
   color: var(--dopa-muted);
 }
 
-/* ── Header glass iOS ── */
+/* ── Header glass iOS — sempre visível em todas as lojas ── */
+#main-header.header {
+  position: sticky;
+  top: 0;
+  z-index: 500 !important;
+  background: var(--dopa-glass) !important;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--dopa-border) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+body.theme-express #main-header.header,
+body.theme-premium #main-header.header,
+body.theme-fashion #main-header.header,
+body.flow-checkout #main-header.header {
+  background: var(--dopa-glass) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border-bottom: 1px solid var(--dopa-border) !important;
+}
+
+body.theme-express #main-header .nav-link,
+body.theme-premium #main-header .nav-link,
+body.theme-fashion #main-header .nav-link {
+  color: var(--dopa-muted) !important;
+}
+
+body.theme-express #main-header .nav-link:hover,
+body.theme-express #main-header .nav-link.active,
+body.theme-premium #main-header .nav-link:hover,
+body.theme-premium #main-header .nav-link.active,
+body.theme-fashion #main-header .nav-link:hover,
+body.theme-fashion #main-header .nav-link.active {
+  color: var(--dopa-text) !important;
+  background: var(--dopa-surface-2) !important;
+}
+
+body.theme-express #main-header .wallet-fintech .wallet-value,
+body.theme-premium #main-header .wallet-fintech .wallet-value,
+body.theme-fashion #main-header .wallet-fintech .wallet-value {
+  color: var(--dopa-neon) !important;
+}
+
 .header {
   background: var(--dopa-glass) !important;
   backdrop-filter: blur(16px) saturate(180%);
@@ -216,6 +260,9 @@ h3 {
   border-bottom: 1px solid var(--dopa-border);
   border-radius: var(--dopa-radius) var(--dopa-radius) 0 0;
   overflow: hidden;
+  position: sticky;
+  top: var(--dopamina-header-h, 68px);
+  z-index: 90;
 }
 
 .shop-hub-tab {
@@ -715,16 +762,19 @@ input:focus,
 }
 
 @media (max-width: 640px) {
-  .wallet-fintech { min-width: 120px; padding: 8px 12px; }
-  .wallet-fintech .wallet-value { font-size: 0.9rem; }
-  .header-inner { gap: 12px; }
+  :root { --dopamina-header-h: 120px; }
+  .wallet-fintech { min-width: 100px; padding: 6px 10px; }
+  .wallet-fintech .wallet-value { font-size: 0.75rem; }
+  .wallet-card-hint { display: none; }
+  .header-inner { gap: 8px; padding: 10px 12px; }
+  #main-header .coupon-badge { font-size: 0.65rem; padding: 4px 8px; }
 }
 
 /* ── MVP: pedidos, banner, demo ── */
 .active-order-banner {
   position: sticky;
-  top: 56px;
-  z-index: 500;
+  top: var(--dopamina-header-h, 68px);
+  z-index: 480;
   padding: 10px 16px 0;
   margin-bottom: 4px;
 }
