@@ -762,6 +762,12 @@
     return '🚚 Em trânsito · ' + Math.round(p * 100) + '% · ' + formatRemaining(getOrderDeliveryEnd(order) - Date.now());
   }
 
+  function shouldShowActiveOrderBanner() {
+    if (currentView === 'profile') return true;
+    if (document.body.classList.contains('cart-drawer-open')) return true;
+    return false;
+  }
+
   function updateActiveOrderBanner() {
     var banner = $('#active-order-banner');
     var titleEl = $('#active-order-banner-title');
@@ -771,7 +777,8 @@
     var active = getActiveOrder();
     if (!banner) return;
 
-    document.body.classList.toggle('has-active-order', !!active);
+    var showBanner = !!active && shouldShowActiveOrderBanner();
+    document.body.classList.toggle('has-active-order', showBanner);
 
     if (!active) {
       banner.hidden = true;
@@ -789,18 +796,21 @@
     if (metaEl) metaEl.textContent = meta;
     if (fillEl) fillEl.style.width = Math.max(4, pct) + '%';
 
-    banner.hidden = false;
+    banner.hidden = !showBanner;
     banner.dataset.orderId = active.id;
 
     if (profileBox) {
-      profileBox.hidden = false;
-      profileBox.innerHTML =
-        '<button type="button" class="active-order-profile-btn" data-order-id="' + active.id + '">' +
-        '<span>📦 Acompanhe sua entrega</span>' +
-        '<strong>' + title + '</strong>' +
-        '<span>' + meta + '</span>' +
-        '<span class="active-order-profile-progress"><span style="width:' + Math.max(4, pct) + '%"></span></span>' +
-        '<span>Rastrear pedido →</span></button>';
+      var showProfile = currentView === 'profile';
+      profileBox.hidden = !showProfile;
+      if (showProfile) {
+        profileBox.innerHTML =
+          '<button type="button" class="active-order-profile-btn" data-order-id="' + active.id + '">' +
+          '<span>📦 Acompanhe sua entrega</span>' +
+          '<strong>' + title + '</strong>' +
+          '<span>' + meta + '</span>' +
+          '<span class="active-order-profile-progress"><span style="width:' + Math.max(4, pct) + '%"></span></span>' +
+          '<span>Rastrear pedido →</span></button>';
+      }
     }
   }
 
@@ -1568,11 +1578,13 @@
     document.body.classList.add('cart-drawer-open');
     document.body.style.overflow = 'hidden';
     renderCart();
+    updateActiveOrderBanner();
   }
 
   function closeCartDrawer() {
     document.body.classList.remove('cart-drawer-open');
     document.body.style.overflow = '';
+    updateActiveOrderBanner();
     var overlay = $('#cart-drawer-overlay');
     var drawer = $('#cart-drawer');
     setTimeout(function () {
