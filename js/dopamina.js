@@ -65,12 +65,14 @@
         '<p>DOPAMINA SHOP (experiência piloto). Contato: canal definido pelo operador do projeto.</p>' +
         '<h3>Dados coletados no cadastro</h3>' +
         '<ul><li>Nome, e-mail, cidade (opcional) e senha simulada (local)</li><li>Pedidos simulados e preferências de navegação</li></ul>' +
+        '<h3>Notificações de envio (opt-in)</h3>' +
+        '<p>Se você autorizar, podemos enviar e-mails simulados sobre o status do pedido (confirmação, saída para entrega e entrega concluída). Você pode desativar a qualquer momento na conta.</p>' +
         '<h3>Camada 2 — dados agregados e anônimos (opt-in)</h3>' +
         '<p>Se você autorizar, registramos eventos como troca de loja, itens adicionados à sacola e faixas de valor — <strong>sem</strong> enviar nome, e-mail ou endereço nos eventos do piloto.</p>' +
         '<h3>Camada futura — identificáveis</h3>' +
         '<p>Compartilhamento com dados que permitam identificação exigirá consentimento específico, ainda não disponível nesta versão.</p>' +
         '<h3>Seus direitos</h3>' +
-        '<p>Você pode revogar marketing e dados agregados na conta, ou excluir todos os dados com &quot;Excluir conta&quot;.</p>' +
+        '<p>Você pode revogar notificações de envio e dados agregados na conta, ou excluir todos os dados com &quot;Excluir conta&quot;.</p>' +
         '<h3>Retenção</h3>' +
         '<p>Nesta versão piloto, os dados permanecem no dispositivo até exclusão manual. Futuras versões poderão sincronizar na nuvem com aviso prévio.</p>',
     },
@@ -1917,7 +1919,7 @@
         if (!A.updateConsents) return;
         if (e.target.id === 'toggle-marketing') {
           A.updateConsents({ marketing: e.target.checked });
-          flashToast(e.target.checked ? 'Marketing ativado' : 'Marketing desativado');
+          flashToast(e.target.checked ? 'Notificações de envio ativadas' : 'Notificações de envio desativadas');
         }
         if (e.target.id === 'toggle-aggregated') {
           A.updateConsents({ aggregatedData: e.target.checked });

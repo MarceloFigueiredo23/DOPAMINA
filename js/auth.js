@@ -35,6 +35,7 @@
         marketing: {
           accepted: !!data.marketing,
           at: data.marketing ? now : null,
+          purpose: 'shipping_notifications',
         },
         aggregatedData: {
           accepted: !!data.aggregatedData,
