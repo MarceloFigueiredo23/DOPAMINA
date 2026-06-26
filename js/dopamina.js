@@ -542,7 +542,6 @@
     if (end <= start) return 1;
     return Math.min(1, Math.max(0, (Date.now() - start) / (end - start)));
   }
-  }
 
   function formatRemaining(ms) {
     if (ms <= 0) return '✅ Entrega concluída';
