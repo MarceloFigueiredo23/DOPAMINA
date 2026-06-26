@@ -1077,6 +1077,10 @@
         '<button type="button" class="aifood-addr-chip">📍 ' + (UI.ADDR || 'Rua Augusta, 1200') + ' <span class="aifood-chevron">›</span></button>' +
         '<button type="button" class="aifood-top-cart nav-link" data-view="cart">🛒 <span id="aifood-cart-count" class="cart-count"' + cartHidden + '>' + loadCart().reduce(function (s, i) { return s + i.qty; }, 0) + '</span></button>' +
         '</div></div>' +
+        '<div class="aifood-subnav store-subnav">' +
+        '<a href="#">Restaurantes</a><a href="#">Mercados</a><a href="#">Bebidas</a>' +
+        '<a href="#" data-action-link="roulette">Cupons</a><a href="#">Promoções</a><a href="#">Favoritos</a>' +
+        '</div>' +
         '<div class="aifood-greeting-row">' +
         '<div><strong>' + (UI.getGreeting ? UI.getGreeting() : 'Olá!') + '</strong>' +
         '<small>📍 ' + (UI.ADDR || 'Sua região') + '</small></div>' +
@@ -1096,7 +1100,7 @@
         '<div class="amazon-search-bar"><input type="search" placeholder="Buscar na AMAZOOM" id="shop-search" /><button type="button">🔍</button></div>' +
         '<button type="button" class="amazoom-cart nav-link" data-view="cart">🛒 <span id="amazoom-cart-count" class="cart-count"' + (loadCart().length ? '' : ' hidden') + '>' + loadCart().reduce(function (s, i) { return s + i.qty; }, 0) + '</span></button>' +
         '</div></div>' +
-        '<div class="amazoom-subnav">' +
+        '<div class="amazoom-subnav store-subnav">' +
         '<a href="#">☰ Todos</a><a href="#">Ofertas do Dia</a><a href="#">Prime</a>' +
         '<a href="#" data-action-link="roulette">Cupons</a><a href="#">Mais Vendidos</a><a href="#">Eletrônicos</a>' +
         '</div>';
@@ -1117,6 +1121,10 @@
         '<button type="button" class="shenim-cart-btn nav-link" data-view="cart">🛒</button></div>' +
         '<div class="shenim-search-wrap"><span>🔍</span><input type="search" id="shop-search" placeholder="Buscar moda, tendências, looks…" value="' + (ifoodSearch || '') + '" /></div>' +
         '<div class="shenim-chips">' + shenimChips + '</div>' +
+        '<div class="shenim-subnav store-subnav">' +
+        '<a href="#">Novidades</a><a href="#">Sale</a><a href="#">Feminino</a>' +
+        '<a href="#" data-action-link="roulette">Cupons</a><a href="#">Tendências</a><a href="#">Mais vendidos</a>' +
+        '</div>' +
         '</div>';
     }
 

@@ -319,6 +319,47 @@
 
 .amazoom-subnav a:hover { text-decoration: underline; }
 
+/* Faixa secundária — paridade nas 3 lojas */
+.store-subnav,
+.aifood-subnav,
+.shenim-subnav {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 8px 20px;
+  font-size: 0.8rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.store-subnav::-webkit-scrollbar,
+.aifood-subnav::-webkit-scrollbar,
+.shenim-subnav::-webkit-scrollbar { display: none; }
+
+.store-subnav a,
+.aifood-subnav a,
+.shenim-subnav a {
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0.92;
+  font-weight: 500;
+}
+
+.store-subnav a:hover,
+.aifood-subnav a:hover,
+.shenim-subnav a:hover { text-decoration: underline; opacity: 1; }
+
+.aifood-subnav {
+  background: #c41623;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.shenim-subnav {
+  background: #1a1a24;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .amazoom-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

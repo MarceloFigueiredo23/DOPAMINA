@@ -4,15 +4,15 @@
 (function (w) {
   'use strict';
 
-  /* AIFOOD — ícone vermelho + garfo-personagem (paródia delivery) */
+  /* AIFOOD — sacola delivery + garfo (paródia iFood) */
   var LOGO_AIFOOD =
     '<svg class="brand-mark brand-mark--aifood" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">' +
-    '<defs><linearGradient id="afMarkBg" x1="4" y1="4" x2="44" y2="44"><stop offset="0%" stop-color="#ff4757"/><stop offset="100%" stop-color="#c41623"/></linearGradient></defs>' +
-    '<rect x="2" y="2" width="44" height="44" rx="13" fill="url(#afMarkBg)"/>' +
-    '<circle cx="24" cy="14.5" r="5.5" fill="#fff"/>' +
-    '<path d="M18.5 22 C18.5 18.5 29.5 18.5 29.5 22 L30.5 33 C30.5 35 17.5 35 17.5 33 Z" fill="#fff"/>' +
-    '<path d="M19 22 L17 38 M22 22 L22 38 M26 22 L26 38 M29 22 L31 38" stroke="#ea1d2c" stroke-width="2.4" stroke-linecap="round"/>' +
-    '<path d="M16 12.5 Q24 9 32 12.5" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.5"/>' +
+    '<defs><linearGradient id="afMarkBg" x1="6" y1="4" x2="42" y2="44"><stop offset="0%" stop-color="#ff5c6a"/><stop offset="100%" stop-color="#c41623"/></linearGradient></defs>' +
+    '<rect x="2" y="2" width="44" height="44" rx="14" fill="url(#afMarkBg)"/>' +
+    '<path d="M14 18 C14 14 34 14 34 18 L32 34 C32 37 16 37 16 34 Z" fill="#fff" opacity="0.95"/>' +
+    '<path d="M18 18 L16.5 36 M22 18 L22 35 M26 18 L26 35 M30 18 L31.5 36" stroke="#ea1d2c" stroke-width="2.2" stroke-linecap="round"/>' +
+    '<circle cx="24" cy="12" r="4.5" fill="#fff"/>' +
+    '<path d="M19 10.5 Q24 7.5 29 10.5" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>' +
     '</svg>';
 
   /* AMAZOOM — caixa escura + "a" + sorriso laranja (paródia marketplace) */
@@ -26,15 +26,16 @@
     '<path d="M38 22 L44 24" stroke="#ffcc66" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>' +
     '</svg>';
 
-  /* SHENIM — badge preto + cabide + SHE/NIM (paródia fast fashion) */
+  /* SHENIM — cabide fashion + tipografia SHE/NIM */
   var LOGO_SHENIM =
     '<svg class="brand-mark brand-mark--shenim" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">' +
-    '<rect x="2" y="2" width="44" height="44" rx="4" fill="#0a0a0a"/>' +
-    '<path d="M17 9 C17 6 31 6 31 9 V12" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
-    '<path d="M13 12 H35" stroke="#fff" stroke-width="2" stroke-linecap="round"/>' +
-    '<text x="24" y="27" text-anchor="middle" fill="#fff" font-size="9.5" font-weight="900" font-family="Arial Black, Arial, sans-serif">SHE</text>' +
-    '<text x="24" y="38" text-anchor="middle" fill="#ff2d6a" font-size="9.5" font-weight="900" font-family="Arial Black, Arial, sans-serif">NIM</text>' +
-    '<path d="M5 18 L9 16 L7 20 Z" fill="#ff2d6a"/><path d="M43 14 L39 16 L41 12 Z" fill="#ff2d6a"/>' +
+    '<defs><linearGradient id="shMarkBg" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#1a1a22"/><stop offset="100%" stop-color="#050508"/></linearGradient></defs>' +
+    '<rect x="2" y="2" width="44" height="44" rx="6" fill="url(#shMarkBg)" stroke="#333" stroke-width="1"/>' +
+    '<path d="M16 10 C16 7 32 7 32 10 V13" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>' +
+    '<path d="M12 13 H36" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>' +
+    '<text x="24" y="28" text-anchor="middle" fill="#fff" font-size="10" font-weight="900" font-family="Arial Black, Arial, sans-serif">SHE</text>' +
+    '<text x="24" y="39" text-anchor="middle" fill="#ff2d6a" font-size="10" font-weight="900" font-family="Arial Black, Arial, sans-serif">NIM</text>' +
+    '<circle cx="8" cy="18" r="2" fill="#ff2d6a"/><circle cx="40" cy="16" r="2" fill="#ff2d6a"/>' +
     '</svg>';
 
   /* DOPAMINA SHOP — monograma premium */
