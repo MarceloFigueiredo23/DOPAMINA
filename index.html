@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Dopamina — delivery e marketplace com experiência completa de compra." />
+  <meta name="description" content="DOPAMINA SHOP — marketplace paródia com delivery, moda e tudo. Compra simulada, zero cobrança real." />
   <meta name="theme-color" content="#0B0B0F" />
-  <title>Dopamina</title>
+  <title>DOPAMINA SHOP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/interactive.css" />
   <link rel="stylesheet" href="css/readability.css" />
   <link rel="stylesheet" href="css/brand.css" />
+  <link rel="stylesheet" href="css/brands.css" />
 </head>
 <body>
   <div id="toast" class="toast" aria-live="polite"></div>
@@ -47,8 +48,8 @@
   <header class="header" id="main-header">
     <div class="header-inner">
       <a href="#" class="logo nav-link" data-view="shop">
-        <span class="logo-icon">⚡</span>
-        <span class="logo-text">DOPAMINA</span>
+        <span class="logo-icon" id="site-logo-mark" aria-hidden="true"></span>
+        <span class="logo-text">DOPAMINA<small>SHOP</small></span>
       </a>
       <nav class="nav">
         <a href="#" class="nav-link active" data-view="shop">Início</a>
@@ -178,7 +179,8 @@
   </main>
 
   <footer class="footer">
-    <p>Dopamina © 2026 · Experiência demonstrativa — nenhuma cobrança real é processada.</p>
+    <p><strong>DOPAMINA SHOP</strong> © 2026 · Experiência demonstrativa — nenhuma cobrança real.</p>
+    <p class="brand-disclaimer">AIFOOD, AMAZOOM e SHENIM são marcas fictícias de paródia, sem vínculo com iFood, Amazon, SHEIN ou outras empresas.</p>
   </footer>
 
   <nav class="ifood-bottom-nav" id="ifood-bottom-nav" hidden>
@@ -199,6 +201,7 @@
 
   <script src="js/catalog-data.js"></script>
   <script src="js/ifood-data.js"></script>
+  <script src="js/brands.js"></script>
   <script src="js/realism.js"></script>
   <script src="js/interactive.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

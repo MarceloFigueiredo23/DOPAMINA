@@ -1,0 +1,161 @@
+/* Marcas paródia — lockups caricatos por segmento */
+
+.brand-mark {
+  flex-shrink: 0;
+  display: block;
+}
+
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-lockup--sm .brand-mark {
+  width: 28px;
+  height: 28px;
+}
+
+.brand-lockup--sm .brand-wordmark {
+  font-size: 0.95rem;
+}
+
+/* Wordmarks */
+.brand-wordmark {
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.brand-wordmark--aifood {
+  font-size: 1.35rem;
+  color: #fff;
+}
+
+.brand-wordmark--aifood .bw-ai {
+  font-weight: 400;
+  opacity: 0.95;
+}
+
+.brand-wordmark--aifood .bw-rest {
+  font-weight: 900;
+}
+
+.brand-wordmark--amazoom {
+  font-size: 1.35rem;
+  color: #fff;
+  letter-spacing: -0.06em;
+}
+
+.brand-wordmark--amazoom .bw-o {
+  color: #ff9900;
+}
+
+.brand-wordmark--shenim {
+  font-size: 1.4rem;
+  color: #fff;
+  letter-spacing: 0.02em;
+  font-family: 'Arial Black', 'Plus Jakarta Sans', sans-serif;
+}
+
+.brand-wordmark--shenim .bw-accent {
+  color: #ff2d6a;
+}
+
+/* Header principal DOPAMINA SHOP */
+.logo {
+  gap: 10px !important;
+}
+
+.logo .brand-mark--dopamina {
+  width: 36px;
+  height: 36px;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.05;
+  -webkit-text-fill-color: initial !important;
+  background: none !important;
+  color: var(--dopa-text, #f4f4f8) !important;
+  font-size: 1rem !important;
+  letter-spacing: 0.14em !important;
+}
+
+.logo-text small {
+  font-size: 0.55em;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  color: var(--dopa-accent, #ff2d95);
+  margin-top: 2px;
+}
+
+/* Hub tabs com logo */
+.shop-hub-tab {
+  display: inline-flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px 9px !important;
+}
+
+.shop-hub-tab .brand-mark {
+  width: 26px;
+  height: 26px;
+  opacity: 0.65;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.shop-hub-tab.active .brand-mark,
+.shop-hub-tab:hover .brand-mark {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.shop-hub-tab span.hub-tab-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+}
+
+/* Tops das lojas */
+.aifood-top-row .brand-lockup,
+.amazoom-top-inner .brand-lockup,
+.shenim-top-row .brand-lockup {
+  flex-shrink: 0;
+}
+
+.aifood-top-bar .brand-lockup {
+  flex: 0 0 auto;
+}
+
+.amazoom-top-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.amazoom-top-inner .brand-lockup {
+  margin-right: 4px;
+}
+
+.shenim-top-row {
+  align-items: center;
+}
+
+.order-type-badge--express { background: rgba(234, 29, 44, 0.2); color: #ff6b6b; }
+.order-type-badge--premium { background: rgba(255, 153, 0, 0.2); color: #ff9900; }
+.order-type-badge--fashion { background: rgba(255, 45, 149, 0.2); color: #ff2d95; }
+
+.brand-disclaimer {
+  font-size: 0.68rem;
+  color: var(--dopa-muted, #9b9bb0);
+  margin-top: 8px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.4;
+}

@@ -865,11 +865,22 @@
   }
 
   var TAB_LABELS = { express: 'AIFOOD', premium: 'AMAZOOM', fashion: 'SHENIM' };
+  var BRANDS = function () { return window.DOPAMINA_BRANDS || {}; };
+
+  function brandLockup(tab, size) {
+    var B = BRANDS();
+    if (B.lockup) return B.lockup(tab, size);
+    return '<span>' + (TAB_LABELS[tab] || tab) + '</span>';
+  }
 
   function renderHubTabs() {
+    var B = BRANDS();
     return '<div class="shop-hub"><div class="shop-hub-tabs">' +
       ['express', 'premium', 'fashion'].map(function (tab) {
-        return '<button type="button" class="shop-hub-tab shop-hub-tab--' + tab + (currentTab === tab ? ' active' : '') + '" data-tab="' + tab + '">' + TAB_LABELS[tab] + '</button>';
+        var b = B[tab] || {};
+        var mark = b.logoMark || '';
+        return '<button type="button" class="shop-hub-tab shop-hub-tab--' + tab + (currentTab === tab ? ' active' : '') + '" data-tab="' + tab + '">' +
+          mark + '<span class="hub-tab-label">' + TAB_LABELS[tab] + '</span></button>';
       }).join('') +
       '</div></div>';
   }
@@ -973,7 +984,7 @@
         '<div class="aifood-shell">' +
         '<div class="aifood-top-bar">' +
         '<div class="aifood-top-row">' +
-        '<span class="aifood-logo">AI<span>FOOD</span></span>' +
+        brandLockup('express') +
         '<button type="button" class="aifood-addr-chip">📍 ' + (UI.ADDR || 'Rua Augusta, 1200') + ' <span class="aifood-chevron">›</span></button>' +
         '<button type="button" class="aifood-top-cart nav-link" data-view="cart">🛒 <span id="aifood-cart-count" class="cart-count"' + cartHidden + '>' + loadCart().reduce(function (s, i) { return s + i.qty; }, 0) + '</span></button>' +
         '</div></div>' +
@@ -991,7 +1002,7 @@
     } else if (currentTab === 'premium') {
       zone.innerHTML = hub +
         '<div class="amazoom-top"><div class="amazoom-top-inner">' +
-        '<div class="amazoom-logo">AMAZ<span>OOM</span></div>' +
+        brandLockup('premium') +
         '<div class="amazoom-loc">📍 Enviar para <strong>' + (UI.USER_NAME || 'Você') + '</strong> · Campinas</div>' +
         '<div class="amazon-search-bar"><input type="search" placeholder="Buscar na AMAZOOM" id="shop-search" /><button type="button">🔍</button></div>' +
         '<button type="button" class="amazoom-cart nav-link" data-view="cart">🛒 <span id="amazoom-cart-count" class="cart-count"' + (loadCart().length ? '' : ' hidden') + '>' + loadCart().reduce(function (s, i) { return s + i.qty; }, 0) + '</span></button>' +
@@ -1013,7 +1024,7 @@
 
       zone.innerHTML = hub +
         '<div class="shenim-top">' +
-        '<div class="shenim-top-row"><div class="shenim-logo">SHE<span>NIM</span></div>' +
+        '<div class="shenim-top-row">' + brandLockup('fashion') +
         '<button type="button" class="shenim-cart-btn nav-link" data-view="cart">🛒</button></div>' +
         '<div class="shenim-search-wrap"><span>🔍</span><input type="search" id="shop-search" placeholder="Buscar moda, tendências, looks…" value="' + (ifoodSearch || '') + '" /></div>' +
         '<div class="shenim-chips">' + shenimChips + '</div>' +
@@ -1442,7 +1453,7 @@
         '<article class="order-card' + (delivered ? ' order-card--done' : ' order-card--active') + '">' +
         '<div class="order-card-head">' +
         '<strong>' + o.id + '</strong>' +
-        '<span class="order-type-badge">' + getOrderTypeLabel(o.type) + '</span>' +
+        '<span class="order-type-badge order-type-badge--' + o.type + '">' + getOrderTypeLabel(o.type) + '</span>' +
         '</div>' +
         '<p class="order-card-meta">' + date + ' · ' + formatBRL(o.total) + '</p>' +
         '<p class="order-card-status">' + getOrderStatusLabel(o) + '</p>' +
@@ -1695,6 +1706,9 @@
 
   function runInit() {
     ensureUnlimitedWallet();
+    var siteLogo = $('#site-logo-mark');
+    var B = BRANDS().site;
+    if (siteLogo && B && B.logoMark) siteLogo.innerHTML = B.logoMark;
     updateHeader();
     applyShopTheme();
     bindGlobalUI();
