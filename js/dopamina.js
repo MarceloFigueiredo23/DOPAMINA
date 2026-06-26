@@ -1162,13 +1162,191 @@
     return s;
   }
 
+  function discountPct(p) {
+    if (!p || !p.oldPrice || p.oldPrice <= p.price) return 0;
+    return Math.round((1 - p.price / p.oldPrice) * 100);
+  }
+
+  function formatSoldCount(n) {
+    if (!n) return '';
+    if (n >= 10000) return Math.round(n / 1000) + ' mil vendidos';
+    if (n >= 1000) return (n / 1000).toFixed(1).replace('.0', '') + ' mil vendidos';
+    return n + ' vendidos';
+  }
+
+  function productUrgencyHtml(p) {
+    if (p.reviews >= 8000) return '<span class="deal-urgency deal-urgency--hot">Voando! Restam poucas</span>';
+    if (p.reviews >= 4000) return '<span class="deal-urgency">Mais vendido</span>';
+    if (p.tag) return '<span class="deal-badge-inline">' + p.tag + '</span>';
+    return '';
+  }
+
+  function productFreteHtml(p) {
+    if ((p.price && p.price >= 99) || p.prime) {
+      return '<span class="deal-frete deal-frete--free">Frete grátis</span>';
+    }
+    return '<span class="deal-frete">Frete a calcular</span>';
+  }
+
+  function productSoldMetaHtml(p) {
+    return '<div class="product-sold-meta"><span class="star">' + starsHtml(p.rating) + '</span> ' +
+      p.rating + ' <span class="sold-sep">|</span> ' + formatSoldCount(p.reviews) + '</div>';
+  }
+
+  function getFlashDeals(items, limit) {
+    return items.slice().sort(function (a, b) {
+      var da = discountPct(a);
+      var db = discountPct(b);
+      if (db !== da) return db - da;
+      return (b.reviews || 0) - (a.reviews || 0);
+    }).slice(0, limit || 10);
+  }
+
+  function flashDealsHtml(items) {
+    if (!items.length) return '';
+    var cards = items.map(function (p) {
+      var pct = discountPct(p);
+      var badge = pct > 0
+        ? '<span class="flash-deal-pct">−' + pct + '%</span>'
+        : '<span class="flash-deal-pct flash-deal-pct--tag">' + (p.tag || 'HOT') + '</span>';
+      return '<article class="flash-deal-card" data-open="' + p.id + '">' +
+        badge +
+        '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=300&h=300&fit=crop\'" />' +
+        '<h4>' + p.name + '</h4>' +
+        '<div class="flash-deal-price"><strong>' + formatBRL(p.price) + '</strong>' +
+        (p.oldPrice ? '<s>' + formatBRL(p.oldPrice) + '</s>' : '') + '</div>' +
+        '<span class="deal-urgency deal-urgency--hot">Voando! Restam poucas</span>' +
+        '<button type="button" class="flash-deal-add" data-add="' + p.id + '">Adicionar</button>' +
+        '</article>';
+    }).join('');
+    return '<section class="flash-deals-block" aria-label="Ofertas relâmpago">' +
+      '<div class="flash-deals-head"><h3>Ofertas Relâmpago</h3>' +
+      '<p class="flash-deals-sub">Termina em <span data-countdown="flash">02:47:59</span></p></div>' +
+      '<div class="flash-deals-scroll">' + cards + '</div></section>';
+  }
+
+  function shopInfiniteLoaderHtml() {
+    return '<div class="shop-infinite-loader" data-infinite-loader>' +
+      '<span class="shop-infinite-spinner"></span> Carregando mais produtos…</div>';
+  }
+
+  function bindProductGridActions(grid) {
+    bindPromoArea(grid);
+    grid.querySelectorAll('[data-add]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        addToCart(btn.dataset.add);
+      });
+    });
+    grid.querySelectorAll('[data-open]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        if (e.target.closest('[data-add]')) return;
+        openProductModal(el.dataset.open);
+      });
+    });
+    bindInfiniteLoader(grid);
+  }
+
+  function bindInfiniteLoader(root) {
+    var loader = root && root.querySelector('[data-infinite-loader]');
+    if (!loader || loader.dataset.done) return;
+    loader.dataset.done = '1';
+    setTimeout(function () {
+      loader.innerHTML = '<span class="shop-infinite-done">✓ Você viu as ofertas em destaque — continue explorando!</span>';
+    }, 2600);
+  }
+
+  function renderAmazonCard(p) {
+    var pct = discountPct(p);
+    return '<article class="amazon-card deal-card-rich" data-open="' + p.id + '">' +
+      '<div class="deal-card-img-wrap">' +
+      (pct > 0 ? '<span class="deal-pct-badge">−' + pct + '%</span>' : '') +
+      (p.prime ? '<span class="amazon-prime">prime</span>' : '') +
+      '<img class="amazon-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&h=600&fit=crop\'" />' +
+      '</div>' +
+      productBrandHtml(p) +
+      '<h3>' + p.name + '</h3>' +
+      productSoldMetaHtml(p) +
+      productUrgencyHtml(p) +
+      '<div class="amazon-price-block"><div class="amazon-price">' + formatBRL(p.price) + '</div>' +
+      (p.oldPrice ? '<div class="amazon-old-price">De: ' + formatBRL(p.oldPrice) + '</div>' : '') + '</div>' +
+      productFreteHtml(p) +
+      '<button type="button" class="amazon-add-btn" data-add="' + p.id + '">Adicionar ao carrinho</button></article>';
+  }
+
+  function renderShenimCard(p) {
+    var pct = discountPct(p);
+    return '<article class="shenim-card deal-card-rich" data-open="' + p.id + '">' +
+      '<div class="shenim-card-img-wrap deal-card-img-wrap">' +
+      (pct > 0 ? '<span class="deal-pct-badge shenim-sale">−' + pct + '%</span>' : '') +
+      brandTierBadge(p.brandTier) +
+      '<img class="shenim-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&h=800&fit=crop\'" /></div>' +
+      productBrandHtml(p) +
+      '<h3>' + p.name + '</h3>' +
+      '<p class="shenim-card-meta">' + (p.color || '') + (p.material ? ' · ' + p.material : '') + '</p>' +
+      productSoldMetaHtml(p) +
+      productUrgencyHtml(p) +
+      '<div class="shenim-price-row"><span class="shenim-price">' + formatBRL(p.price) + '</span>' +
+      (p.oldPrice ? '<span class="shenim-old">' + formatBRL(p.oldPrice) + '</span>' : '') + '</div>' +
+      productFreteHtml(p) +
+      '<button type="button" class="shenim-add-btn" data-add="' + p.id + '">Adicionar</button></article>';
+  }
+
+  function calcDopaminaLevel(cart) {
+    if (!cart.length) {
+      return {
+        pct: 0,
+        label: 'Cérebro em repouso. Adicione algo para liberar dopamina! 🧠',
+      };
+    }
+    var sub = cartTotal(cart);
+    var items = cart.reduce(function (s, i) { return s + i.qty; }, 0);
+    var pct = Math.min(100, Math.round(Math.sqrt(sub / 100) * 7 + items * 5));
+    var label;
+    if (pct < 20) label = 'Pequena dose começando… ✨';
+    else if (pct < 45) label = 'Prazer da compra ativado 🛒';
+    else if (pct < 70) label = 'Rush de dopamina subindo! 🔥';
+    else if (pct < 90) label = 'Quase no pico — finalize o checkout! 🚀';
+    else label = 'DOPAMINA MÁXIMA — libere no checkout! 💥';
+    return { pct: pct, label: label };
+  }
+
+  function renderDopaminaMeter() {
+    var el = $('#dopamina-meter');
+    if (!el) return;
+    var cart = loadCart();
+    var level = calcDopaminaLevel(cart);
+    el.innerHTML =
+      '<div class="dopamina-meter-head"><span>🧠 Nível de Dopamina Simulado</span><strong>' + level.pct + '%</strong></div>' +
+      '<div class="dopamina-meter-bar"><div class="dopamina-meter-fill" style="width:' + level.pct + '%"></div></div>' +
+      '<p class="dopamina-meter-label">' + level.label + '</p>';
+  }
+
+  function pulseCartIcon() {
+    var badge = $('#cart-count');
+    if (badge) {
+      badge.classList.remove('cart-pulse');
+      void badge.offsetWidth;
+      badge.classList.add('cart-pulse');
+    }
+    $$('.nav-link[data-view="cart"]').forEach(function (link) {
+      link.classList.remove('cart-pulse');
+      void link.offsetWidth;
+      link.classList.add('cart-pulse');
+    });
+  }
+
   function syncHeaderHeight() {
+    var ticker = $('#promo-ticker');
+    var tickerH = ticker ? ticker.getBoundingClientRect().height : 0;
+    document.documentElement.style.setProperty('--promo-ticker-h', Math.ceil(tickerH) + 'px');
     var el = $('#main-header');
     if (!el) return;
     el.removeAttribute('hidden');
     document.body.classList.add('has-dopamina-header');
     var h = el.getBoundingClientRect().height;
     document.documentElement.style.setProperty('--dopamina-header-h', Math.ceil(h) + 'px');
+    document.documentElement.style.setProperty('--dopamina-chrome-h', (Math.ceil(h) + Math.ceil(tickerH)) + 'px');
   }
 
   function updateAppChrome(view) {
@@ -1329,6 +1507,9 @@
     var catLabel = (IFOOD.categories || []).find(function (c) { return c.id === ifoodCategory; });
     var title = ifoodCategory === 'all' ? 'Restaurantes perto de você' : (catLabel ? catLabel.label : 'Restaurantes');
     var extras = '';
+    if (UI.therapyHero) extras += UI.therapyHero('express');
+    var expressDeals = CATALOG.express || [];
+    if (expressDeals.length) extras += flashDealsHtml(getFlashDeals(expressDeals, 8));
     if (UI.aifoodHero) extras += UI.aifoodHero();
     if (UI.aifoodMicroPromo) extras += UI.aifoodMicroPromo();
     if (UI.stampsBar) extras += UI.stampsBar();
@@ -1336,8 +1517,9 @@
     if (UI.carouselHtml) extras += UI.carouselHtml();
     grid.innerHTML = extras +
       '<h2 class="ifood-section-title">' + title + ' <span class="ifood-count">' + list.length + ' lojas</span></h2>' +
-      '<div class="ifood-rest-list">' + list.map(renderRestaurantCard).join('') + '</div>';
-    bindPromoArea(grid);
+      '<div class="ifood-rest-list">' + list.map(renderRestaurantCard).join('') + '</div>' +
+      shopInfiniteLoaderHtml();
+    bindProductGridActions(grid);
     grid.querySelectorAll('[data-restaurant]').forEach(function (el) {
       el.addEventListener('click', function () { ifoodRestaurantId = el.dataset.restaurant; ifoodRestaurantTab = 'menu'; renderShop(); window.scrollTo(0, 0); });
     });
@@ -1378,47 +1560,28 @@
       });
     }
     grid.className = 'shenim-home';
-    var heroBlock = (UI.shenimHero ? UI.shenimHero() : '') + (UI.shenimCategories ? UI.shenimCategories() : '');
+    var therapy = UI.therapyHero ? UI.therapyHero('fashion') : '';
+    var heroBlock = therapy + (UI.shenimHero ? UI.shenimHero() : '') + (UI.shenimCategories ? UI.shenimCategories() : '');
+    var flashBlock = flashDealsHtml(getFlashDeals(items, 10));
     var gridInner = items.map(function (p) {
-      var pct = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;
-      return '<article class="shenim-card" data-open="' + p.id + '">' +
-        '<div class="shenim-card-img-wrap">' +
-        (pct > 0 ? '<span class="shenim-sale">−' + pct + '%</span>' : '') +
-        brandTierBadge(p.brandTier) +
-        '<img class="shenim-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&h=800&fit=crop\'" /></div>' +
-        productBrandHtml(p) +
-        '<h3>' + p.name + '</h3>' +
-        '<p class="shenim-card-meta">' + (p.color || '') + (p.material ? ' · ' + p.material : '') + '</p>' +
-        '<div class="shenim-stars"><span class="star">' + starsHtml(p.rating) + '</span> <span>(' + p.reviews + ')</span></div>' +
-        '<div class="shenim-price-row"><span class="shenim-price">' + formatBRL(p.price) + '</span>' +
-        (p.oldPrice ? '<span class="shenim-old">' + formatBRL(p.oldPrice) + '</span>' : '') + '</div>' +
-        '<button type="button" class="shenim-add-btn" data-add="' + p.id + '">Adicionar</button></article>';
+      return renderShenimCard(p);
     }).join('');
-    grid.innerHTML = heroBlock + '<div class="shenim-grid">' + gridInner + '</div>';
-    bindPromoArea(grid);
-    grid.querySelectorAll('[data-add]').forEach(function (btn) {
-      btn.addEventListener('click', function (e) { e.stopPropagation(); addToCart(btn.dataset.add); });
-    });
-    grid.querySelectorAll('[data-open]').forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        if (e.target.closest('[data-add]')) return;
-        openProductModal(el.dataset.open);
-      });
-    });
+    grid.innerHTML = heroBlock + flashBlock + '<div class="shenim-grid">' + gridInner + '</div>' + shopInfiniteLoaderHtml();
+    bindProductGridActions(grid);
   }
 
   function renderAmazonProducts() {
     var grid = $('#product-grid');
     var items = CATALOG.premium || [];
+    var therapy = UI.therapyHero ? UI.therapyHero('premium') : '';
+    var flashBlock = flashDealsHtml(getFlashDeals(items, 12));
     var homeBlocks = UI.amazoomHomeBlocks ? UI.amazoomHomeBlocks() : '';
     var cardsHtml = items.map(function (p) {
-      return '<article class="amazon-card" data-open="' + p.id + '"><img class="amazon-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&h=600&fit=crop\'" />' + (p.prime ? '<span class="amazon-prime">prime</span>' : '') + productBrandHtml(p) + '<h3>' + p.name + '</h3><div class="amazon-stars"><span class="star">' + starsHtml(p.rating) + '</span> <a href="#">' + p.reviews + ' avaliações</a></div><div class="amazon-price-block"><div class="amazon-price">' + formatBRL(p.price) + '</div>' + (p.oldPrice ? '<div class="amazon-old-price">De: ' + formatBRL(p.oldPrice) + '</div>' : '') + '</div><button type="button" class="amazon-add-btn" data-add="' + p.id + '">Adicionar ao carrinho</button></article>';
+      return renderAmazonCard(p);
     }).join('');
     grid.className = 'amazoom-home';
-    grid.innerHTML = homeBlocks + '<div class="amazon-grid">' + cardsHtml + '</div>';
-    bindPromoArea(grid);
-    grid.querySelectorAll('[data-add]').forEach(function (btn) { btn.addEventListener('click', function (e) { e.stopPropagation(); addToCart(btn.dataset.add); }); });
-    grid.querySelectorAll('[data-open]').forEach(function (el) { el.addEventListener('click', function (e) { if (e.target.closest('[data-add]')) return; openProductModal(el.dataset.open); }); });
+    grid.innerHTML = therapy + flashBlock + homeBlocks + '<div class="amazon-grid">' + cardsHtml + '</div>' + shopInfiniteLoaderHtml();
+    bindProductGridActions(grid);
   }
 
   function renderProducts() {
@@ -1565,7 +1728,9 @@
     else cart.push({ id: id, qty: 1 });
     saveCart(cart);
     updateHeader();
-    flashToast('Adicionado à sacola');
+    var level = calcDopaminaLevel(cart);
+    flashToast('Adicionado à sacola', level.pct);
+    pulseCartIcon();
     var p = getProduct(id);
     trackBehavior('add_to_cart', {
       productId: id,
@@ -1575,9 +1740,12 @@
     if (currentView === 'cart') renderCart();
   }
 
-  function flashToast(msg) {
+  function flashToast(msg, dopaminaPct) {
     const t = $('#toast');
-    t.textContent = msg;
+    var dopaLine = typeof dopaminaPct === 'number'
+      ? '<span class="toast-dopa">Dopamina simulada: ' + dopaminaPct + '%</span>'
+      : '';
+    t.innerHTML = '<strong>' + msg + '</strong>' + dopaLine;
     t.classList.add('show');
     setTimeout(function () {
       t.classList.remove('show');
@@ -1638,6 +1806,7 @@
   }
 
   function renderCart() {
+    renderDopaminaMeter();
     const cart = loadCart();
     const coupon = loadCoupon();
     const t = calcCartTotals(cart, coupon);
@@ -1646,8 +1815,9 @@
     if (!cart.length) {
       list.innerHTML =
         '<div class="empty-state">' +
-        '<p class="empty">Sua sacola está vazia.</p>' +
-        '<button type="button" class="btn btn-primary nav-link" data-view="shop">Explorar lojas</button>' +
+        '<p class="empty">Seu carrinho está vazio.</p>' +
+        '<p class="empty-sub">Que tal garantir aquela dose de dopamina agora?</p>' +
+        '<button type="button" class="btn btn-primary nav-link" data-view="shop">Explorar ofertas</button>' +
         '</div>';
       $('#cart-summary').hidden = true;
       return;

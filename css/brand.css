@@ -5,6 +5,8 @@
 
 :root {
   --dopamina-header-h: 68px;
+  --promo-ticker-h: 34px;
+  --dopamina-chrome-h: calc(var(--promo-ticker-h) + var(--dopamina-header-h));
   --dopa-bg: #0b0b0f;
   --dopa-bg-2: #101018;
   --dopa-surface: #13131a;
@@ -117,12 +119,47 @@ h3 {
 
 /* ── Header glass — FIXO em todas as lojas ── */
 body.has-dopamina-header {
-  padding-top: var(--dopamina-header-h, 72px);
+  padding-top: var(--dopamina-chrome-h, 102px);
+}
+
+/* ── Ticker promocional (referência DopaminaShop) ── */
+.promo-ticker {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 700;
+  height: var(--promo-ticker-h);
+  background: linear-gradient(90deg, #ff2d95 0%, #b026ff 50%, #7c3aed 100%);
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.promo-ticker-track {
+  display: flex;
+  gap: 48px;
+  width: max-content;
+  animation: promo-ticker-scroll 38s linear infinite;
+  padding: 8px 0;
+  white-space: nowrap;
+}
+
+.promo-ticker-track span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+@keyframes promo-ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 #main-header.header {
   position: fixed !important;
-  top: 0;
+  top: var(--promo-ticker-h, 34px);
   left: 0;
   right: 0;
   z-index: 650 !important;
@@ -1122,6 +1159,12 @@ body.flow-checkout #view-tracking h3 {
 
 .empty-state .btn { margin-top: 16px; }
 
+.empty-sub {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: var(--dopa-muted);
+}
+
 body.demo-mode .footer::after {
   content: 'Modo demo — entregas aceleradas. Use ?real=1 para prazos reais.';
   display: block;
@@ -1209,4 +1252,349 @@ body.demo-mode .footer::after {
 .summary-row.wallet-row span:last-child {
   color: var(--dopa-neon, #00ffa3);
   font-weight: 700;
+}
+
+/* ── Hero terapêutico + ofertas relâmpago ── */
+.therapy-hero {
+  margin: 0 0 16px;
+  padding: 20px 18px;
+  border-radius: var(--dopa-radius);
+  background: linear-gradient(135deg, rgba(255, 45, 149, 0.14), rgba(176, 38, 255, 0.12));
+  border: 1px solid rgba(176, 38, 255, 0.28);
+}
+
+.therapy-hero-kicker {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dopa-neon);
+  margin-bottom: 8px;
+}
+
+.therapy-hero-title {
+  font-size: clamp(1.15rem, 3.5vw, 1.55rem);
+  line-height: 1.25;
+  margin: 0 0 8px;
+  background: var(--dopa-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.therapy-hero-sub {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+  color: var(--dopa-muted);
+  line-height: 1.45;
+  max-width: 52ch;
+}
+
+.therapy-hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.therapy-hero-tags span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(0, 255, 163, 0.1);
+  border: 1px solid rgba(0, 255, 163, 0.25);
+  color: #b8ffe4;
+}
+
+.flash-deals-block {
+  margin: 0 0 18px;
+  padding: 14px 0 4px;
+}
+
+.flash-deals-head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.flash-deals-sub {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: var(--dopa-muted);
+}
+
+.flash-deals-sub .flash-countdown,
+[data-countdown] {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: #ff8ec4;
+}
+
+.flash-deals-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 12px 2px 8px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.flash-deal-card {
+  flex: 0 0 148px;
+  scroll-snap-align: start;
+  background: var(--dopa-surface);
+  border: 1px solid var(--dopa-border);
+  border-radius: 12px;
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s var(--dopa-ease), box-shadow 0.2s;
+}
+
+.flash-deal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(176, 38, 255, 0.2);
+}
+
+.flash-deal-pct {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  background: #ff2d95;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
+.flash-deal-pct--tag {
+  background: #7c3aed;
+  font-size: 0.58rem;
+  max-width: 72px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.flash-deal-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: var(--dopa-bg-2);
+}
+
+.flash-deal-card h4 {
+  font-size: 0.72rem;
+  line-height: 1.3;
+  margin: 0 0 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.flash-deal-price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.flash-deal-price strong {
+  font-size: 0.9rem;
+  color: var(--dopa-neon);
+}
+
+.flash-deal-price s {
+  font-size: 0.68rem;
+  color: var(--dopa-muted-2);
+}
+
+.flash-deal-add {
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px;
+  border: none;
+  border-radius: 8px;
+  background: var(--dopa-gradient);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.deal-card-img-wrap {
+  position: relative;
+}
+
+.deal-pct-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  background: #ff2d95;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 4px 7px;
+  border-radius: 6px;
+}
+
+.deal-urgency {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #ffb347;
+  margin: 4px 0;
+}
+
+.deal-urgency--hot {
+  color: #ff6b6b;
+  animation: urgency-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes urgency-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+.deal-badge-inline {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(176, 38, 255, 0.2);
+  color: #d9b3ff;
+  margin: 4px 0;
+}
+
+.deal-frete {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--dopa-muted);
+  margin: 4px 0 8px;
+}
+
+.deal-frete--free {
+  color: var(--dopa-neon);
+  font-weight: 700;
+}
+
+.product-sold-meta {
+  font-size: 0.72rem;
+  color: var(--dopa-muted);
+  margin: 4px 0 6px;
+}
+
+.product-sold-meta .sold-sep {
+  opacity: 0.4;
+  margin: 0 4px;
+}
+
+.shop-infinite-loader {
+  text-align: center;
+  padding: 24px 16px 32px;
+  font-size: 0.82rem;
+  color: var(--dopa-muted);
+}
+
+.shop-infinite-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--dopa-border);
+  border-top-color: var(--dopa-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.shop-infinite-done {
+  color: var(--dopa-muted-2);
+  font-size: 0.78rem;
+}
+
+/* ── Medidor de dopamina (sacola) ── */
+.dopamina-meter {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border-radius: var(--dopa-radius-sm);
+  background: linear-gradient(135deg, rgba(176, 38, 255, 0.12), rgba(255, 45, 149, 0.08));
+  border: 1px solid rgba(176, 38, 255, 0.3);
+}
+
+.dopamina-meter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  margin-bottom: 8px;
+  color: var(--dopa-muted);
+}
+
+.dopamina-meter-head strong {
+  font-size: 1.1rem;
+  color: var(--dopa-neon);
+}
+
+.dopamina-meter-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.dopamina-meter-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #b026ff, #ff2d95, #00ffa3);
+  transition: width 0.45s var(--dopa-ease);
+  box-shadow: 0 0 12px rgba(255, 45, 149, 0.45);
+}
+
+.dopamina-meter-label {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--dopa-text);
+  line-height: 1.35;
+}
+
+.toast.show {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+.toast-dopa {
+  font-size: 0.72rem;
+  color: var(--dopa-neon);
+  font-weight: 700;
+}
+
+.nav-link.cart-pulse,
+#cart-count.cart-pulse {
+  animation: cart-bounce 0.5s ease;
+}
+
+@keyframes cart-bounce {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.2); }
+  70% { transform: scale(0.95); }
+}
+
+body.theme-express .therapy-hero,
+body.theme-fashion .therapy-hero {
+  margin-left: 0;
+  margin-right: 0;
 }

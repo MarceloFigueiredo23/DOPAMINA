@@ -173,8 +173,26 @@
       '<h3>ATÉ <strong>80% OFF</strong></h3>' +
       '<p>Moda feminina, masculina e acessórios</p></div>' +
       '<button type="button" class="shenim-flash-btn" data-action="roulette">Resgatar cupons</button>' +
-      '<div class="shenim-countdown" data-countdown>02:47:33</div>' +
+      '<div class="shenim-countdown" data-countdown="shenim">02:47:33</div>' +
       '</div>'
+    );
+  }
+
+  function therapyHero(tab) {
+    var subs = {
+      express: 'Peça, acompanhe a entrega e sinta o checkout — sem gastar de verdade.',
+      premium: 'Navegue ofertas, monte o carrinho e acompanhe entregas simuladas em tempo real.',
+      fashion: 'Looks, tendências e descontos — a emoção é real, a cobrança não.',
+      default: 'Sinta a dopamina sem gastar dinheiro real. A emoção é real, a conta não.',
+    };
+    return (
+      '<section class="therapy-hero therapy-hero--' + (tab || 'default') + '">' +
+      '<span class="therapy-hero-kicker">Mega ofertas do dia</span>' +
+      '<h2 class="therapy-hero-title">Simulador de Compras para Terapia de Varejo</h2>' +
+      '<p class="therapy-hero-sub">' + (subs[tab] || subs.default) + '</p>' +
+      '<div class="therapy-hero-tags">' +
+      '<span>🚚 Frete grátis hoje</span><span>Até 60% OFF</span><span>📦 Entrega simulada</span>' +
+      '</div></section>'
     );
   }
 
@@ -259,24 +277,38 @@
     });
   }
 
-  function bindCountdown(root) {
+  function bindCountdowns(root) {
     if (!root) return;
     root.querySelectorAll('[data-countdown]').forEach(function (el) {
-      var sec = 2 * 3600 + 47 * 60 + 33;
-      setInterval(function () {
-        sec = sec > 0 ? sec - 1 : 86400;
-        var h = Math.floor(sec / 3600);
-        var m = Math.floor((sec % 3600) / 60);
-        var s = sec % 60;
-        el.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-      }, 1000);
+      if (el.dataset.cdInit) return;
+      el.dataset.cdInit = '1';
+      var key = el.getAttribute('data-countdown') || 'default';
+      var sk = 'dopamina_cd_' + key;
+      var end = sessionStorage.getItem(sk);
+      if (!end) {
+        var secs = 2 * 3600 + Math.floor(Math.random() * 3600);
+        end = String(Date.now() + secs * 1000);
+        sessionStorage.setItem(sk, end);
+      }
+      function tick() {
+        var left = Math.max(0, Math.floor((parseInt(end, 10) - Date.now()) / 1000));
+        var h = Math.floor(left / 3600);
+        var m = Math.floor((left % 3600) / 60);
+        var s = left % 60;
+        el.textContent =
+          String(h).padStart(2, '0') + ':' +
+          String(m).padStart(2, '0') + ':' +
+          String(s).padStart(2, '0');
+      }
+      tick();
+      setInterval(tick, 1000);
     });
   }
 
   function bindInteractive(root, handlers) {
     bindCarousels(root);
     bindDismiss(root);
-    bindCountdown(root);
+    bindCountdowns(root);
     if (!root || !handlers) return;
     root.querySelectorAll('[data-action="roulette"]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
@@ -318,6 +350,7 @@
     carouselHtml: function () { return carouselHtml(AIFOOD_SLIDES, 'aifood'); },
     amazoomHomeBlocks: amazoomHomeBlocks,
     shenimHero: shenimHero,
+    therapyHero: therapyHero,
     shenimCategories: shenimCategories,
     couponSheetHtml: couponSheetHtml,
     bindInteractive: bindInteractive,
