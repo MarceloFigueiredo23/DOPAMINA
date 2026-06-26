@@ -69,6 +69,14 @@
     </div>
   </header>
 
+  <div id="active-order-banner" class="active-order-banner" hidden>
+    <button type="button" class="active-order-banner-inner" id="active-order-banner-btn">
+      <span class="active-order-pulse" aria-hidden="true">📦</span>
+      <span class="active-order-banner-text" id="active-order-banner-text">Pedido em trânsito</span>
+      <span class="active-order-banner-cta">Rastrear →</span>
+    </button>
+  </div>
+
   <main class="main">
     <!-- LOJA -->
     <section id="view-shop" class="view active">
@@ -99,6 +107,7 @@
     </section>
 
     <section id="view-checkout" class="view">
+      <button type="button" class="view-back nav-link" data-view="cart">← Voltar à sacola</button>
       <h2 class="view-title">Pagamento</h2>
       <form id="checkout-form" class="checkout-form">
         <label>
@@ -145,22 +154,25 @@
       <h3 id="tracking-map-title">Rastreamento · partida Fiji</h3>
       <div id="tracking-map" class="tracking-map"></div>
 
-      <button type="button" class="btn btn-secondary" onclick="location.reload()">Fazer novo pedido</button>
+      <button type="button" class="btn btn-secondary" id="btn-new-order">Fazer novo pedido</button>
     </section>
 
     <section id="view-profile" class="view">
       <h2 class="view-title">Minha conta</h2>
+      <div id="active-order-profile" class="active-order-profile" hidden></div>
       <div class="profile-stats">
         <div class="stat-card">
           <span class="stat-value" id="profile-saved">R$ 0,00</span>
-          <span class="stat-label">Total em pedidos este mês</span>
+          <span class="stat-label">Total gasto simulado</span>
         </div>
         <div class="stat-card">
           <span class="stat-value" id="profile-orders">0</span>
           <span class="stat-label">Pedidos realizados</span>
         </div>
       </div>
-      <h3>Histórico de gastos (últimos 7 dias)</h3>
+      <h3>Meus pedidos</h3>
+      <div id="orders-list" class="orders-list"></div>
+      <h3>Gastos nos últimos 7 dias</h3>
       <div id="savings-chart" class="savings-chart"></div>
     </section>
   </main>

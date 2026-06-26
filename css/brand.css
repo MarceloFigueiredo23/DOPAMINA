@@ -719,3 +719,161 @@ input:focus,
   .wallet-fintech .wallet-value { font-size: 0.9rem; }
   .header-inner { gap: 12px; }
 }
+
+/* ── MVP: pedidos, banner, demo ── */
+.active-order-banner {
+  position: sticky;
+  top: 56px;
+  z-index: 390;
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+
+.active-order-banner-inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 255, 163, 0.35);
+  background: linear-gradient(90deg, rgba(0, 255, 163, 0.12), rgba(176, 38, 255, 0.12));
+  color: var(--dopa-text);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s var(--dopa-ease);
+}
+
+.active-order-banner-inner:hover {
+  border-color: var(--dopa-neon);
+  box-shadow: 0 0 24px rgba(0, 255, 163, 0.2);
+}
+
+.active-order-pulse {
+  animation: orderPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes orderPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.active-order-banner-text {
+  flex: 1;
+  text-align: left;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.active-order-banner-cta {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--dopa-neon);
+}
+
+.active-order-profile {
+  margin-bottom: 20px;
+}
+
+.active-order-profile-btn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--dopa-border);
+  background: var(--dopa-surface-2);
+  color: var(--dopa-text);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.active-order-profile-btn strong {
+  font-size: 0.85rem;
+  color: var(--dopa-neon);
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.order-card {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--dopa-border);
+  background: var(--dopa-surface-2);
+}
+
+.order-card--active {
+  border-color: rgba(0, 255, 163, 0.35);
+}
+
+.order-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.order-type-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--dopa-gradient-soft);
+  color: var(--dopa-accent);
+}
+
+.order-card-meta,
+.order-card-status {
+  font-size: 0.85rem;
+  color: var(--dopa-muted);
+  margin-bottom: 8px;
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.8rem;
+}
+
+.order-done-tag {
+  font-size: 0.75rem;
+  color: var(--dopa-muted);
+}
+
+.view-back {
+  display: inline-flex;
+  margin-bottom: 16px;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  color: var(--dopa-muted);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.view-back:hover { color: var(--dopa-text); }
+
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+}
+
+.empty-state .btn { margin-top: 16px; }
+
+body.demo-mode .footer::after {
+  content: 'Modo demo — entregas aceleradas. Use ?real=1 para prazos reais.';
+  display: block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--dopa-neon);
+}

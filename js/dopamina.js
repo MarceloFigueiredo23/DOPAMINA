@@ -434,6 +434,37 @@
     mixed: 5 * 24 * 60 * 60 * 1000,
   };
 
+  const DEMO_DELIVERY_MS = {
+    express: 2 * 60 * 1000,
+    premium: 5 * 60 * 1000,
+    fashion: 3 * 60 * 1000,
+    mixed: 5 * 60 * 1000,
+  };
+
+  function isDemoMode() {
+    try {
+      if (typeof URLSearchParams !== 'undefined') {
+        var p = new URLSearchParams(window.location.search);
+        if (p.get('real') === '1') {
+          localStorage.setItem('dopamina_real', '1');
+          return false;
+        }
+        if (p.get('demo') === '1') {
+          localStorage.removeItem('dopamina_real');
+          return true;
+        }
+      }
+      return localStorage.getItem('dopamina_real') !== '1';
+    } catch (e) {
+      return true;
+    }
+  }
+
+  function getDeliveryDurationMs(orderType) {
+    if (isDemoMode()) return DEMO_DELIVERY_MS[orderType] || DEMO_DELIVERY_MS.premium;
+    return DELIVERY_DURATION_MS[orderType] || DELIVERY_DURATION_MS.premium;
+  }
+
   const DELIVERY_META = {
     express: { eta: 'Previsão: até 1 hora (AIFOOD)', unit: 'hour' },
     premium: { eta: 'Previsão: 5 dias úteis (AMAZOOM)', unit: 'day' },
@@ -441,12 +472,16 @@
     mixed: { eta: 'Comida em até 1h · Produtos em 3–5 dias', unit: 'day' },
   };
 
-  function getDeliveryDurationMs(orderType) {
-    return DELIVERY_DURATION_MS[orderType] || DELIVERY_DURATION_MS.premium;
-  }
-
   function getDeliveryMeta(orderType) {
-    return DELIVERY_META[orderType] || DELIVERY_META.premium;
+    var m = DELIVERY_META[orderType] || DELIVERY_META.premium;
+    if (!isDemoMode()) return m;
+    var demoEta = {
+      express: 'Demo: entrega em ~2 min (AIFOOD)',
+      premium: 'Demo: entrega em ~5 min (AMAZOOM)',
+      fashion: 'Demo: entrega em ~3 min (SHENIM)',
+      mixed: 'Demo: entrega em ~5 min',
+    };
+    return { eta: demoEta[orderType] || demoEta.premium, unit: m.unit };
   }
 
   function getOrderDeliveryEnd(order) {
@@ -456,11 +491,57 @@
     return start + dur;
   }
 
+  function findOrderById(id) {
+    return loadOrders().find(function (o) { return o.id === id; });
+  }
+
+  function getActiveOrder() {
+    var orders = loadOrders();
+    for (var i = 0; i < orders.length; i++) {
+      if (getOrderProgress(orders[i]) < 1) return orders[i];
+    }
+    return null;
+  }
+
+  function getOrderTypeLabel(type) {
+    return { express: 'AIFOOD', premium: 'AMAZOOM', fashion: 'SHENIM', mixed: 'Misto' }[type] || 'Pedido';
+  }
+
+  function getOrderStatusLabel(order) {
+    var p = getOrderProgress(order);
+    if (p >= 1) return '✅ Entregue';
+    return '🚚 Em trânsito · ' + Math.round(p * 100) + '% · ' + formatRemaining(getOrderDeliveryEnd(order) - Date.now());
+  }
+
+  function updateActiveOrderBanner() {
+    var banner = $('#active-order-banner');
+    var text = $('#active-order-banner-text');
+  var profileBox = $('#active-order-profile');
+    var active = getActiveOrder();
+    if (!banner) return;
+    if (!active) {
+      banner.hidden = true;
+      if (profileBox) profileBox.hidden = true;
+      return;
+    }
+    var label = getOrderTypeLabel(active.type) + ' · ' + active.id + ' — ' + Math.round(getOrderProgress(active) * 100) + '%';
+    if (text) text.textContent = label;
+    banner.hidden = false;
+    banner.dataset.orderId = active.id;
+    if (profileBox) {
+      profileBox.hidden = false;
+      profileBox.innerHTML =
+        '<button type="button" class="active-order-profile-btn" data-order-id="' + active.id + '">' +
+        '<span>📦 Pedido em andamento</span><strong>' + label + '</strong><span>Rastrear →</span></button>';
+    }
+  }
+
   function getOrderProgress(order) {
     var start = new Date(order.createdAt).getTime();
     var end = getOrderDeliveryEnd(order);
     if (end <= start) return 1;
     return Math.min(1, Math.max(0, (Date.now() - start) / (end - start)));
+  }
   }
 
   function formatRemaining(ms) {
@@ -684,10 +765,14 @@
           );
         }
         if (onStatus) onStatus(mapStatusForProgress(orderType, progress, phase));
+        updateActiveOrderBanner();
       }
 
       tick();
       container._trackingIv = setInterval(tick, 1000);
+      setTimeout(function () {
+        try { map.invalidateSize(); } catch (e) { /* ignore */ }
+      }, 400);
     });
   }
 
@@ -777,6 +862,7 @@
     if (ic) { ic.textContent = count; ic.hidden = count === 0; }
     var ac = $('#amazoom-cart-count');
     if (ac) { ac.textContent = count; ac.hidden = count === 0; }
+    updateActiveOrderBanner();
   }
 
   var TAB_LABELS = { express: 'AIFOOD', premium: 'AMAZOOM', fashion: 'SHENIM' };
@@ -845,8 +931,8 @@
       'flow-checkout',
       ['cart', 'checkout', 'tracking', 'profile'].indexOf(view) >= 0
     );
-    var pd = $('#profile-dot');
-    if (pd) pd.hidden = loadOrders().length === 0;
+    document.body.classList.toggle('demo-mode', isDemoMode());
+    updateActiveOrderBanner();
   }
 
   function applyShopTheme() {
@@ -1263,7 +1349,11 @@
 
     const list = $('#cart-list');
     if (!cart.length) {
-      list.innerHTML = '<p class="empty">Sua sacola está vazia.</p>';
+      list.innerHTML =
+        '<div class="empty-state">' +
+        '<p class="empty">Sua sacola está vazia.</p>' +
+        '<button type="button" class="btn btn-primary nav-link" data-view="shop">Explorar lojas</button>' +
+        '</div>';
       $('#cart-summary').hidden = true;
       return;
     }
@@ -1336,21 +1426,51 @@
     renderCart();
   }
 
+  function renderOrdersList(orders) {
+    var box = $('#orders-list');
+    if (!box) return;
+    if (!orders.length) {
+      box.innerHTML = '<p class="empty">Nenhum pedido ainda. Faça sua primeira compra simulada!</p>';
+      return;
+    }
+    box.innerHTML = orders.map(function (o) {
+      var prog = getOrderProgress(o);
+      var delivered = prog >= 1;
+      var date = new Date(o.createdAt).toLocaleString('pt-BR', {
+        day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
+      });
+      return (
+        '<article class="order-card' + (delivered ? ' order-card--done' : ' order-card--active') + '">' +
+        '<div class="order-card-head">' +
+        '<strong>' + o.id + '</strong>' +
+        '<span class="order-type-badge">' + getOrderTypeLabel(o.type) + '</span>' +
+        '</div>' +
+        '<p class="order-card-meta">' + date + ' · ' + formatBRL(o.total) + '</p>' +
+        '<p class="order-card-status">' + getOrderStatusLabel(o) + '</p>' +
+        (!delivered
+          ? '<button type="button" class="btn btn-primary btn-sm order-track-btn" data-order-id="' + o.id + '">Acompanhar entrega</button>'
+          : '<span class="order-done-tag">Concluído</span>') +
+        '</article>'
+      );
+    }).join('');
+  }
+
   function renderProfile() {
     const savings = loadSavings();
     const orders = loadOrders();
-    const totalSaved = Object.values(savings).reduce(function (a, b) {
-      return a + b;
-    }, 0);
     const days = Object.keys(savings).sort().slice(-7);
+    const last7Total = days.reduce(function (sum, d) { return sum + (savings[d] || 0); }, 0);
 
-    $('#profile-saved').textContent = formatBRL(totalSaved);
+    $('#profile-saved').textContent = formatBRL(last7Total);
     $('#profile-orders').textContent = orders.length;
+
+    renderOrdersList(orders);
+    updateActiveOrderBanner();
 
     const chart = $('#savings-chart');
     var stampsHtml = UI.stampsBar ? UI.stampsBar() : '';
     if (!days.length) {
-      chart.innerHTML = stampsHtml + '<p class="empty">Nenhum pedido ainda. Explore o AIFOOD, AMAZOOM ou SHENIM!</p>';
+      chart.innerHTML = stampsHtml + '<p class="empty">Gráfico aparece após o primeiro pedido.</p>';
       return;
     }
 
@@ -1502,6 +1622,23 @@
 
   function bindGlobalUI() {
     document.body.addEventListener('click', function (e) {
+      var trackBtn = e.target.closest('.order-track-btn, .active-order-profile-btn, #active-order-banner-btn');
+      var bannerEl = e.target.closest('#active-order-banner');
+      if (trackBtn || bannerEl) {
+        e.preventDefault();
+        var banner = $('#active-order-banner');
+        var oid = (trackBtn && trackBtn.dataset.orderId) || (banner && banner.dataset.orderId);
+        var order = findOrderById(oid);
+        if (order) showTracking(order);
+        return;
+      }
+
+      if (e.target.closest('#btn-new-order')) {
+        e.preventDefault();
+        showView('shop');
+        return;
+      }
+
       var rouletteBtn = e.target.closest('[data-action="roulette"]');
       if (rouletteBtn && !e.target.closest('#roulette-overlay')) {
         e.preventDefault();
@@ -1587,16 +1724,17 @@
       });
     });
 
-    if (!rouletteDoneForTab('express')) {
-      rouletteTab = 'express';
-      initRoulette(function (prize) {
-        markRouletteDoneForTab('express');
-        if (prize.type !== 'none') {
-          saveCoupon(prize);
-          updateCouponBadge();
-          if (UI.addStamp) UI.addStamp(1);
-        }
-      });
+    if (!rouletteDoneForTab('express') && !sessionStorage.getItem('dopamina_roulette_hint')) {
+      sessionStorage.setItem('dopamina_roulette_hint', '1');
+      setTimeout(function () {
+        flashToast('🎰 Toque em Cupons e gire a roleta de descontos!');
+      }, 2500);
+    }
+
+    if (isDemoMode()) {
+      setTimeout(function () {
+        flashToast('⚡ Modo demo: entregas aceleradas (2–5 min)');
+      }, 1200);
     }
 
     updateCouponBadge();
