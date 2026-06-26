@@ -417,7 +417,12 @@
   }
 
   /* ── tracking.js ── */
-  const FIJI = { lat: -17.7134, lng: 178.065, label: 'Ilhas Fiji — ponto de partida' };
+  const FIJI = {
+    lat: -17.713371,
+    lng: 178.065032,
+    label: 'Fiji',
+    mapsUrl: 'https://www.google.com/maps/place/Fiji/@-17.713371,178.065032,8z',
+  };
   const BRAZIL_COAST = { lat: -23.0, lng: -43.5 };
 
   const DELIVERY_META = {
@@ -562,7 +567,7 @@
       }).addTo(map);
 
       const oceanPath = buildOceanPath(dest);
-      map.setView([FIJI.lat, FIJI.lng], 3);
+      map.setView([FIJI.lat, FIJI.lng], 6);
 
       const routeLine = L.polyline(
         oceanPath.map(function (p) {
@@ -572,10 +577,13 @@
       ).addTo(map);
 
       L.marker([FIJI.lat, FIJI.lng], { icon: makeEmojiIcon('🏝️', 32) })
-        .bindPopup(FIJI.label)
+        .bindPopup(
+          '<strong>' + FIJI.label + '</strong><br>Ponto de partida do pedido<br>' +
+          '<a href="' + FIJI.mapsUrl + '" target="_blank" rel="noopener noreferrer">Ver no Google Maps</a>'
+        )
         .addTo(map);
 
-      setStatus('🐋 Pedido saiu das Ilhas Fiji em direção ao Brasil');
+      setStatus('🐋 Pedido saiu de Fiji em direção ao Brasil');
 
       const whaleIcon = makeEmojiIcon('🐋', 44);
       const oceanLeg = oceanPath.slice(0, 7);
@@ -607,7 +615,7 @@
 
   function runExpressTracking(statusEl, onComplete) {
     const steps = [
-      { text: '🏝️ Pedido saiu das Ilhas Fiji', delay: 0 },
+      { text: '🏝️ Pedido saiu de Fiji (-17.71°, 178.07°)', delay: 0 },
       { text: 'Restaurante confirmou e está preparando', delay: 10000 },
       { text: 'Pedido em preparo — previsão até 1 hora', delay: 22000 },
       { text: 'Entregador a caminho do seu endereço', delay: 36000 },
@@ -1352,7 +1360,7 @@
     mapEl.hidden = false;
     if (mapTitle) {
       mapTitle.hidden = false;
-      mapTitle.textContent = 'Rastreamento · saída Ilhas Fiji';
+      mapTitle.textContent = 'Rastreamento · partida Fiji';
     }
     if (etaEl) etaEl.textContent = meta.eta;
 
