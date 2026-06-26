@@ -1305,21 +1305,151 @@
     var label;
     if (pct < 20) label = 'Pequena dose começando… ✨';
     else if (pct < 45) label = 'Prazer da compra ativado 🛒';
-    else if (pct < 70) label = 'Rush de dopamina subindo! 🔥';
-    else if (pct < 90) label = 'Quase no pico — finalize o checkout! 🚀';
+    else if (pct < 65) label = 'Fluxo de prazer constante! O carrinho está ficando lindo. ✨';
+    else if (pct < 85) label = 'Rush subindo — quase no pico! 🔥';
+    else if (pct < 95) label = 'Quase lá — finalize o checkout! 🚀';
     else label = 'PICO DOPSHOP — libere no checkout! 💥';
     return { pct: pct, label: label };
   }
 
-  function renderDopaminaMeter() {
-    var el = $('#dopamina-meter');
-    if (!el) return;
-    var cart = loadCart();
-    var level = calcDopaminaLevel(cart);
-    el.innerHTML =
-      '<div class="dopamina-meter-head"><span>🧠 Rush de compra no DopShop</span><strong>' + level.pct + '%</strong></div>' +
+  function dopaminaMeterHtml(level) {
+    return '<div class="dopamina-meter-head"><span>🧠 Nível de Dopamina Simulado</span><strong>' + level.pct + '%</strong></div>' +
       '<div class="dopamina-meter-bar"><div class="dopamina-meter-fill" style="width:' + level.pct + '%"></div></div>' +
       '<p class="dopamina-meter-label">' + level.label + '</p>';
+  }
+
+  function renderDopaminaMeter() {
+    var cart = loadCart();
+    var level = calcDopaminaLevel(cart);
+    var html = dopaminaMeterHtml(level);
+    ['dopamina-meter', 'dopamina-meter-drawer'].forEach(function (id) {
+      var el = $('#' + id);
+      if (el) el.innerHTML = html;
+    });
+  }
+
+  function cartItemMetaLine(p) {
+    var parts = [];
+    if (p.color) parts.push('Cor: ' + p.color);
+    if (p.sizes && p.sizes.length) parts.push('Tam: ' + p.sizes[0]);
+    if (p.material && parts.length < 2) parts.push(p.material);
+    if (p.portion) parts.push(p.portion);
+    if (p.shop && isExpress(p.id)) parts.push(p.shop);
+    return parts.join(' · ');
+  }
+
+  function renderCartDrawerItem(item) {
+    var p = getProduct(item.id);
+    if (!p) return '';
+    var meta = cartItemMetaLine(p);
+    return '<article class="cart-drawer-item">' +
+      '<img class="cart-drawer-item-img" src="' + (p.image || '') + '" alt="" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop\'" />' +
+      '<div class="cart-drawer-item-body">' +
+      '<strong>' + p.name + '</strong>' +
+      (meta ? '<span class="cart-drawer-item-meta">' + meta + '</span>' : '') +
+      '<span class="cart-drawer-item-price">' + formatBRL(p.price) + '</span>' +
+      '<div class="cart-drawer-item-actions">' +
+      '<div class="cart-drawer-qty">' +
+      '<button type="button" data-qty="' + item.id + '" data-delta="-1" aria-label="Menos">−</button>' +
+      '<span>' + item.qty + '</span>' +
+      '<button type="button" data-qty="' + item.id + '" data-delta="1" aria-label="Mais">+</button>' +
+      '</div>' +
+      '<button type="button" class="cart-drawer-remove" data-remove="' + item.id + '" aria-label="Remover">🗑</button>' +
+      '</div></div></article>';
+  }
+
+  function openCartDrawer() {
+    var overlay = $('#cart-drawer-overlay');
+    var drawer = $('#cart-drawer');
+    if (!drawer) return;
+    if (overlay) {
+      overlay.hidden = false;
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+    drawer.hidden = false;
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('cart-drawer-open');
+    document.body.style.overflow = 'hidden';
+    renderCart();
+  }
+
+  function closeCartDrawer() {
+    document.body.classList.remove('cart-drawer-open');
+    document.body.style.overflow = '';
+    var overlay = $('#cart-drawer-overlay');
+    var drawer = $('#cart-drawer');
+    setTimeout(function () {
+      if (!document.body.classList.contains('cart-drawer-open')) {
+        if (overlay) {
+          overlay.hidden = true;
+          overlay.setAttribute('aria-hidden', 'true');
+        }
+        if (drawer) {
+          drawer.hidden = true;
+          drawer.setAttribute('aria-hidden', 'true');
+        }
+      }
+    }, 360);
+  }
+
+  function bindCartListEvents(listEl) {
+    if (!listEl) return;
+    listEl.querySelectorAll('[data-qty]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        changeQty(btn.dataset.qty, parseInt(btn.dataset.delta, 10));
+      });
+    });
+    listEl.querySelectorAll('[data-remove]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        removeFromCart(btn.dataset.remove);
+      });
+    });
+  }
+
+  function tryApplyCouponCode(code) {
+    var normalized = (code || '').trim().toUpperCase();
+    if (normalized === 'DOPSHOP10') {
+      saveCoupon({ label: 'DOPSHOP10', discount: 0.1, type: 'percent' });
+      flashToast('Cupom DOPSHOP10 aplicado — 10% OFF');
+      renderCart();
+      return true;
+    }
+    flashToast('Cupom inválido ou expirado');
+    return false;
+  }
+
+  function bindCartDrawer() {
+    var closeBtn = $('#cart-drawer-close');
+    var overlay = $('#cart-drawer-overlay');
+    if (closeBtn) closeBtn.addEventListener('click', closeCartDrawer);
+    if (overlay) overlay.addEventListener('click', closeCartDrawer);
+    var checkoutBtn = $('#cart-drawer-checkout');
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener('click', function () {
+        if (!loadCart().length) return;
+        closeCartDrawer();
+        prefillCheckout();
+        showView('checkout');
+      });
+    }
+    var couponBtn = $('#cart-drawer-coupon-btn');
+    var couponInput = $('#cart-drawer-coupon-input');
+    if (couponBtn && couponInput) {
+      couponBtn.addEventListener('click', function () {
+        tryApplyCouponCode(couponInput.value);
+      });
+      couponInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          tryApplyCouponCode(couponInput.value);
+        }
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && document.body.classList.contains('cart-drawer-open')) {
+        closeCartDrawer();
+      }
+    });
   }
 
   function pulseCartIcon() {
@@ -1729,15 +1859,39 @@
     saveCart(cart);
     updateHeader();
     var level = calcDopaminaLevel(cart);
-    flashToast('Adicionado à sacola', level.pct);
-    pulseCartIcon();
     var p = getProduct(id);
+    flashAddToast(p, level.pct);
+    pulseCartIcon();
     trackBehavior('add_to_cart', {
       productId: id,
       tab: currentTab,
       category: p && p.tag ? p.tag : undefined,
     });
-    if (currentView === 'cart') renderCart();
+    if (currentView === 'shop' || currentView === 'profile') {
+      openCartDrawer();
+    } else if (currentView === 'cart') {
+      renderCart();
+    }
+    closeProductModal();
+  }
+
+  function flashAddToast(p, dopaminaPct) {
+    const t = $('#toast');
+    if (!t) return;
+    if (!p) {
+      flashToast('Adicionado à sacola', dopaminaPct);
+      return;
+    }
+    var name = p.name.length > 52 ? p.name.slice(0, 51) + '…' : p.name;
+    t.className = 'toast toast--cart-add show';
+    t.innerHTML =
+      '<img src="' + (p.image || '') + '" alt="" onerror="this.style.display=\'none\'" />' +
+      '<div><strong>Adicionado ao carrinho!</strong>' +
+      '<span class="toast-product-name">' + name + '</span></div>';
+    setTimeout(function () {
+      t.classList.remove('show');
+      t.className = 'toast';
+    }, 2800);
   }
 
   function flashToast(msg, dopaminaPct) {
@@ -1753,6 +1907,23 @@
   }
 
   function showView(view) {
+    if (view !== 'cart') closeCartDrawer();
+
+    if (view === 'cart') {
+      if (currentView === 'checkout') {
+        currentView = 'shop';
+        $$('.view').forEach(function (v) { v.classList.remove('active'); });
+        var shopEl = $('#view-shop');
+        if (shopEl) shopEl.classList.add('active');
+        updateAppChrome('shop');
+        $$('.nav-link').forEach(function (l) {
+          l.classList.toggle('active', l.dataset.view === 'shop');
+        });
+      }
+      openCartDrawer();
+      return;
+    }
+
     currentView = view;
     $$('.view').forEach(function (v) {
       v.classList.remove('active');
@@ -1769,7 +1940,6 @@
       renderShop();
       trackBehavior('view_shop', { tab: currentTab });
     }
-    if (view === 'cart') renderCart();
     if (view === 'profile') renderProfile();
     if (view === 'checkout') {
       renderCheckoutSummary();
@@ -1812,71 +1982,120 @@
     const t = calcCartTotals(cart, coupon);
 
     const list = $('#cart-list');
+    const drawerList = $('#cart-drawer-list');
+    const drawerFoot = $('#cart-drawer-foot');
+    const couponActive = $('#cart-drawer-coupon-active');
+    const couponInput = $('#cart-drawer-coupon-input');
+
+    var emptyDrawerHtml =
+      '<div class="cart-drawer-empty">' +
+      '<p class="empty">Seu carrinho está vazio.</p>' +
+      '<p class="empty-sub">Que tal garantir aquela dose de rush agora?</p>' +
+      '<button type="button" class="btn btn-primary cart-drawer-explore-btn">Explorar ofertas</button>' +
+      '</div>';
+    var emptyPageHtml =
+      '<div class="empty-state">' +
+      '<p class="empty">Seu carrinho está vazio.</p>' +
+      '<p class="empty-sub">Que tal garantir aquela dose de rush agora?</p>' +
+      '<button type="button" class="btn btn-primary nav-link" data-view="shop">Explorar ofertas</button>' +
+      '</div>';
+
     if (!cart.length) {
-      list.innerHTML =
-        '<div class="empty-state">' +
-        '<p class="empty">Seu carrinho está vazio.</p>' +
-        '<p class="empty-sub">Que tal garantir aquela dose de dopamina agora?</p>' +
-        '<button type="button" class="btn btn-primary nav-link" data-view="shop">Explorar ofertas</button>' +
-        '</div>';
-      $('#cart-summary').hidden = true;
+      if (list) list.innerHTML = emptyPageHtml;
+      if (drawerList) {
+        drawerList.innerHTML = emptyDrawerHtml;
+        var exploreBtn = drawerList.querySelector('.cart-drawer-explore-btn');
+        if (exploreBtn) exploreBtn.addEventListener('click', closeCartDrawer);
+      }
+      if (drawerFoot) drawerFoot.hidden = true;
+      if ($('#cart-summary')) $('#cart-summary').hidden = true;
       return;
     }
 
-    list.innerHTML = cart
-      .map(function (item) {
-        const p = getProduct(item.id);
-        if (!p) return '';
-        return (
-          '<div class="cart-item">' +
-          '<img class="cart-item-img" src="' + (p.image || '') + '" alt="" />' +
-          '<div class="cart-info">' +
-          '<strong>' + p.name + '</strong>' +
-          '<span class="cart-shop">' + (p.shop || '') + '</span>' +
-          '<span>' + formatBRL(p.price) + ' × ' + item.qty + '</span>' +
-          '</div>' +
-          '<div class="cart-qty">' +
-          '<button type="button" data-qty="' + item.id + '" data-delta="-1">−</button>' +
-          '<span>' + item.qty + '</span>' +
-          '<button type="button" data-qty="' + item.id + '" data-delta="1">+</button>' +
-          '</div>' +
-          '<button type="button" class="cart-remove" data-remove="' + item.id + '">✕</button>' +
-          '</div>'
-        );
-      })
-      .join('');
+    var drawerHtml = cart.map(renderCartDrawerItem).join('');
+    if (drawerList) {
+      drawerList.innerHTML = drawerHtml;
+      bindCartListEvents(drawerList);
+    }
 
-    list.querySelectorAll('[data-qty]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        changeQty(btn.dataset.qty, parseInt(btn.dataset.delta, 10));
-      });
-    });
-    list.querySelectorAll('[data-remove]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        removeFromCart(btn.dataset.remove);
-      });
-    });
+    if (list) {
+      list.innerHTML = cart
+        .map(function (item) {
+          const p = getProduct(item.id);
+          if (!p) return '';
+          return (
+            '<div class="cart-item">' +
+            '<img class="cart-item-img" src="' + (p.image || '') + '" alt="" />' +
+            '<div class="cart-info">' +
+            '<strong>' + p.name + '</strong>' +
+            '<span class="cart-shop">' + (p.shop || '') + '</span>' +
+            '<span>' + formatBRL(p.price) + ' × ' + item.qty + '</span>' +
+            '</div>' +
+            '<div class="cart-qty">' +
+            '<button type="button" data-qty="' + item.id + '" data-delta="-1">−</button>' +
+            '<span>' + item.qty + '</span>' +
+            '<button type="button" data-qty="' + item.id + '" data-delta="1">+</button>' +
+            '</div>' +
+            '<button type="button" class="cart-remove" data-remove="' + item.id + '">✕</button>' +
+            '</div>'
+          );
+        })
+        .join('');
+      bindCartListEvents(list);
+    }
 
-    $('#cart-summary').hidden = false;
-    $('#cart-subtotal').textContent = formatBRL(t.subtotal);
-    $('#cart-discount').textContent = t.discount > 0 ? '−' + formatBRL(t.discount) : '—';
-    $('#cart-shipping').textContent = t.shipping === 0 ? 'Grátis' : formatBRL(t.shipping);
+    if (drawerFoot) drawerFoot.hidden = false;
+    if ($('#cart-summary')) $('#cart-summary').hidden = false;
+
+    var subtotalEl = $('#cart-subtotal');
+    var discountEl = $('#cart-discount');
+    var totalEl = $('#cart-total');
+    if (subtotalEl) subtotalEl.textContent = formatBRL(t.subtotal);
+    if (discountEl) discountEl.textContent = t.discount > 0 ? '−' + formatBRL(t.discount) : '—';
+    if ($('#cart-shipping')) $('#cart-shipping').textContent = t.shipping === 0 ? 'Grátis' : formatBRL(t.shipping);
     var svc = $('#cart-service');
     if (svc) svc.textContent = t.service > 0 ? formatBRL(t.service) : '—';
-    $('#cart-total').textContent = formatBRL(t.total);
+    if (totalEl) totalEl.textContent = formatBRL(t.total);
+
+    var dSub = $('#cart-drawer-subtotal');
+    var dDisc = $('#cart-drawer-discount');
+    var dTotal = $('#cart-drawer-total');
+    if (dSub) dSub.textContent = formatBRL(t.subtotal);
+    if (dDisc) dDisc.textContent = t.discount > 0 ? '−' + formatBRL(t.discount) : '—';
+    if (dTotal) dTotal.textContent = formatBRL(t.total);
+
+    if (couponActive) {
+      if (coupon && coupon.label) {
+        couponActive.hidden = false;
+        couponActive.textContent = '✓ Cupom ' + coupon.label + ' ativo';
+        if (couponInput) couponInput.value = coupon.label;
+      } else {
+        couponActive.hidden = true;
+      }
+    }
+
+    function walletHintText(bal, total) {
+      if (bal <= 0) return { text: 'Desafio encerrado — seu R$ 1 milhão acabou.', cls: 'cart-wallet-hint--empty' };
+      if (total > bal) return { text: 'Faltam ' + formatBRL(total - bal) + ' para fechar este pedido.', cls: 'cart-wallet-hint--warn' };
+      return { text: 'Após este pedido: ' + formatBRL(bal - total) + ' de saldo restante.', cls: '' };
+    }
+
+    var bal = loadWallet();
+    var wh = walletHintText(bal, t.total);
     var walletHint = $('#cart-wallet-hint');
     if (walletHint) {
-      var bal = loadWallet();
-      if (bal <= 0) {
-        walletHint.textContent = 'Desafio encerrado — seu R$ 1 milhão acabou.';
-        walletHint.className = 'cart-wallet-hint cart-wallet-hint--empty';
-      } else if (t.total > bal) {
-        walletHint.textContent = 'Faltam ' + formatBRL(t.total - bal) + ' para fechar este pedido.';
-        walletHint.className = 'cart-wallet-hint cart-wallet-hint--warn';
-      } else {
-        walletHint.textContent = 'Após este pedido: ' + formatBRL(bal - t.total) + ' de saldo restante.';
-        walletHint.className = 'cart-wallet-hint';
-      }
+      walletHint.textContent = wh.text;
+      walletHint.className = 'cart-wallet-hint' + (wh.cls ? ' ' + wh.cls : '');
+    }
+    var drawerWallet = $('#cart-drawer-wallet-hint');
+    if (drawerWallet) {
+      drawerWallet.textContent = wh.text;
+      drawerWallet.className = 'cart-wallet-hint cart-drawer-wallet-hint' + (wh.cls ? ' ' + wh.cls : '');
+    }
+
+    var drawerCheckout = $('#cart-drawer-checkout');
+    if (drawerCheckout) {
+      drawerCheckout.disabled = bal < t.total || t.total <= 0;
     }
   }
 
@@ -2368,6 +2587,7 @@
     updateHeader();
     applyShopTheme();
     bindGlobalUI();
+    bindCartDrawer();
     bindAuthUI();
 
     const checkoutForm = $('#checkout-form');

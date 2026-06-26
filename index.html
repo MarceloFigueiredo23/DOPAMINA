@@ -11,13 +11,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="css/styles.css?v=9" />
-  <link rel="stylesheet" href="css/themes.css?v=9" />
-  <link rel="stylesheet" href="css/interactive.css?v=9" />
-  <link rel="stylesheet" href="css/readability.css?v=9" />
-  <link rel="stylesheet" href="css/brand.css?v=9" />
-  <link rel="stylesheet" href="css/brands.css?v=9" />
-  <link rel="stylesheet" href="css/auth.css?v=9" />
+  <link rel="stylesheet" href="css/styles.css?v=10" />
+  <link rel="stylesheet" href="css/themes.css?v=10" />
+  <link rel="stylesheet" href="css/interactive.css?v=10" />
+  <link rel="stylesheet" href="css/readability.css?v=10" />
+  <link rel="stylesheet" href="css/brand.css?v=10" />
+  <link rel="stylesheet" href="css/brands.css?v=10" />
+  <link rel="stylesheet" href="css/auth.css?v=10" />
 </head>
 <body>
   <div class="promo-ticker" id="promo-ticker" aria-hidden="true">
@@ -35,6 +35,34 @@
     </div>
   </div>
   <div id="toast" class="toast" aria-live="polite"></div>
+
+  <!-- Sacola lateral (drawer) -->
+  <div id="cart-drawer-overlay" class="cart-drawer-overlay" hidden aria-hidden="true"></div>
+  <aside id="cart-drawer" class="cart-drawer" hidden aria-hidden="true" aria-label="Seu carrinho">
+    <header class="cart-drawer-head">
+      <span class="cart-drawer-head-title">🛍️ Seu carrinho</span>
+      <button type="button" class="cart-drawer-close" id="cart-drawer-close" aria-label="Fechar carrinho">✕</button>
+    </header>
+    <div class="cart-drawer-scroll">
+      <div class="dopamina-meter dopamina-meter--drawer" id="dopamina-meter-drawer" aria-live="polite"></div>
+      <div id="cart-drawer-list" class="cart-drawer-list"></div>
+    </div>
+    <footer class="cart-drawer-foot" id="cart-drawer-foot" hidden>
+      <div class="cart-drawer-coupon">
+        <input type="text" id="cart-drawer-coupon-input" placeholder="Cupom de desconto" autocomplete="off" />
+        <button type="button" class="cart-drawer-coupon-btn" id="cart-drawer-coupon-btn">Aplicar</button>
+      </div>
+      <p class="cart-drawer-coupon-active" id="cart-drawer-coupon-active" hidden></p>
+      <div class="cart-drawer-totals">
+        <div class="cart-drawer-total-row"><span>Subtotal</span><span id="cart-drawer-subtotal"></span></div>
+        <div class="cart-drawer-total-row"><span>Desconto</span><span id="cart-drawer-discount"></span></div>
+        <div class="cart-drawer-total-row cart-drawer-total-row--big"><span>Total</span><span id="cart-drawer-total"></span></div>
+      </div>
+      <p class="cart-wallet-hint cart-drawer-wallet-hint" id="cart-drawer-wallet-hint"></p>
+      <button type="button" class="cart-drawer-checkout-btn" id="cart-drawer-checkout">Finalizar pedido</button>
+      <p class="cart-drawer-disclaimer">Compra 100% simulada — nenhuma cobrança real</p>
+    </footer>
+  </aside>
 
   <!-- Cupons estilo SHEIN -->
   <div id="coupon-overlay" class="coupon-overlay" hidden>
@@ -397,13 +425,13 @@
     <button type="button" class="ifood-nav-item nav-link" data-view="profile"><span>👤</span>Perfil</button>
   </nav>
 
-  <script src="js/catalog-data.js?v=9"></script>
-  <script src="js/ifood-data.js?v=9"></script>
-  <script src="js/brands.js?v=9"></script>
-  <script src="js/auth.js?v=9"></script>
-  <script src="js/realism.js?v=9"></script>
-  <script src="js/interactive.js?v=9"></script>
+  <script src="js/catalog-data.js?v=10"></script>
+  <script src="js/ifood-data.js?v=10"></script>
+  <script src="js/brands.js?v=10"></script>
+  <script src="js/auth.js?v=10"></script>
+  <script src="js/realism.js?v=10"></script>
+  <script src="js/interactive.js?v=10"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/dopamina.js?v=9"></script>
+  <script src="js/dopamina.js?v=10"></script>
 </body>
 </html>
