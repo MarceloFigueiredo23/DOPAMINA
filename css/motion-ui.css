@@ -1,0 +1,131 @@
+/**
+ * Motion UI — camada de animação (Motion / Framer Motion engine)
+ * Respeita prefers-reduced-motion
+ */
+
+:root {
+  --motion-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-snappy: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+body.mp-motion-active .cart-drawer,
+body.mp-motion-active .cart-drawer-overlay {
+  transition: none !important;
+}
+
+body.mp-motion-active .cart-drawer {
+  transform: translateX(100%);
+}
+
+body.mp-motion-active.cart-drawer-open .cart-drawer {
+  transform: translateX(100%);
+}
+
+body.mp-motion-active.cart-drawer-open .cart-drawer-overlay {
+  opacity: 0;
+  pointer-events: auto;
+}
+
+body.mp-motion-active .product-modal-panel {
+  animation: none !important;
+}
+
+body.mp-motion-active .view {
+  animation: none !important;
+}
+
+/* Cards — estado inicial antes do stagger */
+body.mp-motion-active [data-motion-card] {
+  will-change: transform, opacity;
+}
+
+body.mp-motion-active [data-motion-card].mp-motion-hidden {
+  opacity: 0;
+  transform: translateY(22px) scale(0.97);
+}
+
+/* View transitions */
+.view.mp-view-enter {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.view.active.mp-view-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Header scroll intelligence */
+.site-header.mp-header-elevated {
+  box-shadow: 0 4px 24px rgba(255, 193, 7, 0.22), 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.site-header.mp-header-compact .site-header-inner {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* Botões — feedback tátil */
+body.mp-motion-active .ds-add-btn,
+body.mp-motion-active .amazon-add-btn,
+body.mp-motion-active .shenim-add-btn,
+body.mp-motion-active .mercadao-add-btn,
+body.mp-motion-active .cart-drawer-checkout-btn,
+body.mp-motion-active .mp-tab {
+  transform-origin: center;
+}
+
+/* Toast motion layer */
+#toast.mp-toast-visible {
+  pointer-events: none;
+}
+
+/* Hero subtle depth */
+.mp-hero-float {
+  will-change: transform;
+}
+
+/* Category chips */
+.ds-cat-tab,
+.shenim-chip,
+.mercadao-filter-chip {
+  transform-origin: center;
+}
+
+.ds-cat-tab.mp-chip-active {
+  transform: scale(1.04);
+}
+
+/* Cart badge pop */
+.mp-cart-badge-pop {
+  animation: none !important;
+}
+
+@keyframes mp-cart-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+/* Modal backdrop */
+.product-modal-backdrop.mp-backdrop-ready {
+  opacity: 0;
+}
+
+/* Drawer items */
+.cart-drawer-item[data-motion-item] {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.mp-motion-active [data-motion-card].mp-motion-hidden,
+  .view.mp-view-enter {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .site-header.mp-header-elevated,
+  .site-header.mp-header-compact .site-header-inner {
+    transition: none !important;
+  }
+}

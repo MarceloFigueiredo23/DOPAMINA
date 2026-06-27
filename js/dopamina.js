@@ -1174,11 +1174,24 @@
       '<button type="button" class="ds-add-btn" data-add="' + p.id + '">Adicionar</button></article>';
   }
 
+  function $(sel) { return document.querySelector(sel); }
+
+  function motion(name) {
+    var M = window.DOPAMINA_MOTION;
+    if (M && M.ready && typeof M[name] === 'function') {
+      var args = Array.prototype.slice.call(arguments, 1);
+      M[name].apply(M, args);
+      return true;
+    }
+    return false;
+  }
+
   function bindHomeCategories(root) {
     if (!root) return;
     root.querySelectorAll('[data-home-cat]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         homeCategory = btn.dataset.homeCat || 'all';
+        motion('chipActive', btn);
         renderHomeShop();
         var tabs = root.querySelector('.ds-category-tabs');
         if (tabs) tabs.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1452,6 +1465,7 @@
       });
     });
     bindInfiniteLoader(grid);
+    motion('staggerGrid', grid);
   }
 
   function bindInfiniteLoader(root) {
@@ -1579,6 +1593,7 @@
     document.body.style.overflow = 'hidden';
     renderCart();
     updateActiveOrderBanner();
+    motion('openCart');
   }
 
   function closeCartDrawer() {
@@ -1587,7 +1602,7 @@
     updateActiveOrderBanner();
     var overlay = $('#cart-drawer-overlay');
     var drawer = $('#cart-drawer');
-    setTimeout(function () {
+    var hideAll = function () {
       if (!document.body.classList.contains('cart-drawer-open')) {
         if (overlay) {
           overlay.hidden = true;
@@ -1598,7 +1613,10 @@
           drawer.setAttribute('aria-hidden', 'true');
         }
       }
-    }, 360);
+    };
+    if (!motion('closeCart', hideAll)) {
+      setTimeout(hideAll, 360);
+    }
   }
 
   function bindCartListEvents(listEl) {
@@ -1662,6 +1680,7 @@
   }
 
   function pulseCartIcon() {
+    motion('pulseCart');
     var badge = $('#cart-count');
     if (badge) {
       badge.classList.remove('cart-pulse');
@@ -1860,6 +1879,7 @@
     zone.querySelectorAll('[data-sfilter]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         shenimFilter = btn.dataset.sfilter;
+        motion('chipActive', btn);
         zone.querySelectorAll('[data-sfilter]').forEach(function (b) {
           b.classList.toggle('active', b.dataset.sfilter === shenimFilter);
         });
@@ -1869,6 +1889,7 @@
     zone.querySelectorAll('[data-mfilter]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         marketFilter = btn.dataset.mfilter;
+        motion('chipActive', btn);
         zone.querySelectorAll('[data-mfilter]').forEach(function (b) {
           b.classList.toggle('active', b.dataset.mfilter === marketFilter);
         });
@@ -2144,6 +2165,7 @@
     modal.hidden = false;
     document.body.classList.add('product-modal-open');
     document.body.style.overflow = 'hidden';
+    motion('openModal');
 
     $('#modal-close-btn').onclick = closeProductModal;
     $('#product-modal-backdrop').onclick = closeProductModal;
@@ -2156,10 +2178,13 @@
   }
 
   function closeProductModal() {
-    const modal = $('#product-modal');
-    if (modal) modal.hidden = true;
-    document.body.classList.remove('product-modal-open');
-    document.body.style.overflow = '';
+    var modal = $('#product-modal');
+    var finish = function () {
+      if (modal) modal.hidden = true;
+      document.body.classList.remove('product-modal-open');
+      document.body.style.overflow = '';
+    };
+    if (!motion('closeModal', finish)) finish();
   }
 
   function addToCart(id, evt) {
@@ -2232,9 +2257,11 @@
       : '';
     t.innerHTML = '<strong>' + msg + '</strong>' + dopaLine;
     t.classList.add('show');
-    setTimeout(function () {
-      t.classList.remove('show');
-    }, 2200);
+    if (!motion('toast', t)) {
+      setTimeout(function () {
+        t.classList.remove('show');
+      }, 2200);
+    }
   }
 
   function showView(view) {
@@ -2266,6 +2293,8 @@
     });
 
     updateAppChrome(view);
+
+    if (viewEl) motion('viewChange', view, viewEl);
 
     if (view === 'shop') {
       renderShop();
@@ -2355,6 +2384,9 @@
     if (drawerList) {
       drawerList.innerHTML = drawerHtml;
       bindCartListEvents(drawerList);
+      if (document.body.classList.contains('cart-drawer-open')) {
+        motion('staggerList', drawerList);
+      }
     }
 
     if (list) {
