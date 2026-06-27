@@ -1116,14 +1116,14 @@
   function homeCategoryOf(p) {
     if (p.category === 'Acessórios') return 'acessorios';
     if (p.category === 'Calçados') {
-      if (['Nike', 'Adidas', 'New Balance', 'Puma', 'Balenciaga', 'Prada'].indexOf(p.brand) >= 0) return 'esportes';
+      if (['Nike', 'Adidas', 'New Balance', 'Puma', 'Balenciaga', 'Prada', 'Jordan', 'Vans', 'Converse', 'Under Armour', 'Speedo'].indexOf(p.brand) >= 0) return 'esportes';
       return 'moda';
     }
     if (p.category === 'Feminino' || p.category === 'Masculino') return 'moda';
-    if (p.tag === 'Games' || p.id === 'p03' || p.id === 'p08' || p.id === 'p13' || p.id === 'p30') return 'games';
-    if (p.tag === 'Beleza' || p.tag === 'Wearable') return 'beleza';
+    if (p.tag === 'Games' || p.id === 'p03' || p.id === 'p08' || p.id === 'p13' || p.id === 'p30' || p.id === 'p34' || p.id === 'p35' || p.id === 'p36') return 'games';
+    if (p.tag === 'Beleza' || p.tag === 'Wearable' || p.id === 'p45' || p.id === 'p46' || p.id === 'p47' || p.id === 'p48') return 'beleza';
     if (['Áudio', 'Creator', 'Periféricos', 'Foto', 'Tablet'].indexOf(p.tag) >= 0) return 'gadgets';
-    if (['Casa', 'Cozinha', 'Eletro', 'TV', 'Monitor', 'Barista'].indexOf(p.tag) >= 0) return 'casa';
+    if (['Casa', 'Cozinha', 'Eletro', 'TV', 'Monitor', 'Barista'].indexOf(p.tag) >= 0 || p.id === 'p49' || p.id === 'p50' || p.id === 'p51' || p.id === 'p53' || p.id === 'p54' || p.id === 'p55' || p.id === 'p56') return 'casa';
     return 'eletronicos';
   }
 

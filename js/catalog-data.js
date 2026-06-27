@@ -40,6 +40,8 @@
   /* Comida / delivery — desativado (ver branch futuro) */
   var express = [];
 
+  var expand = w.DOPAMINA_CATALOG_EXPAND || { premium: [], fashion: [] };
+
   var premium = [
     { id: 'p01', brand: 'Apple', name: 'iPhone 16 Pro 256GB Titânio Natural',     shop: 'Mercadopamina', price: 8999, oldPrice: 9999, tag: 'Lançamento', image: ecImg('photo-1695048133144-6b33fd7b28b5'), rating: 4.8, reviews: 2847, prime: true, specs: ['Tela 6,3" Super Retina XDR OLED 120Hz', 'Chip Apple A18 Pro · Neural Engine 16-core', 'Câmera 48MP principal · zoom óptico 5x', 'USB-C · Wi-Fi 6E · Bluetooth 5.3 · 5G', 'Resistente a água IP68 · titânio grau 5'], desc: 'iPhone 16 Pro com tela ProMotion, chip A18 Pro e sistema de câmeras profissional — desempenho de ponta para foto, vídeo e jogos.' },
     { id: 'p02', brand: 'Apple', name: 'MacBook Air 13" M3 16GB 512GB',     shop: 'Mercadopamina', price: 10999, oldPrice: 12499, tag: 'Apple', image: ecImg('photo-1517336714731-489689fd1ca8'), rating: 4.9, reviews: 1203, prime: true, specs: ['Chip Apple M3 8-core CPU · GPU 10-core', '16GB memória unificada · SSD 512GB', 'Tela Liquid Retina 13,6" · 500 nits · P3', 'Até 18h de bateria · carregador MagSafe USB-C', 'MagSafe · 2× Thunderbolt · Touch ID · macOS'], desc: 'MacBook Air 13" com chip M3 — ultrafino, silencioso e com bateria para o dia inteiro de trabalho, estudo e criação.' },
@@ -71,7 +73,7 @@
     { id: 'p28', brand: 'Philips', name: 'OneBlade Pro QP6550',     shop: 'Mercadopamina', price: 399, oldPrice: 499, tag: 'Beleza', image: ecImg('photo-1503951914875-452162b0f3f1'), rating: 4.6, reviews: 4560, prime: true, specs: ['Tecnologia OneBlade — apara, barbeia e define contornos', 'Bateria recarregável até 120 min de autonomia', '3 pentes de guia (1, 3 e 5 mm)', 'À prova d\'água — uso seco ou no banho', 'Cabeça dupla com revestimento deslizante para a pele'], desc: 'Philips OneBlade Pro — aparador híbrido 3 em 1 para rosto e corpo, com pentes de guia e uso à prova d\'água.' },
     { id: 'p29', brand: 'Consul', name: 'Fogão 5 Bocas Mesa de Vidro',     shop: 'Mercadopamina', price: 1299, oldPrice: 1499, tag: 'Eletro', image: wikiThumb('5/5e/Gas_stove.jpg', 800), rating: 4.5, reviews: 1432, prime: false, specs: ['5 bocas', 'Mesa vidro', 'Forno 86L', 'Acendimento auto'], desc: 'Fogão Consul com mesa de vidro temperado e timer.' },
     { id: 'p30', brand: 'Asus', name: 'ROG Strix G16 RTX 4060 i7',     shop: 'Mercadopamina', price: 8999, oldPrice: 9999, tag: 'Notebook', image: wikiThumb('9/9e/Gaming_laptop.jpg', 800), rating: 4.7, reviews: 890, prime: true, specs: ['Tela 16" WQXGA 165Hz · 100% sRGB', 'Intel Core i7-13650HX · 14 núcleos', 'NVIDIA RTX 4060 8GB · 16GB DDR5', 'SSD 1TB NVMe · Wi-Fi 6E', 'Teclado RGB · Cooler duplo ROG'], desc: 'Notebook gamer Asus ROG Strix G16 com tela 165Hz, RTX 4060 e Intel i7 — portátil para jogar e trabalhar pesado.' },
-  ];
+  ].concat(expand.premium || []);
 
   premium.forEach(function (p) {
     p.reviewList = productReviews(p.name);
@@ -102,17 +104,19 @@
     { id: 'm22', brand: 'Ray-Ban', brandTier: 'premium', category: 'Acessórios', name: 'Aviador Classic RB3025 — Dourado',     shop: 'Mercadopamina', price: 699, oldPrice: 849, tag: 'Ray-Ban', image: ecImg('photo-1572635196237-14b3f281503f'), rating: 4.8, reviews: 9200, sizes: ['Único'], color: 'Dourado/Verde G-15', material: 'Metal', fit: 'Unissex', care: 'Estojo + flanela', specs: ['Modelo RB3025 Classic — armação aviador', 'Lentes G-15 verde — proteção UV 100%', 'Armação metal dourado · hastes ajustáveis', 'Pontas em acetato para conforto nas orelhas', 'Estojo rígido e flanela de limpeza inclusos'], desc: 'Ray-Ban Aviador RB3025 dourado com lentes G-15 — o óculos mais icônico do mundo, criado para pilotos e adotado por gerações.' },
     { id: 'm23', brand: 'Havaianas', brandTier: 'popular', category: 'Calçados', name: 'Top Brasil — Azul Naval',     shop: 'Mercadopamina', price: 39.9, oldPrice: 49.9, tag: 'Havaianas', image: ecImg('photo-1603487742874-03f67dfec1a3'), rating: 4.9, reviews: 23400, sizes: ['35/36', '37/38', '39/40', '41/42'], color: 'Azul naval', material: 'Borracha', fit: 'Fiel', care: 'Lavar água fria', desc: 'Havaianas Top Brasil — chinelo mais vendido do país.' },
     { id: 'm24', brand: 'Colcci', brandTier: 'premium', category: 'Masculino', name: 'Camiseta Logo Bordado Preta',     shop: 'Mercadopamina', price: 159, oldPrice: 199, tag: 'Colcci', image: ecImg('photo-1521572163474-e1f1ad5812d0'), rating: 4.5, reviews: 2100, sizes: ['P', 'M', 'G', 'GG'], color: 'Preto', material: 'Algodão premium', fit: 'Slim', care: 'Máq. 30°C do avesso', desc: 'Camiseta Colcci com logo bordado — streetwear brasileiro premium.' },
-  ];
+  ].concat(expand.fashion || []);
 
   fashion.forEach(function (p) {
     p.reviewList = fashionReviews(p.name, p.brand);
-    p.specs = [
-      'Marca: ' + p.brand,
-      'Cor: ' + p.color,
-      'Material: ' + p.material,
-      'Caimento: ' + p.fit,
-      'Cuidados: ' + p.care,
-    ];
+    if (!p.specs) {
+      p.specs = [
+        'Marca: ' + p.brand,
+        'Cor: ' + p.color,
+        'Material: ' + p.material,
+        'Caimento: ' + p.fit,
+        'Cuidados: ' + p.care,
+      ];
+    }
   });
 
   if (w.DOPAMINA_PHOTOS && w.DOPAMINA_PHOTOS.apply) {
@@ -126,5 +130,10 @@
     w.DOPAMINA_PHOTOS.apply(fashion);
   }
 
-  w.DOPAMINA_CATALOG = { express: express, premium: premium, fashion: fashion };
+  w.DOPAMINA_CATALOG = {
+    express: express,
+    premium: premium,
+    fashion: fashion,
+    total: premium.length + fashion.length + express.length,
+  };
 })(window);

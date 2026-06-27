@@ -6,7 +6,7 @@
 (function (w) {
   'use strict';
 
-  var IMG_VER = '39';
+  var IMG_VER = '40';
 
   function wiki(path, width) {
     var file = path.split('/').pop();
@@ -21,8 +21,14 @@
     return 'img/products/' + id + '.webp?v=' + IMG_VER;
   }
 
-  function P(id, primary, backup) {
-    return { id: id, local: local(id), primary: primary, backup: backup || primary };
+  function P(id, primary, backup, remoteOnly) {
+    return {
+      id: id,
+      local: remoteOnly ? null : local(id),
+      primary: primary,
+      backup: backup || primary,
+      remoteOnly: !!remoteOnly,
+    };
   }
 
   var PHOTOS = {
@@ -87,12 +93,72 @@
     m22: P('m22', uns('photo-1572635196237-14b3f281503f'), uns('photo-1511499767150-a48a237f0083')),
     m23: P('m23', wiki('8/8a/Flip-flops.jpg', 900), wiki('8/8a/Sandals.jpg', 900)),
     m24: P('m24', wiki('9/9e/T-shirt.jpg', 900), wiki('8/8d/Polo_shirt.jpg', 900)),
+
+    /* Expansão catálogo 100+ — fotos Unsplash (sem webp local) */
+    p31: P('p31', uns('photo-1556656793-08538906a9f8'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p32: P('p32', uns('photo-1556656793-08538906a9f8'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p33: P('p33', uns('photo-1556656793-08538906a9f8'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p34: P('p34', uns('photo-1606813907291-d86efa9b94db'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p35: P('p35', uns('photo-1606813907291-d86efa9b94db'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p36: P('p36', uns('photo-1621259182978-fbf93132d53d'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p37: P('p37', uns('photo-1527864550417-7fd91fc51a46'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p38: P('p38', uns('photo-1527864550417-7fd91fc51a46'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p39: P('p39', uns('photo-1590658268037-6bf12165a8df'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p40: P('p40', uns('photo-1590658268037-6bf12165a8df'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p41: P('p41', uns('photo-1608043152269-423dbba4e7e1'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p42: P('p42', uns('photo-1516035069371-29a1b244cc32'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p43: P('p43', uns('photo-1516035069371-29a1b244cc32'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p44: P('p44', uns('photo-1516035069371-29a1b244cc32'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p45: P('p45', uns('photo-1503951914875-452162b0f3f1'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p46: P('p46', uns('photo-1503951914875-452162b0f3f1'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p47: P('p47', uns('photo-1503951914875-452162b0f3f1'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p48: P('p48', uns('photo-1503951914875-452162b0f3f1'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p49: P('p49', uns('photo-1556656793-08538906a9f8'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p50: P('p50', uns('photo-1556656793-08538906a9f8'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p51: P('p51', uns('photo-1556656793-08538906a9f8'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p52: P('p52', uns('photo-1556656793-08538906a9f8'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p53: P('p53', uns('photo-1585655097312-7c098090a426'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p54: P('p54', uns('photo-1585655097312-7c098090a426'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p55: P('p55', uns('photo-1626082927389-6cd097cdc6ec'), uns('photo-1511702033304-f8f02fdda238'), true),
+    p56: P('p56', uns('photo-1585655097312-7c098090a426'), uns('photo-1511702033304-f8f02fdda238'), true),
+    m25: P('m25', uns('photo-1548036328-c9fa89d128fa'), uns('photo-1576566588028-4147f3842f27'), true),
+    m26: P('m26', uns('photo-1566150905458-1bf1fc113f0d'), uns('photo-1576566588028-4147f3842f27'), true),
+    m27: P('m27', uns('photo-1548036328-c9fa89d128fa'), uns('photo-1576566588028-4147f3842f27'), true),
+    m28: P('m28', uns('photo-1542291026-7eec264c27ff'), uns('photo-1576566588028-4147f3842f27'), true),
+    m29: P('m29', uns('photo-1576566588028-4147f3842f27'), uns('photo-1576566588028-4147f3842f27'), true),
+    m30: P('m30', uns('photo-1576566588028-4147f3842f27'), uns('photo-1576566588028-4147f3842f27'), true),
+    m31: P('m31', uns('photo-1542291026-7eec264c27ff'), uns('photo-1576566588028-4147f3842f27'), true),
+    m32: P('m32', uns('photo-1600185365926-3a2ce3cdb9eb'), uns('photo-1576566588028-4147f3842f27'), true),
+    m33: P('m33', uns('photo-1542291026-7eec264c27ff'), uns('photo-1576566588028-4147f3842f27'), true),
+    m34: P('m34', uns('photo-1603487742874-03f67dfec1a3'), uns('photo-1576566588028-4147f3842f27'), true),
+    m35: P('m35', uns('photo-1603487742874-03f67dfec1a3'), uns('photo-1576566588028-4147f3842f27'), true),
+    m36: P('m36', uns('photo-1624378439575-d8705ad7ae80'), uns('photo-1576566588028-4147f3842f27'), true),
+    m37: P('m37', uns('photo-1621072156002-e2fccdc0b176'), uns('photo-1576566588028-4147f3842f27'), true),
+    m38: P('m38', uns('photo-1576566588028-4147f3842f27'), uns('photo-1576566588028-4147f3842f27'), true),
+    m39: P('m39', uns('photo-1503951914875-452162b0f3f1'), uns('photo-1576566588028-4147f3842f27'), true),
+    m40: P('m40', uns('photo-1503951914875-452162b0f3f1'), uns('photo-1576566588028-4147f3842f27'), true),
+    m41: P('m41', uns('photo-1503951914875-452162b0f3f1'), uns('photo-1576566588028-4147f3842f27'), true),
+    m42: P('m42', uns('photo-1621072156002-e2fccdc0b176'), uns('photo-1576566588028-4147f3842f27'), true),
+    m43: P('m43', uns('photo-1591047139829-d91aecb6caea'), uns('photo-1576566588028-4147f3842f27'), true),
+    m44: P('m44', uns('photo-1591047139829-d91aecb6caea'), uns('photo-1576566588028-4147f3842f27'), true),
+    m45: P('m45', uns('photo-1576566588028-4147f3842f27'), uns('photo-1576566588028-4147f3842f27'), true),
+    m46: P('m46', uns('photo-1576566588028-4147f3842f27'), uns('photo-1576566588028-4147f3842f27'), true),
+    m47: P('m47', uns('photo-1595777457583-95e059d581b8'), uns('photo-1576566588028-4147f3842f27'), true),
+    m48: P('m48', uns('photo-1572635196237-14b3f281503f'), uns('photo-1576566588028-4147f3842f27'), true),
+    m49: P('m49', uns('photo-1434493789847-2f02dc6ca35d'), uns('photo-1576566588028-4147f3842f27'), true),
+    m50: P('m50', uns('photo-1611591437281-460bfbe1220a'), uns('photo-1576566588028-4147f3842f27'), true),
   };
 
   function applyProductPhotos(items) {
     items.forEach(function (p) {
       var ph = PHOTOS[p.id];
       if (!ph) return;
+      if (ph.remoteOnly || !ph.local) {
+        p.image = ph.primary;
+        p.imageFallback = ph.backup;
+        p.imageAltFallback = ph.primary;
+        return;
+      }
       p.image = ph.local;
       p.imageFallback = ph.primary;
       p.imageAltFallback = ph.backup;
