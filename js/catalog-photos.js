@@ -6,7 +6,7 @@
 (function (w) {
   'use strict';
 
-  var IMG_VER = '37';
+  var IMG_VER = '38';
 
   function wiki(path, width) {
     var file = path.split('/').pop();
@@ -42,14 +42,15 @@
     p08: P('p08', uns('photo-1621259182978-fbf93132d53d'), uns('photo-1578303512595-81e6cc240f37')),
     p09: P('p09', wiki('c/c0/Robot_vacuum_cleaner.jpg', 900), wiki('5/5f/IRobot_Roomba.jpg', 900)),
     p10: P('p10', wiki('4/4e/Espresso_machine.jpg', 900), wiki('1/1f/Coffee_capsule_machine.jpg', 900)),
-    p11: P('p11', wiki('5/5a/Apple_Watch_Series_9.png', 900), wiki('3/3a/Apple_Watch_Series_8.png', 900)),
+    /* Parte 4 — um de cada categoria (webp local 1000×1000) */
+    p11: P('p11', uns('photo-1434493789847-2f02dc6ca35d'), uns('photo-1579586337278-3befd40fd17a')),
     p12: P('p12', wiki('4/4b/DJI_Mini_3_Pro_drone.jpg', 900), wiki('8/8d/Quadcopter.jpg', 900)),
     p14: P('p14', wiki('8/8e/Microwave_oven.jpg', 900), wiki('7/7a/Microwave_oven_2.jpg', 900)),
-    p15: P('p15', wiki('3/3a/Air_fryer.jpg', 900), wiki('8/8f/Deep_fryer.jpg', 900)),
+    p15: P('p15', uns('photo-1626082927389-6cd097cdc6ec'), uns('photo-1585515655855-d74f3e9c2d23')),
     p17: P('p17', wiki('4/4e/IPad_10th_generation.png', 900), wiki('9/9e/IPad_Pro_11-inch_(4th_generation).png', 900)),
     p18: P('p18', wiki('9/9e/Canon_EOS_R50.jpg', 900), wiki('3/3f/Canon_EOS_R10.jpg', 900)),
     p19: P('p19', wiki('5/5a/Apple_Watch_Series_9.png', 900), wiki('3/3a/Apple_Watch_Series_8.png', 900)),
-    p20: P('p20', wiki('8/8d/JBL_Flip_6.jpg', 900), wiki('6/6a/Bluetooth_speaker.jpg', 900)),
+    p20: P('p20', uns('photo-1608043152269-423dbba4e7e1'), uns('photo-1613689043014-7eacd122af21')),
     p21: P('p21', wiki('9/9e/Logitech_MX_Master_3S.jpg', 900), wiki('8/8d/Computer_mouse.jpg', 900)),
     p22: P('p22', wiki('5/5f/Dyson_V15_Detect.jpg', 900), wiki('4/4b/Vacuum_cleaner.jpg', 900)),
     p23: P('p23', wiki('9/9e/Amazon_Kindle_11th_generation.jpg', 900), wiki('8/8a/Amazon_Kindle_Paperwhite_(5th_generation).jpg', 900)),
@@ -62,7 +63,7 @@
 
     /* Parte 2 — moda curada (webp local 1000×1000) */
     m01: P('m01', uns('photo-1548036328-c9fa89d128fa'), uns('photo-1584917865442-de89dfa41ccb')),
-    m02: P('m02', wiki('8/8a/Louis_Vuitton_Neverfull.jpg', 900), wiki('8/8a/Handbag.jpg', 900)),
+    m02: P('m02', uns('photo-1566150905458-1bf1fc113f0d'), uns('photo-1548036328-c9fa89d128fa')),
     m03: P('m03', wiki('4/4e/Chanel_2.55_bag.jpg', 900), wiki('8/8a/Handbag.jpg', 900)),
     m04: P('m04', wiki('8/8d/Balenciaga_Triple_S.jpg', 900), wiki('4/4e/Sneakers.jpg', 900)),
     m05: P('m05', wiki('4/4e/Sneakers.jpg', 900), wiki('8/8d/Sneakers_white.jpg', 900)),
@@ -74,7 +75,7 @@
     m11: P('m11', uns('photo-1595777457583-95e059d581b8'), uns('photo-1566174053879-31528523f8ae')),
     m12: P('m12', wiki('8/8d/Polo_shirt.jpg', 900), wiki('9/9e/T-shirt.jpg', 900)),
     m13: P('m13', uns('photo-1576566588028-4147f3842f27'), uns('photo-1521572163474-e1f1ad5812d0')),
-    m14: P('m14', wiki('8/8a/Jeans.jpg', 900), wiki('9/9e/Denim_jeans.jpg', 900)),
+    m14: P('m14', uns('photo-1624378439575-d8705ad7ae80'), uns('photo-1541099644245-14f3c6c7d9e5')),
     m15: P('m15', wiki('9/9e/Blouse.jpg', 900), wiki('8/8a/T-shirt.jpg', 900)),
     m16: P('m16', wiki('8/8a/Sandals.jpg', 900), wiki('9/9e/High-heeled_shoes.jpg', 900)),
     m17: P('m17', wiki('9/9e/Summer_dress.jpg', 900), wiki('9/9e/Dress.jpg', 900)),
