@@ -6,7 +6,7 @@
 (function (w) {
   'use strict';
 
-  var IMG_VER = '35';
+  var IMG_VER = '36';
 
   function wiki(path, width) {
     var file = path.split('/').pop();
@@ -59,19 +59,20 @@
     p28: P('p28', wiki('8/8a/Electric_razor.jpg', 900), wiki('7/7a/Shaving_razor.jpg', 900)),
     p29: P('p29', wiki('5/5e/Gas_stove.jpg', 900), wiki('8/8e/Kitchen_stove.jpg', 900)),
 
-    m01: P('m01', wiki('9/9e/Gucci_bag.jpg', 900), wiki('8/8a/Handbag.jpg', 900)),
+    /* Parte 2 — moda curada (webp local 1000×1000) */
+    m01: P('m01', uns('photo-1548036328-c9fa89d128fa'), uns('photo-1584917865442-de89dfa41ccb')),
     m02: P('m02', wiki('8/8a/Louis_Vuitton_Neverfull.jpg', 900), wiki('8/8a/Handbag.jpg', 900)),
     m03: P('m03', wiki('4/4e/Chanel_2.55_bag.jpg', 900), wiki('8/8a/Handbag.jpg', 900)),
     m04: P('m04', wiki('8/8d/Balenciaga_Triple_S.jpg', 900), wiki('4/4e/Sneakers.jpg', 900)),
     m05: P('m05', wiki('4/4e/Sneakers.jpg', 900), wiki('8/8d/Sneakers_white.jpg', 900)),
     m06: P('m06', wiki('9/9e/Sunglasses.jpg', 900), wiki('7/7a/Sunglasses_2.jpg', 900)),
-    m07: P('m07', wiki('8/8d/Nike_Air_Max_90.jpg', 900), wiki('4/4e/Sneakers.jpg', 900)),
+    m07: P('m07', uns('photo-1542291026-7eec264c27ff'), uns('photo-1606107557195-0ccc2b0a2bb0')),
     m08: P('m08', wiki('4/4e/Adidas_Ultraboost.jpg', 900), wiki('4/4e/Sneakers.jpg', 900)),
     m09: P('m09', wiki('8/8d/New_Balance_550.jpg', 900), wiki('4/4e/Sneakers.jpg', 900)),
     m10: P('m10', wiki('8/8a/Trench_coat.jpg', 900), wiki('9/9e/Coat.jpg', 900)),
-    m11: P('m11', wiki('9/9e/Dress.jpg', 900), wiki('8/8a/Evening_dress.jpg', 900)),
+    m11: P('m11', uns('photo-1595777457583-95e059d581b8'), uns('photo-1566174053879-31528523f8ae')),
     m12: P('m12', wiki('8/8d/Polo_shirt.jpg', 900), wiki('9/9e/T-shirt.jpg', 900)),
-    m13: P('m13', wiki('9/9e/T-shirt.jpg', 900), wiki('8/8d/Polo_shirt.jpg', 900)),
+    m13: P('m13', uns('photo-1576566588028-4147f3842f27'), uns('photo-1521572163474-e1f1ad5812d0')),
     m14: P('m14', wiki('8/8a/Jeans.jpg', 900), wiki('9/9e/Denim_jeans.jpg', 900)),
     m15: P('m15', wiki('9/9e/Blouse.jpg', 900), wiki('8/8a/T-shirt.jpg', 900)),
     m16: P('m16', wiki('8/8a/Sandals.jpg', 900), wiki('9/9e/High-heeled_shoes.jpg', 900)),
@@ -80,7 +81,7 @@
     m19: P('m19', wiki('8/8a/Knitwear.jpg', 900), wiki('9/9e/T-shirt.jpg', 900)),
     m20: P('m20', wiki('8/8a/Lingerie.jpg', 900), wiki('9/9e/Underwear.jpg', 900)),
     m21: P('m21', wiki('8/8d/Football_shirt.jpg', 900), wiki('9/9e/T-shirt.jpg', 900)),
-    m22: P('m22', wiki('9/9e/Ray-Ban_Aviator.jpg', 900), wiki('9/9e/Sunglasses.jpg', 900)),
+    m22: P('m22', uns('photo-1572635196237-14b3f281503f'), uns('photo-1511499767150-a48a237f0083')),
     m23: P('m23', wiki('8/8a/Flip-flops.jpg', 900), wiki('8/8a/Sandals.jpg', 900)),
     m24: P('m24', wiki('9/9e/T-shirt.jpg', 900), wiki('8/8d/Polo_shirt.jpg', 900)),
   };
