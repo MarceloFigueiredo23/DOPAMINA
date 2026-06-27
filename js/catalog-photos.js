@@ -6,7 +6,7 @@
 (function (w) {
   'use strict';
 
-  var IMG_VER = '36';
+  var IMG_VER = '37';
 
   function wiki(path, width) {
     var file = path.split('/').pop();
@@ -33,12 +33,13 @@
     p16: P('p16', uns('photo-1505740420928-5e560c06d30e'), uns('photo-1572569511254-d8f795e3431f')),
     p30: P('p30', uns('photo-1588872657578-7efd1f1555ed'), uns('photo-1496181133206-80ce9ccb4a7e')),
 
-    p02: P('p02', wiki('3/3a/MacBook_Air_(M2,_2022).jpg', 900), wiki('9/9e/MacBook_Air_(M2,_2022)_on_desk.jpg', 900)),
-    p03: P('p03', wiki('7/77/PlayStation_5_and_DualSense_controller.png', 900), wiki('4/4e/PlayStation_5.svg', 900)),
-    p04: P('p04', wiki('1/1e/Samsung_Galaxy_S23_Ultra.png', 900), wiki('a/a8/Samsung_Galaxy_S24_Ultra.png', 900)),
+    /* Parte 3 — eletrônicos curados (webp local 1000×1000) */
+    p02: P('p02', uns('photo-1517336714731-489689fd1ca8'), uns('photo-1611186871348-b1ce696e52ba')),
+    p03: P('p03', uns('photo-1606813907291-d86efa9b94db'), uns('photo-1606144042614-b241699e99f8')),
+    p04: P('p04', uns('photo-1556656793-08538906a9f8'), uns('photo-1592899677977-9c10ca588bbd')),
     p05: P('p05', wiki('8/8a/Refrigerator.jpg', 900), wiki('5/5e/Refrigerator_interior.jpg', 900)),
-    p07: P('p07', wiki('2/2e/AirPods_Pro_2nd_generation.png', 900), wiki('e/e8/AirPods_Pro.png', 900)),
-    p08: P('p08', wiki('1/1e/Nintendo-Switch-OLED-model.png', 900), wiki('8/8d/Nintendo_Switch_console.png', 900)),
+    p07: P('p07', uns('photo-1590658268037-6bf12165a8df'), uns('photo-1505740420928-5e560c06d30e')),
+    p08: P('p08', uns('photo-1621259182978-fbf93132d53d'), uns('photo-1578303512595-81e6cc240f37')),
     p09: P('p09', wiki('c/c0/Robot_vacuum_cleaner.jpg', 900), wiki('5/5f/IRobot_Roomba.jpg', 900)),
     p10: P('p10', wiki('4/4e/Espresso_machine.jpg', 900), wiki('1/1f/Coffee_capsule_machine.jpg', 900)),
     p11: P('p11', wiki('5/5a/Apple_Watch_Series_9.png', 900), wiki('3/3a/Apple_Watch_Series_8.png', 900)),
